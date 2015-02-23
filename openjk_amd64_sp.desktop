@@ -6,4 +6,4 @@ Path=.free-engineer/JediAcademy/GameData/
 Exec=env LD_LIBRARY_PATH=/opt/sdl2-makson/lib/ ./openjk_sp.x86_64
 Icon=/opt/free-engineer/openjk_icon.png
 Categories=Game;
-Terminal=true
+Terminal=false

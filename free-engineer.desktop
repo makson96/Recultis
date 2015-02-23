@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Free Engineer
+Comment=Install free game engines with proprietary content.
+Path=/opt/free-engineer
+Exec=python3 free_engineer.py
+Icon=/opt/free-engineer/icon.png
+Categories=Game;
+Terminal=false
