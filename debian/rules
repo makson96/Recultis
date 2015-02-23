@@ -5,23 +5,22 @@ PACKAGEDIR = package_dir
 # secondly called by launchpad
 build:
 	mkdir $(PACKAGEDIR)
-	mkdir -p $(PACKAGEDIR)/pymol-plugin-dynamics/DEBIAN
-	mkdir -p $(PACKAGEDIR)/pymol-plugin-dynamics/usr/lib/python2.7/dist-packages/pmg_tk/startup
-	mkdir -p $(PACKAGEDIR)/pymol-plugin-dynamics/usr/share/doc/pymol-plugin-dynamics
-	cp dynamics_pymol_plugin.py $(PACKAGEDIR)/pymol-plugin-dynamics/usr/lib/python2.7/dist-packages/pmg_tk/startup
-	cp dynamics_pymol_plugin.pyc $(PACKAGEDIR)/pymol-plugin-dynamics/usr/lib/python2.7/dist-packages/pmg_tk/startup
-	cp manual.odt $(PACKAGEDIR)/pymol-plugin-dynamics/usr/share/doc/pymol-plugin-dynamics
-	cp README $(PACKAGEDIR)/pymol-plugin-dynamics/usr/share/doc/pymol-plugin-dynamics
-	cp LICENSE $(PACKAGEDIR)/pymol-plugin-dynamics/usr/share/doc/pymol-plugin-dynamics
-	cp debian/add_files/preinst $(PACKAGEDIR)/pymol-plugin-dynamics/DEBIAN/
-	mkdir -p $(PACKAGEDIR)/pydynamics/DEBIAN
-	mkdir -p $(PACKAGEDIR)/pydynamics/usr/bin/
-	mkdir -p $(PACKAGEDIR)/pydynamics/usr/share/doc/pydynamics/
-	mkdir -p $(PACKAGEDIR)/pydynamics/usr/share/applications/
-	cp pydynamics.py $(PACKAGEDIR)/pydynamics/usr/bin/pydynamics
-	cp pydynamics_gui.py $(PACKAGEDIR)/pydynamics/usr/bin/pydynamics_gui
-	cp icon.png $(PACKAGEDIR)/pydynamics/usr/share/doc/pydynamics/
-	cp debian/add_files/pydynamics.desktop $(PACKAGEDIR)/pydynamics/usr/share/applications/
+	mkdir -p $(PACKAGEDIR)/free-engineer/DEBIAN
+	mkdir -p $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp free_engineer.pyc $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp openjk_amd64_mp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp openjk_amd64_sp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp openjk_i386_mp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp openjk_i386_sp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp openjk_icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp openjk.pyc $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp steamcmd_linux.tar.gz $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	mkdir -p $(PACKAGEDIR)/free-engineer/usr/share/doc/free-engineer
+	cp README.md $(PACKAGEDIR)/free-engineer/usr/share/doc/free-engineer
+	mkdir -p $(PACKAGEDIR)/free-engineer/usr/share/applications
+	cp free-engineer.desktop $(PACKAGEDIR)/free-engineer/usr/share/applications
+
 
 # thirdly called by launchpad
 binary: binary-indep binary-arch
