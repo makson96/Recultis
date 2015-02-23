@@ -30,12 +30,9 @@ binary-indep:
 
 binary-arch:
 	mkdir -p debian/tmp/DEBIAN
-	dpkg-gencontrol -ppymol-plugin-dynamics
-	mv debian/tmp/DEBIAN/control $(PACKAGEDIR)/pymol-plugin-dynamics/DEBIAN
-	dpkg --build $(PACKAGEDIR)/pymol-plugin-dynamics/ ..
-	dpkg-gencontrol -ppydynamics
-	mv debian/tmp/DEBIAN/control $(PACKAGEDIR)/pydynamics/DEBIAN
-	dpkg --build $(PACKAGEDIR)/pydynamics/ ..
+	dpkg-gencontrol -pfree-engineer
+	mv debian/tmp/DEBIAN/control $(PACKAGEDIR)/free-engineer/DEBIAN
+	dpkg --build $(PACKAGEDIR)/free-engineer/ ..
 
 # firstly called by launchpad
 clean:
