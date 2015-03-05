@@ -50,6 +50,8 @@ class Window(QWidget):
 	def choose(self):
 		if self.r0.isChecked():
 			self.game_nr = 0
+		elif self.r1.isChecked():
+			self.game_nr = 1
 		
 		try:
 			check_dep = check_output("dpkg-query -W --showformat='${Status}\n' " + games[self.game_nr][1], shell=True)
