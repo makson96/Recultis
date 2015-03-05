@@ -30,6 +30,7 @@ def steamcmd(user):
 	while os.path.isdir(game_data_dir) == False:
 		time.sleep(2)
 	symlink()
+	launchers()
 
 def symlink():
 	for binary in next(os.walk(engine_dir))[2]:
@@ -42,7 +43,6 @@ def symlink():
 			if os.path.exists(local_openjk_dir + library) == False:
 				print("symlinking " + library)
 				os.symlink(engine_dir + "OpenJK/" + library, local_openjk_dir + library)
-	launchers()
 
 def launchers():
 	print("make_launchers")

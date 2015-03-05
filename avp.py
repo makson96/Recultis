@@ -26,23 +26,20 @@ def steamcmd(user):
 	print(user)
 	if os.path.isdir(game_data_dir) == False:
 		s_download = call("x-terminal-emulator -e './steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " +force_install_dir " + game_data_dir + " +app_update " + s_appid + " validate +quit'", shell=True)
-	while os.path.isdir(game_data_dir) == False:
+	while os.path.isdir(game_data_dir+"avp_huds") == False:
 		time.sleep(2)
-	#symlink()
+	files_lowercase()
 	launchers()
 
-def symlink():
-	for binary in next(os.walk(engine_dir))[2]:
-		if os.path.exists(game_data_dir + binary) == False:
-			print("symlinking " + binary)
-			os.symlink(engine_dir + binary, game_data_dir + binary)
-		if os.path.isdir(local_openjk_dir) == False:
-			os.makedirs(local_openjk_dir)
-		for library in next(os.walk(engine_dir + "OpenJK/"))[2]:
-			if os.path.exists(local_openjk_dir + library) == False:
-				print("symlinking " + library)
-				os.symlink(engine_dir + "OpenJK/" + library, local_openjk_dir + library)
-	launchers()
+def files_lowercase():
+	for avp_file_or_dir in os.listdir(game_data_dir):
+		if os.path.isdir(game_data_dir + avp_file_or_dir) == True:
+			print("entering dir " + avp_file_or_dir)
+			for avp_file in os.listdir(game_data_dir + avp_file_or_dir):
+				os.rename(game_data_dir + avp_file_or_dir + "/" + avp_file, game_data_dir + avp_file_or_dir + "/" + avp_file.lower())
+			os.rename(game_data_dir + avp_file_or_dir, game_data_dir + avp_file_or_dir.lower())
+		elif os.path.isfile(game_data_dir + avp_file_or_dir) == True:
+			os.rename(game_data_dir + avp_file_or_dir, game_data_dir + avp_file_or_dir.lower())
 
 def launchers():
 	print("make_launchers")
