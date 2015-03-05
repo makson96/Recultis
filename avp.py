@@ -48,7 +48,7 @@ def launchers():
 	os.symlink(self_dir + "avp.desktop", desk_dir + "/avp.desktop")
 	os.symlink(self_dir + "avp.desktop", os.getenv("HOME") + "/.local/share/applications/avp.desktop")
 		
-	msgBox = QMessageBox.information(qw, "Game is ready", "Have fun!")
+	msgBox = QMessageBox.information(qw, "Game is ready", "Have fun!<br>Important shortcuts:<br>- ALT-ENTER for fullscreen<br>- CTRL-G for mouse grab")
 	qw.close()
 
 class Steam:
