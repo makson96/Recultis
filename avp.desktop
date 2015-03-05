@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Aliens versus Predator Classic 2000
+Comment=Play Aliens versus Predator
+Path=.free-engineer/JediAcademy/GameData/
+Exec=env AVP_DATA=$(HOME)/.free-engineer/AliensVsPredator/ /opt/avp/avp
+Icon=/opt/free-engineer/avp_icon.png
+Categories=Game;
+Terminal=false

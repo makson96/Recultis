@@ -9,12 +9,11 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
 self_dir = "/opt/free-engineer/"
-engine_dir = "/opt/OpenJK/"
-local_openjk_dir = os.getenv("HOME") + "/.local/share/openjk/base/"
+engine_dir = "/opt/avp/"
 
 engineer_dir = os.getenv("HOME") + "/.free-engineer/"
-game_data_dir = engineer_dir + "JediAcademy/GameData/"
-s_appid = "6020"
+game_data_dir = engineer_dir + "AliensVsPredator/"
+s_appid = "3730"
 
 def steamcmd(user):
 	if os.path.isdir(engineer_dir) == False:
@@ -26,10 +25,11 @@ def steamcmd(user):
 		tar.close()
 	print(user)
 	if os.path.isdir(game_data_dir) == False:
-		s_download = call("x-terminal-emulator -e './steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " +force_install_dir " + engineer_dir + "JediAcademy/ +app_update " + s_appid + " validate +quit'", shell=True)
+		s_download = call("x-terminal-emulator -e './steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " +force_install_dir " + game_data_dir + " +app_update " + s_appid + " validate +quit'", shell=True)
 	while os.path.isdir(game_data_dir) == False:
 		time.sleep(2)
-	symlink()
+	#symlink()
+	launchers()
 
 def symlink():
 	for binary in next(os.walk(engine_dir))[2]:
@@ -47,18 +47,9 @@ def symlink():
 def launchers():
 	print("make_launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
-	if os.uname()[4] == "x86_64":
-		print("symlinking desktop amd64")
-		os.symlink(self_dir + "openjk_amd64_sp.desktop", desk_dir + "/openjk_amd64_sp.desktop")
-		os.symlink(self_dir + "openjk_amd64_sp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_amd64_sp.desktop")
-		os.symlink(self_dir + "openjk_amd64_mp.desktop", desk_dir + "/openjk_amd64_mp.desktop")
-		os.symlink(self_dir + "openjk_amd64_mp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_amd64_mp.desktop")
-	else:
-		print("symlinking desktop i386")
-		os.symlink(self_dir + "openjk_i386_sp.desktop", desk_dir + "/openjk_i386_sp.desktop")
-		os.symlink(self_dir + "openjk_i386_sp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_i386_sp.desktop")
-		os.symlink(self_dir + "openjk_i386_mp.desktop", desk_dir + "/openjk_i386_mp.desktop")
-		os.symlink(self_dir + "openjk_i386_mp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_i386_mp.desktop")
+	print("symlinking desktop")
+	os.symlink(self_dir + "avp.desktop", desk_dir + "/avp.desktop")
+	os.symlink(self_dir + "avp.desktop", os.getenv("HOME") + "/.local/share/applications/avp.desktop")
 		
 	msgBox = QMessageBox.information(qw, "Game is ready", "Have fun!")
 	qw.close()

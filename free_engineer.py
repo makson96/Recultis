@@ -8,7 +8,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-games = [ ["Jedi Knight: Jedi Academy on OpenJK engine", "openjk"]]
+games = [ ["Jedi Knight: Jedi Academy on OpenJK engine", "openjk"], ["Aliens vs Predator Classic 2000 on avp", "avp"]]
 
 class Window(QWidget):
 	
@@ -22,8 +22,8 @@ class Window(QWidget):
 		game_group = QButtonGroup()
 		self.r0 = QRadioButton(games[0][0])
 		game_group.addButton(self.r0)
-		#self.r1 = QRadioButton("1")
-		#game_group.addButton(self.r1)
+		self.r1 = QRadioButton(games[1][0])
+		game_group.addButton(self.r1)
 		self.r0.setChecked(True)
 		self.chooseButton = QPushButton("Choose")
 		self.exitButton = QPushButton("Exit")
@@ -33,7 +33,7 @@ class Window(QWidget):
 
 		vbox1.addWidget(nameLabel)
 		vbox1.addWidget(self.r0)
-		#vbox1.addWidget(self.r1)
+		vbox1.addWidget(self.r1)
 		hbox1.addWidget(self.chooseButton)
 		hbox1.addWidget(self.exitButton)
 		vbox1.addLayout(hbox1)
@@ -53,7 +53,7 @@ class Window(QWidget):
 		
 		try:
 			check_dep = check_output("dpkg-query -W --showformat='${Status}\n' " + games[self.game_nr][1], shell=True)
-			result = str(check_dep)#.split(" ")
+			result = str(check_dep)
 			print(result)
 			result = result[2:-3]
 		except CalledProcessError as e:
@@ -75,6 +75,8 @@ class Window(QWidget):
 		if self.engine_installed == 1:
 			if self.game_nr == 0:
 				import openjk as game_data
+			elif self.game_nr == 0:
+				import avp as game_data
 			download_data = game_data.Steam(self, 1)
 			self.close()
 				
