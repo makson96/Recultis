@@ -1,5 +1,5 @@
 Source: free-engineer
-Section: science
+Section: games
 Priority: extra
 Maintainer: Tomasz Makarewicz <makson96@gmail.com>
 Build-Depends: debhelper (>= 5), cdbs (>= 0.2)
