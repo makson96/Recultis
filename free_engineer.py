@@ -77,7 +77,7 @@ class Window(QWidget):
 		if self.engine_installed == 1:
 			if self.game_nr == 0:
 				import openjk as game_data
-			elif self.game_nr == 0:
+			elif self.game_nr == 1:
 				import avp as game_data
 			download_data = game_data.Steam(self, 1)
 			self.close()
