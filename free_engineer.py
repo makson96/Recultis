@@ -8,7 +8,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-games = [ ["Jedi Knight: Jedi Academy on OpenJK engine", "openjk"], ["Aliens vs Predator Classic 2000 on avp", "avp"]]
+games = [ ["Jedi Knight: Jedi Academy on OpenJK engine", "openjk"], ["Aliens vs Predator Classic 2000 on avp", "avp"], ["Doom 3 BFG on RBDOOM-3-BFG", "rbdoom-3-bfg"]]
 
 class Window(QWidget):
 	
@@ -24,6 +24,8 @@ class Window(QWidget):
 		game_group.addButton(self.r0)
 		self.r1 = QRadioButton(games[1][0])
 		game_group.addButton(self.r1)
+		self.r2 = QRadioButton(games[2][0])
+		game_group.addButton(self.r2)
 		self.r0.setChecked(True)
 		self.chooseButton = QPushButton("Choose")
 		self.exitButton = QPushButton("Exit")
@@ -34,6 +36,7 @@ class Window(QWidget):
 		vbox1.addWidget(nameLabel)
 		vbox1.addWidget(self.r0)
 		vbox1.addWidget(self.r1)
+		vbox1.addWidget(self.r2)
 		hbox1.addWidget(self.chooseButton)
 		hbox1.addWidget(self.exitButton)
 		vbox1.addLayout(hbox1)
@@ -52,6 +55,8 @@ class Window(QWidget):
 			self.game_nr = 0
 		elif self.r1.isChecked():
 			self.game_nr = 1
+		elif self.r2.isChecked():
+			self.game_nr = 2
 		
 		try:
 			check_dep = check_output("dpkg-query -W --showformat='${Status}\n' " + games[self.game_nr][1], shell=True)
@@ -79,6 +84,8 @@ class Window(QWidget):
 				import openjk as game_data
 			elif self.game_nr == 1:
 				import avp as game_data
+			elif self.game_nr == 2:
+				import doom3 as game_data
 			download_data = game_data.Steam(self, 1)
 			self.close()
 				

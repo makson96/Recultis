@@ -21,6 +21,10 @@ build:
 	cp avp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	cp avp_icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	cp avp.pyc $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	#doom3
+	cp doom3.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp rbdoom-3-bfg_icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp doom3.pyc $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	#steamcmd
 	cp steamcmd_linux.tar.gz $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	mkdir -p $(PACKAGEDIR)/free-engineer/usr/share/doc/free-engineer
