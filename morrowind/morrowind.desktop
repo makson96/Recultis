@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=The Elder Scrolls III: Morrowind
+Comment=Play The Elder Scrolls III: Morrowind
+Exec=sh /opt/free-engineer/morrowind/run.sh
+Icon=/opt/free-engineer/morrowind/icon.png
+Categories=Game;
+Terminal=false
