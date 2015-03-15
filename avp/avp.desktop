@@ -4,6 +4,6 @@ Name=Aliens versus Predator Classic 2000
 Comment=Play Aliens versus Predator
 Path=.free-engineer/AliensVsPredator/
 Exec=/opt/avp/avp
-Icon=/opt/free-engineer/avp_icon.png
+Icon=/opt/free-engineer/avp/icon.png
 Categories=Game;
 Terminal=false
