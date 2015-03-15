@@ -53,6 +53,8 @@ binary-arch:
 	mkdir -p debian/tmp/DEBIAN
 	dpkg-gencontrol -pfree-engineer
 	mv debian/tmp/DEBIAN/control $(PACKAGEDIR)/free-engineer/DEBIAN
+	cp debian/postinst $(PACKAGEDIR)/free-engineer/DEBIAN
+	chmod +x $(PACKAGEDIR)/free-engineer/DEBIAN/postinst
 	dpkg --build $(PACKAGEDIR)/free-engineer/ ..
 
 # firstly called by launchpad
