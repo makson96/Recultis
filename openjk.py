@@ -48,17 +48,17 @@ def launchers():
 	print("make_launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 	if os.uname()[4] == "x86_64":
-		print("symlinking desktop amd64")
-		os.symlink(self_dir + "openjk_amd64_sp.desktop", desk_dir + "/openjk_amd64_sp.desktop")
-		os.symlink(self_dir + "openjk_amd64_sp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_amd64_sp.desktop")
-		os.symlink(self_dir + "openjk_amd64_mp.desktop", desk_dir + "/openjk_amd64_mp.desktop")
-		os.symlink(self_dir + "openjk_amd64_mp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_amd64_mp.desktop")
+		print("desktop amd64")
+		shutil.copy(self_dir + "jediacademy/openjk_amd64_sp.desktop", desk_dir + "/openjk_amd64_sp.desktop")
+		shutil.copy(self_dir + "jediacademy/openjk_amd64_sp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_amd64_sp.desktop")
+		shutil.copy(self_dir + "jediacademy/openjk_amd64_mp.desktop", desk_dir + "/openjk_amd64_mp.desktop")
+		shutil.copy(self_dir + "jediacademy/openjk_amd64_mp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_amd64_mp.desktop")
 	else:
-		print("symlinking desktop i386")
-		os.symlink(self_dir + "openjk_i386_sp.desktop", desk_dir + "/openjk_i386_sp.desktop")
-		os.symlink(self_dir + "openjk_i386_sp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_i386_sp.desktop")
-		os.symlink(self_dir + "openjk_i386_mp.desktop", desk_dir + "/openjk_i386_mp.desktop")
-		os.symlink(self_dir + "openjk_i386_mp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_i386_mp.desktop")
+		print("desktop i386")
+		shutil.copy(self_dir + "jediacademy/openjk_i386_sp.desktop", desk_dir + "/openjk_i386_sp.desktop")
+		shutil.copy(self_dir + "jediacademy/openjk_i386_sp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_i386_sp.desktop")
+		shutil.copy(self_dir + "jediacademy/openjk_i386_mp.desktop", desk_dir + "/openjk_i386_mp.desktop")
+		shutil.copy(self_dir + "jediacademy/openjk_i386_mp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_i386_mp.desktop")
 		
 	msgBox = QMessageBox.information(qw, "Game is ready", "Have fun!")
 	qw.close()

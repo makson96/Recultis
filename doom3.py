@@ -38,8 +38,8 @@ def symlink():
 def launchers():
 	print("make_launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
-	os.symlink(self_dir + "doom3.desktop", desk_dir + "/doom3.desktop")
-	os.symlink(self_dir + "doom3.desktop", os.getenv("HOME") + "/.local/share/applications/doom3.desktop")
+	shutil.copy(self_dir + "doom3/doom3.desktop", desk_dir + "/doom3.desktop")
+	shutil.copy(self_dir + "doom3/doom3.desktop", os.getenv("HOME") + "/.local/share/applications/doom3.desktop")
 		
 	msgBox = QMessageBox.information(qw, "Game is ready", "Have fun!")
 	qw.close()

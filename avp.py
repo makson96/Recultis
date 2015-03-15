@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 
-import sys, os, tarfile, time
+import sys, os, tarfile, time, shutil
 from subprocess import call, check_output
 
 from PyQt5.QtCore import *
@@ -44,9 +44,8 @@ def files_lowercase():
 def launchers():
 	print("make_launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
-	print("symlinking desktop")
-	os.symlink(self_dir + "avp.desktop", desk_dir + "/avp.desktop")
-	os.symlink(self_dir + "avp.desktop", os.getenv("HOME") + "/.local/share/applications/avp.desktop")
+	shutil.copy(self_dir + "avp/avp.desktop", desk_dir + "/avp.desktop")
+	shutil.copy(self_dir + "avp/avp.desktop", os.getenv("HOME") + "/.local/share/applications/avp.desktop")
 		
 	msgBox = QMessageBox.information(qw, "Game is ready", "Have fun!<br>Important shortcuts:<br>- ALT-ENTER for fullscreen<br>- CTRL-G for mouse grab")
 	qw.close()
