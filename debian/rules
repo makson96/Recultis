@@ -11,20 +11,30 @@ build:
 	cp free_engineer.pyc $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	cp icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	#OpenJK
-	cp openjk_amd64_mp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer
-	cp openjk_amd64_sp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer
-	cp openjk_i386_mp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer
-	cp openjk_i386_sp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer
-	cp openjk_icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	mkdir -p $(PACKAGEDIR)/free-engineer/opt/free-engineer/jediacademy
+	cp jediacademy/openjk_amd64_mp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/jediacademy/
+	cp jediacademy/openjk_amd64_sp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/jediacademy/
+	cp jediacademy/openjk_i386_mp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/jediacademy/
+	cp jediacademy/openjk_i386_sp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/jediacademy/
+	cp jediacademy/icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer/jediacademy/
 	cp openjk.pyc $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	#avp
-	cp avp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer
-	cp avp_icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	mkdir -p $(PACKAGEDIR)/free-engineer/opt/free-engineer/avp
+	cp avp/avp.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/avp/
+	cp avp/icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer/avp/
 	cp avp.pyc $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	#doom3
-	cp doom3.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer
-	cp rbdoom-3-bfg_icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	mkdir -p $(PACKAGEDIR)/free-engineer/opt/free-engineer/doom3
+	cp doom3/doom3.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/doom3/
+	cp doom3/icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer/doom3/
 	cp doom3.pyc $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	#morrowind
+	mkdir -p $(PACKAGEDIR)/free-engineer/opt/free-engineer/morrowind
+	cp morrowind/morrowind.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/morrowind/
+	cp morrowind/icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer/morrowind/
+	cp morrowind/openmw.cfg $(PACKAGEDIR)/free-engineer/opt/free-engineer/morrowind/
+	cp morrowind/run.sh $(PACKAGEDIR)/free-engineer/opt/free-engineer/morrowind/
+	cp morrowind.pyc $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	#steamcmd
 	cp steamcmd_linux.tar.gz $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	mkdir -p $(PACKAGEDIR)/free-engineer/usr/share/doc/free-engineer
