@@ -1,0 +1,49 @@
+#!/bin/sh
+
+DESKTOP=$(xdg-user-dir DESKTOP)
+
+set -e
+
+echo "Updating launchers"
+
+if [ -L $HOME/.local/share/applications/openjk_amd64_sp.desktop ];
+then
+   echo "Updating openjk"
+fi
+
+if [ -L $HOME/.local/share/applications/openjk_i386_sp.desktop ];
+then
+   echo "Updating openjk"
+fi
+
+if [ -L $HOME/.local/share/applications/openjk_amd64_mp.desktop ];
+then
+   echo "Updating openjk"
+fi
+
+if [ -L $HOME/.local/share/applications/openjk_i386_mp.desktop ];
+then
+   echo "Updating openjk"
+fi
+
+if [ -L $DESKTOP/openjk_amd64_sp.desktop ];
+then
+   echo "Updating openjk"
+fi
+
+if [ -L $DESKTOP/openjk_i386_sp.desktop ];
+then
+   echo "Updating openjk"
+fi
+
+if [ -L $DESKTOP/openjk_amd64_mp.desktop ];
+then
+   echo "Updating openjk"
+fi
+
+if [ -L $DESKTOP/openjk_i386_mp.desktop ];
+then
+   echo "Updating openjk"
+fi
+
+exit 0
