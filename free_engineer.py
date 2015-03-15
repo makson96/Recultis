@@ -8,7 +8,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-games = [ ["Jedi Knight: Jedi Academy on OpenJK engine", "openjk"], ["Aliens vs Predator Classic 2000 on avp", "avp"], ["Doom 3 BFG on RBDOOM-3-BFG", "rbdoom-3-bfg"]]
+games = [ ["Jedi Knight: Jedi Academy on OpenJK engine", "openjk"], ["Aliens vs Predator Classic 2000 on avp", "avp"], ["Doom 3 BFG on RBDOOM-3-BFG", "rbdoom-3-bfg"], ["The Elder Scrolls III: Morrowind on OpenMW","openmw-makson"]]
 
 class Window(QWidget):
 	
@@ -26,6 +26,8 @@ class Window(QWidget):
 		game_group.addButton(self.r1)
 		self.r2 = QRadioButton(games[2][0])
 		game_group.addButton(self.r2)
+		self.r3 = QRadioButton(games[3][0])
+		game_group.addButton(self.r3)
 		self.r0.setChecked(True)
 		self.chooseButton = QPushButton("Choose")
 		self.exitButton = QPushButton("Exit")
@@ -37,6 +39,7 @@ class Window(QWidget):
 		vbox1.addWidget(self.r0)
 		vbox1.addWidget(self.r1)
 		vbox1.addWidget(self.r2)
+		vbox1.addWidget(self.r3)
 		hbox1.addWidget(self.chooseButton)
 		hbox1.addWidget(self.exitButton)
 		vbox1.addLayout(hbox1)
@@ -57,6 +60,8 @@ class Window(QWidget):
 			self.game_nr = 1
 		elif self.r2.isChecked():
 			self.game_nr = 2
+		elif self.r3.isChecked():
+			self.game_nr = 3
 		
 		try:
 			check_dep = check_output("dpkg-query -W --showformat='${Status}\n' " + games[self.game_nr][1], shell=True)
@@ -86,10 +91,10 @@ class Window(QWidget):
 				import avp as game_data
 			elif self.game_nr == 2:
 				import doom3 as game_data
+			elif self.game_nr == 3:
+				import morrowind as game_data
 			download_data = game_data.Steam(self, 1)
-			self.close()
-				
-			
+			self.close()	
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
