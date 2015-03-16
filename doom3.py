@@ -33,7 +33,8 @@ def steamcmd(user):
 
 def symlink():
 		print("symlinking")
-		os.symlink(engine_dir + "RBDoom3BFG", game_data_dir + "RBDoom3BFG")
+		if os.path.exists(game_data_dir + "RBDoom3BFG") == False:
+			os.symlink(engine_dir + "RBDoom3BFG", game_data_dir + "RBDoom3BFG")
 
 def launchers():
 	print("make_launchers")
