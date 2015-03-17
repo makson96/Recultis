@@ -37,12 +37,12 @@ def symlink():
 		if os.path.exists(game_data_dir + binary) == False:
 			print("symlinking " + binary)
 			os.symlink(engine_dir + binary, game_data_dir + binary)
-		if os.path.isdir(local_openjk_dir) == False:
-			os.makedirs(local_openjk_dir)
-		for library in next(os.walk(engine_dir + "OpenJK/"))[2]:
-			if os.path.exists(local_openjk_dir + library) == False:
-				print("symlinking " + library)
-				os.symlink(engine_dir + "OpenJK/" + library, local_openjk_dir + library)
+	if os.path.isdir(local_openjk_dir) == False:
+		os.makedirs(local_openjk_dir)
+	for library in next(os.walk(engine_dir + "OpenJK/"))[2]:
+		if os.path.exists(local_openjk_dir + library) == False:
+			print("symlinking " + library)
+			os.symlink(engine_dir + "OpenJK/" + library, local_openjk_dir + library)
 
 def launchers():
 	print("make_launchers")
