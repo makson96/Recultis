@@ -100,8 +100,8 @@ class Window(QWidget):
 		if result == "install ok installed":
 			self.engine_installed = 1
 		else:
-			selfengine_installed = 0
-		print(engine_installed)
+			self.engine_installed = 0
+		print(self.engine_installed)
 		
 
 if __name__ == '__main__':
