@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 
-import sys, os
-from subprocess import check_output, CalledProcessError, call#, PIPE
+import sys, os, time
+from subprocess import check_output, CalledProcessError, call
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -70,7 +70,9 @@ class Window(QWidget):
 				print("Yes")
 				dep_install = call("""x-terminal-emulator -e 'gksudo "apt-get -y install """  + games[self.game_nr][1] + """"'""", shell=True)
 				print("""x-terminal-emulator -e 'gksudo "apt-get -y install """  + games[self.game_nr][1] + """"'""")
-				self.check_dep()
+				while self.engine_installed == 0:
+					self.check_dep()
+					time.sleep(2)
 			else:
 				print("No")
 				self.check_dep()
