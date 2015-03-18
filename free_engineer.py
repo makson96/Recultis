@@ -63,26 +63,17 @@ class Window(QWidget):
 		elif self.r3.isChecked():
 			self.game_nr = 3
 		
-		try:
-			check_dep = check_output("dpkg-query -W --showformat='${Status}\n' " + games[self.game_nr][1], shell=True)
-			result = str(check_dep)
-			print(result)
-			result = result[2:-3]
-		except CalledProcessError as e:
-			print(e.returncode)
-			result = "non-installed1"
-		print(result)
-		if result != "install ok installed":
+		self.check_dep()
+		if self.engine_installed == 0:
 			dep_pack = QMessageBox.question(self, "Install Engine", "You need to install following packages (root password required):<br><b>" + games[self.game_nr][1] +"</b><br>Continue?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
 			if dep_pack == QMessageBox.Yes:
 				print("Yes")
 				dep_install = call("""x-terminal-emulator -e 'gksudo "apt-get -y install """  + games[self.game_nr][1] + """"'""", shell=True)
-				self.engine_installed = 1
+				print("""x-terminal-emulator -e 'gksudo "apt-get -y install """  + games[self.game_nr][1] + """"'""")
+				self.check_dep()
 			else:
 				print("No")
-				self.engine_installed = 0
-		else:
-			self.engine_installed = 1
+				self.check_dep()
 
 		if self.engine_installed == 1:
 			if self.game_nr == 0:
@@ -94,7 +85,24 @@ class Window(QWidget):
 			elif self.game_nr == 3:
 				import morrowind as game_data
 			download_data = game_data.Steam(self, 1)
-			self.close()	
+			self.close()
+	
+	def check_dep(self):
+		try:
+			check_dep = check_output("dpkg-query -W --showformat='${Status}\n' " + games[self.game_nr][1], shell=True)
+			result = str(check_dep)
+			print(result)
+			result = result[2:-3]
+		except CalledProcessError as e:
+			print(e.returncode)
+			result = "non-installed1"
+		print(result)
+		if result == "install ok installed":
+			self.engine_installed = 1
+		else:
+			selfengine_installed = 0
+		print(engine_installed)
+		
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
