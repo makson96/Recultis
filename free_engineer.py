@@ -34,6 +34,12 @@ class Window(QWidget):
 		game_group.addButton(self.r2)
 		self.r3 = QRadioButton(games[3][0])
 		game_group.addButton(self.r3)
+		self.r4 = QRadioButton(games[4][0])
+		game_group.addButton(self.r4)
+		self.r5 = QRadioButton(games[5][0])
+		game_group.addButton(self.r5)
+		self.r6 = QRadioButton(games[6][0])
+		game_group.addButton(self.r6)
 		self.r0.setChecked(True)
 		self.chooseButton = QPushButton("Choose")
 		self.exitButton = QPushButton("Exit")
@@ -46,6 +52,9 @@ class Window(QWidget):
 		vbox1.addWidget(self.r1)
 		vbox1.addWidget(self.r2)
 		vbox1.addWidget(self.r3)
+		vbox1.addWidget(self.r4)
+		vbox1.addWidget(self.r5)
+		vbox1.addWidget(self.r6)
 		hbox1.addWidget(self.chooseButton)
 		hbox1.addWidget(self.exitButton)
 		vbox1.addLayout(hbox1)
@@ -68,6 +77,12 @@ class Window(QWidget):
 			self.game_nr = 2
 		elif self.r3.isChecked():
 			self.game_nr = 3
+		elif self.r4.isChecked():
+			self.game_nr = 4
+		elif self.r5.isChecked():
+			self.game_nr = 5
+		elif self.r6.isChecked():
+			self.game_nr = 6
 		
 		self.check_dep()
 		if self.engine_installed == 0:
