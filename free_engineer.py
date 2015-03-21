@@ -8,7 +8,13 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-games = [ ["Jedi Knight: Jedi Academy on OpenJK engine", "openjk"], ["Aliens vs Predator Classic 2000 on avp", "avp"], ["Doom 3 BFG on RBDOOM-3-BFG", "rbdoom-3-bfg"], ["The Elder Scrolls III: Morrowind on OpenMW","openmw-makson"]]
+games = [ ["Jedi Knight: Jedi Academy on OpenJK engine", "openjk"],
+["Aliens vs Predator Classic 2000 on avp", "avp"],
+["Doom 3 BFG on RBDOOM-3-BFG", "rbdoom-3-bfg"],
+["The Elder Scrolls III: Morrowind on OpenMW","openmw-makson"],
+["Tomb Raider I","openraider"],
+["Tomb Raider II","openraider"],
+["Tomb Raider III","openraider"]]
 
 class Window(QWidget):
 	
@@ -86,7 +92,17 @@ class Window(QWidget):
 				import doom3 as game_data
 			elif self.game_nr == 3:
 				import morrowind as game_data
-			download_data = game_data.Steam(self, 1)
+			elif self.game_nr == 4 or self.game_nr == 5 or self.game_nr == 6:
+				import tombraider as game_data
+			
+			if self.game_nr == 4:
+				download_data = game_data.Steam(self, 1, 1)
+			elif self.game_nr == 5:
+				download_data = game_data.Steam(self, 1, 2)
+			elif self.game_nr == 6:
+				download_data = game_data.Steam(self, 1, 3)
+			else:
+				download_data = game_data.Steam(self, 1)
 			self.close()
 	
 	def check_dep(self):

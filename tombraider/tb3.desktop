@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Tomb Raider III
+Comment=Play Tomb Raider III
+Path=.free-engineer/tb3/
+Exec=env LD_LIBRARY_PATH=/opt/sdl2-makson/lib/ ./OpenRaider
+Icon=/opt/free-engineer/tombraider/icon.png
+Categories=Game;
+Terminal=false

@@ -1,6 +1,6 @@
-free-engineer (0.4.2-trusty1) trusty; urgency=low
+free-engineer (0.5.0-trusty1) trusty; urgency=low
 
   * New upstream release
 
- -- Tomasz Makarewicz <makson96@gmail.com>  Wed, 18 Mar 2015 19:33:29 +0100
+ -- Tomasz Makarewicz <makson96@gmail.com>  Sat, 21 Mar 2015 23:29:53 +0100
 

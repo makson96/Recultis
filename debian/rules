@@ -35,6 +35,13 @@ build:
 	cp morrowind/openmw.cfg $(PACKAGEDIR)/free-engineer/opt/free-engineer/morrowind/
 	cp morrowind/run.sh $(PACKAGEDIR)/free-engineer/opt/free-engineer/morrowind/
 	cp morrowind.pyc $(PACKAGEDIR)/free-engineer/opt/free-engineer
+#tombraider
+	mkdir -p $(PACKAGEDIR)/free-engineer/opt/free-engineer/tombraider
+	cp tombraider/tb1.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/tombraider/
+	cp tombraider/tb2.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/tombraider/
+	cp tombraider/tb3.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/tombraider/
+	cp tombraider/icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer/tombraider/
+	cp tombraider.pyc $(PACKAGEDIR)/free-engineer/opt/free-engineer	
 	#steamcmd
 	cp steamcmd_linux.tar.gz $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	mkdir -p $(PACKAGEDIR)/free-engineer/usr/share/doc/free-engineer
