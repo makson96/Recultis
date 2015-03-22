@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 
-import sys, os, tarfile, time, shutil
+import sys, os, tarfile, time, shutil, fileinput
 from subprocess import call, check_output
 
 from PyQt5.QtCore import *
@@ -48,6 +48,9 @@ def copy_config():
 			shutil.copy(self_dir + "tombraider/OpenRaider_tb2.ini", local_openraider_dir + "OpenRaider.ini")
 		elif s_appid == s_appid3:
 			shutil.copy(self_dir + "tombraider/OpenRaider_tb3.ini", local_openraider_dir + "OpenRaider.ini")
+		for line in fileinput.FileInput(local_openraider_dir + "OpenRaider.ini",inplace=1):
+			line = line.replace("^^^^", os.getenv("HOME"))
+			print(line, end='')
 	if os.path.exists(game_data_dir + "data/splash.tga") == False:
 		shutil.copy(engine_dir + "share/OpenRaider/splash.tga", game_data_dir + "data/splash.tga")
 	print("symlinking")
