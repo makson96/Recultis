@@ -10,7 +10,7 @@ mv __pycache__/doom3.cpython-34.pyc doom3.pyc
 mv __pycache__/morrowind.cpython-34.pyc morrowind.pyc
 mv __pycache__/openjk.cpython-34.pyc openjk.pyc
 mv __pycache__/tombraider.cpython-34.pyc tombraider.pyc
-rm __pycache__
+rm -r __pycache__
 rm free_engineer.py
 rm avp.py
 rm doom3.py
@@ -18,4 +18,4 @@ rm morrowind.py
 rm openjk.py
 rm tombraider.py
 rm icon.xcf
-rm -r .git
+rm -rf .git
