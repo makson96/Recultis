@@ -12,9 +12,9 @@ games = [ ["Jedi Knight: Jedi Academy on OpenJK engine", "openjk"],
 ["Aliens vs Predator Classic 2000 on avp", "avp"],
 ["Doom 3 BFG on RBDOOM-3-BFG", "rbdoom-3-bfg"],
 ["The Elder Scrolls III: Morrowind on OpenMW","openmw-makson"],
-["Tomb Raider I","openraider"],
-["Tomb Raider II","openraider"],
-["Tomb Raider III","openraider"]]
+["Tomb Raider I on OpenRaider","openraider"],
+["Tomb Raider II on OpenRaider","openraider"],
+["Tomb Raider III on OpenRaider","openraider"]]
 
 class Window(QWidget):
 	

@@ -31,7 +31,7 @@ def steamcmd(user):
 	print(user)
 	if os.path.isdir(game_data_dir) == False:
 		s_download = call("x-terminal-emulator -e './steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " +force_install_dir " + game_data_dir + " +app_update " + s_appid + " validate +quit'", shell=True)
-	while os.path.isdir(game_data_dir) == False:
+	while os.path.isdir(game_data_dir + "data") == False:
 		time.sleep(2)
 	copy_config()
 	launchers()
@@ -41,7 +41,15 @@ def copy_config():
 		os.makedirs(local_openraider_dir)
 	if os.path.exists(local_openraider_dir + "OpenRaider.ini") == False:
 		print("copying OpenRaider.ini")
-		shutil.copy(engine_dir + "share/OpenRaider/OpenRaider.ini", local_openraider_dir + "OpenRaider.ini")
+		#shutil.copy(engine_dir + "share/OpenRaider/OpenRaider.ini", local_openraider_dir + "OpenRaider.ini")
+		if s_appid == s_appid1:
+			shutil.copy(self_dir + "tombraider/OpenRaider_tb1.ini", local_openraider_dir + "OpenRaider.ini")
+		elif s_appid == s_appid2:
+			shutil.copy(self_dir + "tombraider/OpenRaider_tb2.ini", local_openraider_dir + "OpenRaider.ini")
+		elif s_appid == s_appid3:
+			shutil.copy(self_dir + "tombraider/OpenRaider_tb3.ini", local_openraider_dir + "OpenRaider.ini")
+	if os.path.exists(game_data_dir + "data/splash.tga") == False:
+		shutil.copy(engine_dir + "share/OpenRaider/splash.tga", game_data_dir + "data/splash.tga")
 	print("symlinking")
 	if os.path.exists(game_data_dir + "OpenRaider") == False:
 		os.symlink(engine_dir + "bin/OpenRaider", game_data_dir + "OpenRaider")
