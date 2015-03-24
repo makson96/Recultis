@@ -89,8 +89,8 @@ class Window(QWidget):
 			dep_pack = QMessageBox.question(self, "Install Engine", "You need to install following packages (root password required):<br><b>" + games[self.game_nr][1] +"</b><br>Continue?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
 			if dep_pack == QMessageBox.Yes:
 				print("Yes")
-				dep_install = call("""x-terminal-emulator -e 'gksudo "apt-get -y install """  + games[self.game_nr][1] + """"'""", shell=True)
-				print("""x-terminal-emulator -e 'gksudo "apt-get -y install """  + games[self.game_nr][1] + """"'""")
+				dep_install = call("""x-terminal-emulator -e 'pkexec "apt-get -y install """  + games[self.game_nr][1] + """"'""", shell=True)
+				print("""x-terminal-emulator -e 'pkexec "apt-get -y install """  + games[self.game_nr][1] + """"'""")
 				while self.engine_installed == 0:
 					self.check_dep()
 					time.sleep(2)
