@@ -95,7 +95,7 @@ class Window(QWidget):
 			self.game_nr = 5
 		elif self.r6.isChecked():
 			self.game_nr = 6
-		elif self.r6.isChecked():
+		elif self.r7.isChecked():
 			self.game_nr = 7
 		
 		self.check_dep()
