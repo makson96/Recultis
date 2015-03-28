@@ -27,7 +27,7 @@ def steamcmd(user):
 	print(user)
 	if os.path.isdir(game_data_dir) == False:
 		s_download = call("x-terminal-emulator -e './steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " +force_install_dir " + game_data_dir + " +app_update " + s_appid + " validate +quit'", shell=True)
-	while os.path.isdir(game_data_dir + "GEODATA/") == False:
+	while os.path.isdir(game_data_dir + "XCOM/") == False:
 		time.sleep(2)
 	symlink()
 	launchers()
@@ -35,11 +35,16 @@ def steamcmd(user):
 def symlink():
 	if os.path.isdir(local_data_dir) == False:
 		os.makedirs(local_data_dir)
-	print("symlinking")
-	dirs = ["GEODATA", "GEOGRAPH", "Language", "MAPS", "Resources", "ROUTES", "Ruleset", "Shaders", "SoldierName", "SOUND", "TERRAIN", "UFOGRAPH", "UFOINTRO", "UNITS"]
+	print("symlinking1")
+	dirs = ["GEODATA", "GEOGRAPH", "MAPS", "ROUTES", "SOUND", "TERRAIN", "UFOGRAPH", "UFOINTRO", "UNITS"]
 	for xdir in dirs:
 		if os.path.exists(local_data_dir + xdir) == False:
 			os.symlink(game_data_dir + xdir, local_data_dir + xdir)
+	print("symlinking2")
+	dirs = ["Language", "MAPS/FIRES.MAP", "MAPS/INTERC.MAP", "Resources", "ROUTES/FIRES.RMP", "ROUTES/INTERC.RMP", "Ruleset", "Shaders", "SoldierName"]
+	for xdir in dirs:
+		if os.path.exists(local_data_dir + xdir) == False:
+			os.symlink(engine_dir + "/share/openxcom/data/" + xdir, local_data_dir + xdir)
 
 def launchers():
 	print("make_launchers")
