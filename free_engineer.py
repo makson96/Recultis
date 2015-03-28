@@ -1,20 +1,29 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 
-import sys, os, time
+import sys, os, time, platform
 from subprocess import check_output, CalledProcessError, call
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-games = [ ["Jedi Knight: Jedi Academy on OpenJK engine", "openjk"],
+games_ubuntu = [ ["Jedi Knight: Jedi Academy on OpenJK engine", "openjk"],
 ["Aliens vs Predator Classic 2000 on avp", "avp"],
 ["Doom 3 BFG on RBDOOM-3-BFG", "rbdoom-3-bfg"],
 ["The Elder Scrolls III: Morrowind on OpenMW","openmw-makson"],
 ["Tomb Raider I on OpenRaider (Alpha)","openraider"],
 ["Tomb Raider II on OpenRaider (Alpha)","openraider"],
-["Tomb Raider III on OpenRaider (Alpha)","openraider"]]
+["Tomb Raider III on OpenRaider (Alpha)","openraider"],
+["X-COM: UFO Defense on OpenXcom", "openxcom"]]
+
+packager_install_ubuntu = "pkexec apt-get -y install "
+packager_check_ubuntu = "dpkg-query -W --showformat='${Status}\n' "
+
+if platform.linux_distribution()[0] == "Ubuntu":
+	games = games_ubuntu
+	packager_install = packager_install_ubuntu
+	packager_check = packager_check_ubuntu
 
 class Window(QWidget):
 	
@@ -40,6 +49,8 @@ class Window(QWidget):
 		game_group.addButton(self.r5)
 		self.r6 = QRadioButton(games[6][0])
 		game_group.addButton(self.r6)
+		self.r7 = QRadioButton(games[7][0])
+		game_group.addButton(self.r7)
 		self.r0.setChecked(True)
 		self.chooseButton = QPushButton("Choose")
 		self.exitButton = QPushButton("Exit")
@@ -55,6 +66,7 @@ class Window(QWidget):
 		vbox1.addWidget(self.r4)
 		vbox1.addWidget(self.r5)
 		vbox1.addWidget(self.r6)
+		vbox1.addWidget(self.r7)
 		hbox1.addWidget(self.chooseButton)
 		hbox1.addWidget(self.exitButton)
 		vbox1.addLayout(hbox1)
@@ -83,13 +95,15 @@ class Window(QWidget):
 			self.game_nr = 5
 		elif self.r6.isChecked():
 			self.game_nr = 6
+		elif self.r6.isChecked():
+			self.game_nr = 7
 		
 		self.check_dep()
 		if self.engine_installed == 0:
 			dep_pack = QMessageBox.question(self, "Install Engine", "You need to install following packages (root password required):<br><b>" + games[self.game_nr][1] +"</b><br>Continue?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
 			if dep_pack == QMessageBox.Yes:
 				print("Yes")
-				dep_install = call("""x-terminal-emulator -e 'pkexec "apt-get -y install """  + games[self.game_nr][1] + """"'""", shell=True)
+				dep_install = call("""x-terminal-emulator -e 'pkexec apt-get -y install """  + games[self.game_nr][1] + """'""", shell=True)
 				print("""x-terminal-emulator -e 'pkexec "apt-get -y install """  + games[self.game_nr][1] + """"'""")
 				while self.engine_installed == 0:
 					self.check_dep()
@@ -109,6 +123,8 @@ class Window(QWidget):
 				import morrowind as game_data
 			elif self.game_nr == 4 or self.game_nr == 5 or self.game_nr == 6:
 				import tombraider as game_data
+			elif self.game_nr == 7:
+				import xcom as game_data
 			
 			if self.game_nr == 4:
 				download_data = game_data.Steam(self, 1, 1)
