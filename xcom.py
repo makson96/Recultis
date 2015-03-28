@@ -39,7 +39,7 @@ def symlink():
 	dirs = ["GEODATA", "GEOGRAPH", "Language", "MAPS", "Resources", "ROUTES", "Ruleset", "Shaders", "SoldierName", "SOUND", "TERRAIN", "UFOGRAPH", "UFOINTRO", "UNITS"]
 	for xdir in dirs:
 		if os.path.exists(local_data_dir + xdir) == False:
-		os.symlink(game_data_dir + xdir, local_data_dir + xdir)
+			os.symlink(game_data_dir + xdir, local_data_dir + xdir)
 
 def launchers():
 	print("make_launchers")
