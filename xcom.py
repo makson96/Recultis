@@ -39,12 +39,16 @@ def symlink():
 	dirs = ["GEODATA", "GEOGRAPH", "MAPS", "ROUTES", "SOUND", "TERRAIN", "UFOGRAPH", "UFOINTRO", "UNITS"]
 	for xdir in dirs:
 		if os.path.exists(local_data_dir + xdir) == False:
-			os.symlink(game_data_dir + xdir, local_data_dir + xdir)
+			os.symlink(game_data_dir + "XCOM/" + xdir, local_data_dir + xdir)
 	print("symlinking2")
-	dirs = ["Language", "MAPS/FIRES.MAP", "MAPS/INTERC.MAP", "Resources", "ROUTES/FIRES.RMP", "ROUTES/INTERC.RMP", "Ruleset", "Shaders", "SoldierName"]
+	dirs = ["Language", "Resources", "Ruleset", "Shaders", "SoldierName"]
 	for xdir in dirs:
 		if os.path.exists(local_data_dir + xdir) == False:
 			os.symlink(engine_dir + "/share/openxcom/data/" + xdir, local_data_dir + xdir)
+	dirs = ["MAPS/FIRES.MAP", "MAPS/INTERC.MAP", "ROUTES/FIRES.RMP", "ROUTES/INTERC.RMP"]
+	for xdir in dirs:
+		if os.path.exists(game_data_dir + "XCOM/" + xdir) == False:
+			os.symlink(engine_dir + "/share/openxcom/data/" + xdir, game_data_dir + "XCOM/" + xdir)
 
 def launchers():
 	print("make_launchers")
