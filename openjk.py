@@ -13,30 +13,22 @@ engine_dir = "/opt/OpenJK/"
 local_openjk_dir = os.getenv("HOME") + "/.local/share/openjk/base/"
 
 engineer_dir = os.getenv("HOME") + "/.free-engineer/"
-game_data_dir = engineer_dir + "JediAcademy/GameData/"
+game_data_dir = engineer_dir + "JediAcademy/"
 s_appid = "6020"
 
-def steamcmd(user):
-	if os.path.isdir(engineer_dir) == False:
-		os.makedirs(engineer_dir)
-	os.chdir(engineer_dir)
-	if os.path.isfile(engineer_dir+"steamcmd.sh") == False:
-		tar = tarfile.open(self_dir + "steamcmd_linux.tar.gz")
-		tar.extractall()
-		tar.close()
-	print(user)
-	if os.path.isdir(game_data_dir) == False:
-		s_download = call("x-terminal-emulator -e './steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " +force_install_dir " + engineer_dir + "JediAcademy/ +app_update " + s_appid + " validate +quit'", shell=True)
-	while os.path.isdir(game_data_dir) == False:
+def start_steam(user):
+	import steam
+	steam.steamcmd(user, s_appid, engineer_dir, game_data_dir)
+	while os.path.isdir(game_data_dir + "GameData/") == False:
 		time.sleep(2)
 	symlink()
 	launchers()
 
 def symlink():
 	for binary in next(os.walk(engine_dir))[2]:
-		if os.path.exists(game_data_dir + binary) == False:
+		if os.path.exists(game_data_dir + "GameData/" + binary) == False:
 			print("symlinking " + binary)
-			os.symlink(engine_dir + binary, game_data_dir + binary)
+			os.symlink(engine_dir + binary, game_data_dir + "GameData/" + binary)
 	if os.path.isdir(local_openjk_dir) == False:
 		os.makedirs(local_openjk_dir)
 	for library in next(os.walk(engine_dir + "OpenJK/"))[2]:
@@ -63,7 +55,7 @@ def launchers():
 	msgBox = QMessageBox.information(qw, "Game is ready", "Have fun!")
 	qw.close()
 
-class Steam:
+class Game:
 	
 	nested = 0
 	
@@ -100,7 +92,7 @@ class Steam:
 		vbox1.addLayout(hbox1)
 		vbox1.addLayout(hbox2)
 		
-		chooseButton.clicked.connect(lambda : steamcmd(str(loginText.text())))
+		chooseButton.clicked.connect(lambda : start_steam(str(loginText.text())))
 		exitButton.clicked.connect(qw.close)
  
 		mainLayout = QGridLayout()

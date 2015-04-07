@@ -16,17 +16,9 @@ game_data_dir = engineer_dir + "xcom/"
 local_data_dir = os.getenv("HOME") + "/.local/share/openxcom/data/"
 s_appid = "7760"
 
-def steamcmd(user):
-	if os.path.isdir(engineer_dir) == False:
-		os.makedirs(engineer_dir)
-	os.chdir(engineer_dir)
-	if os.path.isfile(engineer_dir+"steamcmd.sh") == False:
-		tar = tarfile.open(self_dir + "steamcmd_linux.tar.gz")
-		tar.extractall()
-		tar.close()
-	print(user)
-	if os.path.isdir(game_data_dir) == False:
-		s_download = call("x-terminal-emulator -e './steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " +force_install_dir " + game_data_dir + " +app_update " + s_appid + " validate +quit'", shell=True)
+def start_steam(user):
+	import steam
+	steam.steamcmd(user, s_appid, engineer_dir, game_data_dir)
 	while os.path.isdir(game_data_dir + "XCOM/") == False:
 		time.sleep(2)
 	symlink()
@@ -59,7 +51,7 @@ def launchers():
 	msgBox = QMessageBox.information(qw, "Game is ready", "Have fun!")
 	qw.close()
 
-class Steam:
+class Game:
 	
 	nested = 0
 	
@@ -96,7 +88,7 @@ class Steam:
 		vbox1.addLayout(hbox1)
 		vbox1.addLayout(hbox2)
 		
-		chooseButton.clicked.connect(lambda : steamcmd(str(loginText.text())))
+		chooseButton.clicked.connect(lambda : start_steam(str(loginText.text())))
 		exitButton.clicked.connect(qw.close)
  
 		mainLayout = QGridLayout()

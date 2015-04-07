@@ -127,13 +127,13 @@ class Window(QWidget):
 				import xcom as game_data
 			
 			if self.game_nr == 4:
-				download_data = game_data.Steam(self, 1, 1)
+				download_data = game_data.Game(self, 1, 1)
 			elif self.game_nr == 5:
-				download_data = game_data.Steam(self, 1, 2)
+				download_data = game_data.Game(self, 1, 2)
 			elif self.game_nr == 6:
-				download_data = game_data.Steam(self, 1, 3)
+				download_data = game_data.Game(self, 1, 3)
 			else:
-				download_data = game_data.Steam(self, 1)
+				download_data = game_data.Game(self, 1)
 			self.close()
 	
 	def check_dep(self):
