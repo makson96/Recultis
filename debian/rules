@@ -46,6 +46,12 @@ build:
 	mkdir -p $(PACKAGEDIR)/free-engineer/opt/free-engineer/xcom
 	cp xcom/xcom.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/xcom/
 	cp xcom.pyc $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	#descent
+	mkdir -p $(PACKAGEDIR)/free-engineer/opt/free-engineer/descent
+	cp descent/descent1.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/descent/
+	cp descent/descent2.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/descent/
+	cp descent/icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer/descent/
+	cp descent.py $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	#additional files
 	mkdir -p $(PACKAGEDIR)/free-engineer/usr/share/doc/free-engineer
 	cp README.md $(PACKAGEDIR)/free-engineer/usr/share/doc/free-engineer

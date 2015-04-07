@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Descent 1
+Comment=Play Descent 1
+Exec=/opt/dxx-rebirth/d1x-rebirth
+Icon=/opt/free-engineer/descent/icon.png
+Categories=Game;
+Terminal=false
