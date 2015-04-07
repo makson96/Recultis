@@ -57,7 +57,7 @@ class Game:
 	nested = 0
 	
 	def __init__(self, rootWindow = 0, nested = 0, game_variant = 1):
-		global qw, game_data_dir, s_appid
+		global qw, game_data_dir, s_appid, local_descent_dir
 		if game_variant == 1:
 			game_data_dir = game_data_dir1
 			s_appid = s_appid1
