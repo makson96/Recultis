@@ -9,6 +9,8 @@ build:
 	mkdir -p $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	#Free-Engineer
 	cp free_engineer.py $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp steam.py $(PACKAGEDIR)/free-engineer/opt/free-engineer
+	cp gog.py $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	cp icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	#OpenJK
 	mkdir -p $(PACKAGEDIR)/free-engineer/opt/free-engineer/jediacademy
