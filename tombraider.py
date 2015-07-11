@@ -6,7 +6,7 @@
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
 import sys, os, time, shutil, fileinput
-from subprocess import check_output
+from subprocess import call, check_output
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -25,8 +25,8 @@ s_appid2 = "225300"
 s_appid3 = "225320"
 
 def start_steam(user):
-	import steam
-	steam.steamcmd(user, s_appid, engineer_dir, game_data_dir)
+	print(user)
+	steamcmd = call("x-terminal-emulator -e 'python3 " + self_dir + "steam.py " + user + " " + s_appid + " " + engineer_dir + " " + game_data_dir + "'", shell=True)
 	while os.path.isdir(game_data_dir + "data") == False:
 		time.sleep(2)
 	copy_config()

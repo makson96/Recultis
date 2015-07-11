@@ -21,6 +21,5 @@ if os.path.isfile(engineer_dir+"steamcmd.sh") == False:
 	tar = tarfile.open(engineer_dir + "steamcmd_linux.tar.gz")
 	tar.extractall()
 	tar.close()
-if os.path.isdir(game_data_dir) == False:
-	password = getpass.getpass("Steam Password: ")
-	s_download = call("./steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " " + password + " +force_install_dir " + game_data_dir + " +app_update " + s_appid + " validate +quit", shell=True)
+password = getpass.getpass("Steam Password: ")
+s_download = call("./steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " " + password + " +force_install_dir " + game_data_dir + " +app_update " + s_appid + " validate +quit", shell=True)
