@@ -21,8 +21,7 @@ game_data_dir = engineer_dir + "JediAcademy/"
 s_appid = "6020"
 
 def start_steam(user):
-	import steam
-	steam.steamcmd(user, s_appid, engineer_dir, game_data_dir)
+	steamcmd = call("x-terminal-emulator -e 'python3 " + self_dir + "steam.py " + user + " " + s_appid + " " + engineer_dir + " " + game_data_dir + "'", shell=True)
 	while os.path.isdir(game_data_dir + "GameData/") == False:
 		time.sleep(2)
 	symlink()
