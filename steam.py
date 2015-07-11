@@ -23,4 +23,4 @@ if os.path.isfile(engineer_dir+"steamcmd.sh") == False:
 	tar.close()
 if os.path.isdir(game_data_dir) == False:
 	password = getpass.getpass("Steam Password: ")
-	s_download = call("x-terminal-emulator -e './steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " " + password + " +force_install_dir " + game_data_dir + " +app_update " + s_appid + " validate +quit'", shell=True)
+	s_download = call("./steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " " + password + " +force_install_dir " + game_data_dir + " +app_update " + s_appid + " validate +quit", shell=True)
