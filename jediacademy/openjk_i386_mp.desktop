@@ -3,7 +3,7 @@ Type=Application
 Name=Jedi Knight: Jedi Academy - MultiPlayer
 Comment=Play Jedi Knights Academy
 Path=.free-engineer/JediAcademy/GameData/
-Exec=env LD_LIBRARY_PATH=/opt/sdl2-makson/lib/ ./openjk.i386
+Exec=env LD_LIBRARY_PATH=/opt/sdl203-makson/lib/ ./openjk.i386
 Icon=/opt/free-engineer/jediacademy/icon.png
 Categories=Game;
 Terminal=false

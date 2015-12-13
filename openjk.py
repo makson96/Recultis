@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
 self_dir = "/opt/free-engineer/"
-engine_dir = "/opt/OpenJK/JediAcademy/"
+engine_dir = "/opt/JediAcademy/"
 local_openjk_dir = os.getenv("HOME") + "/.local/share/openjk/base/"
 
 engineer_dir = os.getenv("HOME") + "/.free-engineer/"
