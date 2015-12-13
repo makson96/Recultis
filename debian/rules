@@ -37,13 +37,6 @@ build:
 	cp morrowind/openmw.cfg $(PACKAGEDIR)/free-engineer/opt/free-engineer/morrowind/
 	cp morrowind/run.sh $(PACKAGEDIR)/free-engineer/opt/free-engineer/morrowind/
 	cp morrowind.py $(PACKAGEDIR)/free-engineer/opt/free-engineer
-	#tombraider
-	mkdir -p $(PACKAGEDIR)/free-engineer/opt/free-engineer/tombraider
-	cp tombraider/tb1.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/tombraider/
-	cp tombraider/tb2.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/tombraider/
-	cp tombraider/tb3.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/tombraider/
-	cp tombraider/icon.png $(PACKAGEDIR)/free-engineer/opt/free-engineer/tombraider/
-	cp tombraider.py $(PACKAGEDIR)/free-engineer/opt/free-engineer
 	#xcom
 	mkdir -p $(PACKAGEDIR)/free-engineer/opt/free-engineer/xcom
 	cp xcom/xcom.desktop $(PACKAGEDIR)/free-engineer/opt/free-engineer/xcom/

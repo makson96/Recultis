@@ -16,9 +16,6 @@ games_ubuntu = [ ["Jedi Knight: Jedi Academy on OpenJK engine", "openjk"],
 ["Aliens vs Predator Classic 2000 on avp", "avp"],
 ["Doom 3 BFG on RBDOOM-3-BFG", "rbdoom-3-bfg"],
 ["The Elder Scrolls III: Morrowind on OpenMW","openmw-makson"],
-["Tomb Raider I on OpenRaider (Alpha)","openraider"],
-["Tomb Raider II on OpenRaider (Alpha)","openraider"],
-["Tomb Raider III on OpenRaider (Alpha)","openraider"],
 ["X-COM: UFO Defense on OpenXcom", "openxcom"],
 ["Descent 1 on DXX-Rebirth", "d1x-rebirth"],
 ["Descent 2 on DXX-Rebirth", "d2x-rebirth"]]
@@ -55,12 +52,6 @@ class Window(QWidget):
 		game_group.addButton(self.r5)
 		self.r6 = QRadioButton(games[6][0])
 		game_group.addButton(self.r6)
-		self.r7 = QRadioButton(games[7][0])
-		game_group.addButton(self.r7)
-		self.r8 = QRadioButton(games[8][0])
-		game_group.addButton(self.r8)
-		self.r9 = QRadioButton(games[9][0])
-		game_group.addButton(self.r9)
 		self.r0.setChecked(True)
 		self.chooseButton = QPushButton("Choose")
 		self.exitButton = QPushButton("Exit")
@@ -76,9 +67,6 @@ class Window(QWidget):
 		vbox1.addWidget(self.r4)
 		vbox1.addWidget(self.r5)
 		vbox1.addWidget(self.r6)
-		vbox1.addWidget(self.r7)
-		vbox1.addWidget(self.r8)
-		vbox1.addWidget(self.r9)
 		hbox1.addWidget(self.chooseButton)
 		hbox1.addWidget(self.exitButton)
 		vbox1.addLayout(hbox1)
@@ -107,12 +95,6 @@ class Window(QWidget):
 			self.game_nr = 5
 		elif self.r6.isChecked():
 			self.game_nr = 6
-		elif self.r7.isChecked():
-			self.game_nr = 7
-		elif self.r8.isChecked():
-			self.game_nr = 8
-		elif self.r9.isChecked():
-			self.game_nr = 9
 		
 		self.check_dep()
 		if self.engine_installed == 0:
@@ -137,22 +119,14 @@ class Window(QWidget):
 				import doom3 as game_data
 			elif self.game_nr == 3:
 				import morrowind as game_data
-			elif self.game_nr == 4 or self.game_nr == 5 or self.game_nr == 6:
-				import tombraider as game_data
-			elif self.game_nr == 7:
+			elif self.game_nr == 4:
 				import xcom as game_data
-			elif self.game_nr == 8 or self.game_nr == 9:
+			elif self.game_nr == 5 or self.game_nr == 6:
 				import descent as game_data
 			
-			if self.game_nr == 4:
+			if self.game_nr == 5:
 				download_data = game_data.Game(self, 1, 1)
-			elif self.game_nr == 5:
-				download_data = game_data.Game(self, 1, 2)
 			elif self.game_nr == 6:
-				download_data = game_data.Game(self, 1, 3)
-			elif self.game_nr == 8:
-				download_data = game_data.Game(self, 1, 1)
-			elif self.game_nr == 9:
 				download_data = game_data.Game(self, 1, 2)
 			else:
 				download_data = game_data.Game(self, 1)
