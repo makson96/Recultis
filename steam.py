@@ -11,10 +11,8 @@ from subprocess import call
 user = sys.argv[1]
 s_appid = sys.argv[2]
 engineer_dir = sys.argv[3]
-game_data_dir = sys.argv[4]
+game_dir = sys.argv[4]
 
-if os.path.isdir(engineer_dir) == False:
-	os.makedirs(engineer_dir)
 os.chdir(engineer_dir)
 if os.path.isfile(engineer_dir+"steamcmd.sh") == False:
 	urllib.request.urlretrieve("http://media.steampowered.com/client/steamcmd_linux.tar.gz", engineer_dir + "steamcmd_linux.tar.gz")
@@ -22,4 +20,4 @@ if os.path.isfile(engineer_dir+"steamcmd.sh") == False:
 	tar.extractall()
 	tar.close()
 password = getpass.getpass("Steam Password: ")
-s_download = call("./steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " " + password + " +force_install_dir " + game_data_dir + " +app_update " + s_appid + " validate +quit", shell=True)
+s_download = call("./steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + user + " " + password + " +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit", shell=True)
