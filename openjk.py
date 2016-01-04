@@ -36,6 +36,10 @@ def start_steam(user):
 	launchers()
 
 def launchers():
+	print("copy icon")
+	if os.path.isdir(os.getenv("HOME") + "/.icons") == False:
+		os.makedirs(os.getenv("HOME") + "/.icons")
+	shutil.copy(self_dir + "jediacademy/openjk.png", os.getenv("HOME") + "/.icons/openjk.png")
 	print("make_launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 	shutil.copy(self_dir + "jediacademy/openjk_amd64_sp.desktop", desk_dir + "/openjk_amd64_sp.desktop")
