@@ -13,7 +13,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
-local_openjk_dir = os.getenv("HOME") + "/.local/share/openjk/base/"
 engineer_dir = os.getenv("HOME") + "/.free-engineer/"
 game_dir = engineer_dir + "JediAcademy/"
 s_appid = "6020"
@@ -34,20 +33,7 @@ def start_steam(user):
 	steamcmd = call("x-terminal-emulator -e 'python3 " + self_dir + "steam.py " + user + " " + s_appid + " " + engineer_dir + " " + game_dir + "'", shell=True)
 	while os.path.isdir(game_dir + "GameData/") == False:
 		time.sleep(2)
-	#symlink()
 	launchers()
-
-def symlink():
-	for binary in next(os.walk(engine_dir))[2]:
-		if os.path.exists(game_dir + "GameData/" + binary) == False:
-			print("symlinking " + binary)
-			os.symlink(engine_dir + binary, game_dir + "GameData/" + binary)
-	if os.path.isdir(local_openjk_dir) == False:
-		os.makedirs(local_openjk_dir)
-	for library in next(os.walk(engine_dir + "OpenJK/"))[2]:
-		if os.path.exists(local_openjk_dir + library) == False:
-			print("symlinking " + library)
-			os.symlink(engine_dir + "OpenJK/" + library, local_openjk_dir + library)
 
 def launchers():
 	print("make_launchers")
@@ -88,15 +74,15 @@ class Game:
 			link_file = open(self_dir + "jediacademy/link.txt")
 			link = link_file.read()
 			#try:
-			if os.path.isfile(local_openjk_dir) == False:
+			if os.path.isfile(engineer_dir + "openjk.tar.xz") == False:
 				urllib.request.urlretrieve(link, engineer_dir + "openjk.tar.xz")
 				tar = tarfile.open(engineer_dir + "openjk.tar.xz")
 				tar.extractall(engineer_dir + "tmp")
 				tar.close()
 			os.remove(engineer_dir + "openjk.tar.xz")
 			prepare_engine()
-		#except:
-		#	print("Engine file not found please use latest version of Free-Engineer")
+			#except:
+			#	print("Engine file not found please use latest version of Free-Engineer")
 		if self.nested == 0:
 			s_app.exec_()
 	
