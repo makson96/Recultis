@@ -5,36 +5,47 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import sys, os, time, shutil
+import sys, os, tarfile, time, shutil, urllib.request
 from subprocess import call, check_output
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-self_dir = "/opt/free-engineer/"
-engine_dir = "/opt/openmw-makson/"
-
+self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 engineer_dir = os.getenv("HOME") + "/.free-engineer/"
-game_data_dir = engineer_dir + "morrowind/"
+game_dir = engineer_dir + "morrowind/"
 s_appid = "22320"
 
-def start_steam(user):
-	print(user)
-	steamcmd = call("x-terminal-emulator -e 'python3 " + self_dir + "steam.py " + user + " " + s_appid + " " + engineer_dir + " " + game_data_dir + "'", shell=True)
-	while os.path.isdir(game_data_dir + "Data Files/") == False:
-		time.sleep(2)
-	copy_config()
-	launchers()
-
-def copy_config():
+def prepare_engine():
+	print("prepare engine")
+	for binary in next(os.walk(engineer_dir + "tmp/openmw/"))[2]:
+		shutil.copy(engineer_dir + "tmp/openmw/" + binary, game_dir + binary)
+	for directory in next(os.walk(engineer_dir + "tmp/openmw/"))[1]:
+		try:
+			shutil.rmtree(game_dir + directory)
+		except:
+			pass
+		shutil.copytree(engineer_dir + "tmp/openmw/" + directory, game_dir + directory, symlinks=True)
+	shutil.rmtree(engineer_dir + "tmp")
 		print("copy_config")
 		if os.path.isdir(os.getenv("HOME") + "/.config/openmw/") == False:
 			os.makedirs(os.getenv("HOME") + "/.config/openmw/")
 		if os.path.isfile(os.getenv("HOME") + "/.config/openmw/openmw.cfg") == False:
-			shutil.copy(engine_dir + "morrowind/openmw.cfg", os.getenv("HOME") + "/.config/openmw/openmw.cfg")
+			shutil.copy(self_dir + "morrowind/openmw.cfg", os.getenv("HOME") + "/.config/openmw/openmw.cfg")
+
+def start_steam(user):
+	print(user)
+	steamcmd = call("x-terminal-emulator -e 'python3 " + self_dir + "steam.py " + user + " " + s_appid + " " + engineer_dir + " " + game_dir + "'", shell=True)
+	while os.path.isdir(game_dir + "Data Files/") == False:
+		time.sleep(2)
+	launchers()
 
 def launchers():
+	print("copy icon")
+	if os.path.isdir(os.getenv("HOME") + "/.icons") == False:
+		os.makedirs(os.getenv("HOME") + "/.icons")
+	shutil.copy(self_dir + "morrowind/openmw.png", os.getenv("HOME") + "/.icons/openmw.png")
 	print("make_launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 	shutil.copy(self_dir + "morrowind/morrowind.desktop", desk_dir + "/morrowind.desktop")
@@ -48,6 +59,38 @@ class Game:
 	nested = 0
 	
 	def __init__(self, rootWindow = 0, nested = 0):
+		if os.path.isdir(engineer_dir) == False:
+			os.makedirs(engineer_dir)
+		if os.path.isdir(game_dir) == False:
+			os.makedirs(game_dir)
+		self.engine(rootWindow, nested)
+		self.data(rootWindow, nested)
+	
+	def engine(self, rootWindow = 0, nested = 0):
+		self.nested = nested
+		if self.nested == 0:
+			s_app = QApplication(sys.argv)
+		else:
+			rootWindow.hide()
+		qw = QWidget()
+		#Window about game engine installation
+		rootWindow.hide()
+		install_engine_inform = QMessageBox.information(qw, "Installing engine", "After you click OK, game engine will be downloaded and installed. It may take a while.", QMessageBox.Ok)
+		if QMessageBox.Ok:
+			link_file = open(self_dir + "morrowind/link.txt")
+			link = link_file.read()
+			#try:
+			if os.path.isfile(engineer_dir + "openmw.tar.xz") == False:
+				urllib.request.urlretrieve(link, engineer_dir + "openmw.tar.xz")
+				tar = tarfile.open(engineer_dir + "openmw.tar.xz")
+				tar.extractall(engineer_dir + "tmp")
+				tar.close()
+			os.remove(engineer_dir + "openmw.tar.xz")
+			prepare_engine()
+			#except:
+			#	print("Engine file not found please use latest version of Free-Engineer")
+	
+	def data(self, rootWindow = 0, nested = 0):
 		global qw
 		self.nested = nested
 		if self.nested == 0:

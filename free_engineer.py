@@ -11,7 +11,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-games = [ "Jedi Knight: Jedi Academy on OpenJK engine" ]
+games = [ "Jedi Knight: Jedi Academy on OpenJK engine", "The Elder Scrolls III: Morrowind on OpenMW engine" ]
 
 class Window(QWidget):
 	
@@ -24,6 +24,8 @@ class Window(QWidget):
 		game_group = QButtonGroup()
 		self.r0 = QRadioButton(games[0])
 		game_group.addButton(self.r0)
+		self.r1 = QRadioButton(games[1])
+		game_group.addButton(self.r1)
 		self.r0.setChecked(True)
 		self.chooseButton = QPushButton("Choose")
 		self.exitButton = QPushButton("Exit")
@@ -33,6 +35,7 @@ class Window(QWidget):
 
 		vbox1.addWidget(nameLabel)
 		vbox1.addWidget(self.r0)
+		vbox1.addWidget(self.r1)
 		hbox1.addWidget(self.chooseButton)
 		hbox1.addWidget(self.exitButton)
 		vbox1.addLayout(hbox1)
@@ -49,9 +52,10 @@ class Window(QWidget):
 	def choose(self):
 		if self.r0.isChecked():
 			import openjk as chosen_game
-			
-			download_game = chosen_game.Game(self, 1)
-			self.close()	
+		elif self.r1.isChecked():
+			import openmw as chosen_game
+		download_game = chosen_game.Game(self, 1)
+		self.close()
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)

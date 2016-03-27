@@ -2,7 +2,8 @@
 Type=Application
 Name=The Elder Scrolls III: Morrowind
 Comment=Play The Elder Scrolls III: Morrowind
-Exec=sh /opt/free-engineer/morrowind/run.sh
-Icon=/opt/free-engineer/morrowind/icon.png
+Path=.free-engineer/morrowind/
+Exec=./bin/openmw
+Icon=openmw.png
 Categories=Game;
 Terminal=false
