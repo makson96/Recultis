@@ -43,13 +43,13 @@ def launchers():
 	print("copy icon")
 	if os.path.isdir(os.getenv("HOME") + "/.icons") == False:
 		os.makedirs(os.getenv("HOME") + "/.icons")
+	if os.path.isdir(os.getenv("HOME") + "/.local/share/applications/") == False:
+		os.makedirs(os.getenv("HOME") + "/.local/share/applications/")
 	shutil.copy(self_dir + "morrowind/openmw.png", os.getenv("HOME") + "/.icons/openmw.png")
 	print("make_launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 	shutil.copy(self_dir + "morrowind/morrowind.desktop", desk_dir + "/morrowind.desktop")
 	shutil.copy(self_dir + "morrowind/morrowind.desktop", os.getenv("HOME") + "/.local/share/applications/morrowind.desktop")
-		
-	msgBox = QMessageBox.information(qw, "Game is ready", "Have fun!")
 	qw.close()
 
 class Game:

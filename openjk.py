@@ -39,6 +39,8 @@ def launchers():
 	print("copy icon")
 	if os.path.isdir(os.getenv("HOME") + "/.icons") == False:
 		os.makedirs(os.getenv("HOME") + "/.icons")
+	if os.path.isdir(os.getenv("HOME") + "/.local/share/applications/") == False:
+		os.makedirs(os.getenv("HOME") + "/.local/share/applications/")
 	shutil.copy(self_dir + "jediacademy/openjk.png", os.getenv("HOME") + "/.icons/openjk.png")
 	print("make_launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
@@ -46,8 +48,6 @@ def launchers():
 	shutil.copy(self_dir + "jediacademy/openjk_amd64_sp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_amd64_sp.desktop")
 	shutil.copy(self_dir + "jediacademy/openjk_amd64_mp.desktop", desk_dir + "/openjk_amd64_mp.desktop")
 	shutil.copy(self_dir + "jediacademy/openjk_amd64_mp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_amd64_mp.desktop")
-		
-	msgBox = QMessageBox.information(qw, "Game is ready", "Have fun!")
 	qw.close()
 
 class Game:
