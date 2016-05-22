@@ -26,11 +26,11 @@ def prepare_engine():
 			pass
 		shutil.copytree(engineer_dir + "tmp/openmw/" + directory, game_dir + directory, symlinks=True)
 	shutil.rmtree(engineer_dir + "tmp")
-		print("copy_config")
-		if os.path.isdir(os.getenv("HOME") + "/.config/openmw/") == False:
-			os.makedirs(os.getenv("HOME") + "/.config/openmw/")
-		if os.path.isfile(os.getenv("HOME") + "/.config/openmw/openmw.cfg") == False:
-			shutil.copy(self_dir + "morrowind/openmw.cfg", os.getenv("HOME") + "/.config/openmw/openmw.cfg")
+	print("copy_config")
+	if os.path.isdir(os.getenv("HOME") + "/.config/openmw/") == False:
+		os.makedirs(os.getenv("HOME") + "/.config/openmw/")
+	if os.path.isfile(os.getenv("HOME") + "/.config/openmw/openmw.cfg") == False:
+		shutil.copy(self_dir + "morrowind/openmw.cfg", os.getenv("HOME") + "/.config/openmw/openmw.cfg")
 
 def start_steam(user):
 	print(user)
