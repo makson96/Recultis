@@ -51,9 +51,9 @@ class Window(QWidget):
 	
 	def choose(self):
 		if self.r0.isChecked():
-			import openjk as chosen_game
+			import jediacademy as chosen_game
 		elif self.r1.isChecked():
-			import openmw as chosen_game
+			import morrowind as chosen_game
 		download_game = chosen_game.Game(self, 1)
 		self.close()
 
