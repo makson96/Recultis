@@ -19,8 +19,6 @@ s_appid = "22320"
 
 def prepare_engine():
 	print("prepare engine")
-	for binary in next(os.walk(engineer_dir + "tmp/openmw/"))[2]:
-		shutil.copy(engineer_dir + "tmp/openmw/" + binary, game_dir + binary)
 	for directory in next(os.walk(engineer_dir + "tmp/openmw/"))[1]:
 		try:
 			shutil.rmtree(game_dir + directory)
