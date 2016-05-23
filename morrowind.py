@@ -31,6 +31,9 @@ def prepare_engine():
 		os.makedirs(os.getenv("HOME") + "/.config/openmw/")
 	if os.path.isfile(os.getenv("HOME") + "/.config/openmw/openmw.cfg") == False:
 		shutil.copy(self_dir + "morrowind/openmw.cfg", os.getenv("HOME") + "/.config/openmw/openmw.cfg")
+		openmw_cfg=open(os.getenv("HOME") + "/.config/openmw/openmw.cfg", "a")
+		openmw_cfg.write('\ndata="' + game_dir + 'Data Files"')
+		openmw_cfg.close()
 
 def start_steam(user):
 	print(user)
