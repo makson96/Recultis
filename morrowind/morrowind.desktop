@@ -3,7 +3,7 @@ Type=Application
 Name=The Elder Scrolls III: Morrowind
 Comment=Play The Elder Scrolls III: Morrowind
 Path=.free-engineer/morrowind/
-Exec=./bin/openmw
+Exec=env OSG_LIBRARY_PATH=$HOME/.free-engineer/morrowind/lib/osgPlugins-3.4.0 ./bin/openmw
 Icon=openmw.png
 Categories=Game;
 Terminal=false
