@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Descent 2
-Comment=Play Descent 2
-Exec=/opt/dxx-rebirth/d2x-rebirth
-Icon=/opt/free-engineer/descent/icon.png
-Categories=Game;
-Terminal=false

@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=X-COM: UFO Defense
-Comment=Play X-COM: UFO Defense
-Exec=/opt/openxcom/bin/openxcom
-Icon=/opt/openxcom/share/icons/hicolor/128x128/apps/openxcom.png
-Categories=Game;
-Terminal=false
