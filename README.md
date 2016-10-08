@@ -6,11 +6,11 @@ This application is a set of Python3 scripts. It uses PyQt5 to display GUI. The 
 
 # Supported Games
 Jedi Knights: Jedi Academy (OpenJK engine) <br />
-The Elder Scrolls III: Morrowind (OpenMW engine)
+The Elder Scrolls III: Morrowind (OpenMW engine) <br />
+Doom 3 BFG (RBDoom-3-BFG engine)
 
 #Will be supported in future
 Aliens vs Predator Classic 2000 (avp engine) <br />
-Doom 3 BFG (RBDoom-3-BFG engine) <br />
 X-COM: UFO Defense (OpenXcom engine) <br />
 Descent 1 (DXX-Rebirth engine) <br />
 Descent 2 (DXX-Rebirth engine)
