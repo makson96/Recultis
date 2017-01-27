@@ -88,15 +88,18 @@ class Window(QWidget):
 	
 	def choose(self):
 		if self.r0.isChecked():
-			import jediacademy as chosen_game
+			sys.path.append(os.getcwd() + "/jediacademy")
+			import chosen_game
 			if self.status_list[0][0] == "Update available":
 				urllib.request.urlretrieve(self.status_list[0][1], self.status_list[0][2])
 		elif self.r1.isChecked():
-			import morrowind as chosen_game
+			sys.path.append(os.getcwd() + "/morrowind")
+			import chosen_game
 			if self.status_list[1][0] == "Update available":
 				urllib.request.urlretrieve(self.status_list[1][1], self.status_list[1][2])
 		elif self.r2.isChecked():
-			import doom3 as chosen_game
+			sys.path.append(os.getcwd() + "/doom3")
+			import chosen_game
 			if self.status_list[2][0] == "Update available":
 				urllib.request.urlretrieve(self.status_list[2][1], self.status_list[2][2])
 		download_game = chosen_game.Game(self, 1)
