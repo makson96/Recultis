@@ -8,11 +8,11 @@
 import os, tarfile, shutil
 from subprocess import call
 
-def ar(deb_file):
-	s_ar = call("ar x " + deb_file, shell=True)
+def ar(deb_file, tmp_dir):
+	s_ar = call("cd " + tmp_dir + "; ar x " + deb_file, shell=True)
 
-def dpkg(deb_file):
-	s_dpkg = call("dpkg -x " + deb_file + " .", shell=True)
+def dpkg(deb_file, tmp_dir):
+	s_dpkg = call("dpkg -x " + deb_file + " " + tmp_dir, shell=True)
 
 def untar_data(tmp_dir):
 	tar = tarfile.open(tmp_dir + "data.tar.xz")
@@ -30,7 +30,7 @@ def clean_data(tmp_dir, deb_name):
 	os.remove(tmp_dir+deb_name)
 
 def unpack_deb(tmp_dir, deb_name):
-	ar(tmp_dir+deb_name)
+	ar(tmp_dir+deb_name, tmp_dir)
 	untar_data(tmp_dir)
 	move_data(tmp_dir, deb_name)
 	clean_data(tmp_dir, deb_name)
