@@ -15,15 +15,16 @@ def dpkg(deb_file, tmp_dir):
 	s_dpkg = call("dpkg -x " + deb_file + " " + tmp_dir, shell=True)
 
 def untar_data(tmp_dir):
+	os.chdir(tmp_dir)
 	tar = tarfile.open(tmp_dir + "data.tar.xz")
 	tar.extractall()
 	tar.close()
 
 def move_data(tmp_dir, deb_name):
-	shutil.move(tmp_dir + "./opt/" + deb_name[:-4], tmp_dir + deb_name[:-4])
+	shutil.move(tmp_dir + "opt/" + deb_name[:-4], tmp_dir + deb_name[:-4])
 
 def clean_data(tmp_dir, deb_name):
-	shutil.rmtree(tmp_dir + ".")
+	shutil.rmtree(tmp_dir + "opt")
 	os.remove(tmp_dir + "control.tar.gz")
 	os.remove(tmp_dir + "data.tar.xz")
 	os.remove(tmp_dir + "debian-binary")

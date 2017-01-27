@@ -30,7 +30,7 @@ def prepare_engine():
 	if os.path.isdir(os.getenv("HOME") + "/.config/openmw/") == False:
 		os.makedirs(os.getenv("HOME") + "/.config/openmw/")
 	if os.path.isfile(os.getenv("HOME") + "/.config/openmw/openmw.cfg") == False:
-		shutil.copy(self_dir + "morrowind/openmw.cfg", os.getenv("HOME") + "/.config/openmw/openmw.cfg")
+		shutil.copy(self_dir + "openmw.cfg", os.getenv("HOME") + "/.config/openmw/openmw.cfg")
 		openmw_cfg=open(os.getenv("HOME") + "/.config/openmw/openmw.cfg", "a")
 		openmw_cfg.write('\ndata="' + game_dir + 'Data Files"')
 		openmw_cfg.close()
@@ -48,11 +48,11 @@ def launchers():
 		os.makedirs(os.getenv("HOME") + "/.icons")
 	if os.path.isdir(os.getenv("HOME") + "/.local/share/applications/") == False:
 		os.makedirs(os.getenv("HOME") + "/.local/share/applications/")
-	shutil.copy(self_dir + "morrowind/openmw.png", os.getenv("HOME") + "/.icons/openmw.png")
+	shutil.copy(self_dir + "openmw.png", os.getenv("HOME") + "/.icons/openmw.png")
 	print("make_launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
-	shutil.copy(self_dir + "morrowind/morrowind.desktop", desk_dir + "/morrowind.desktop")
-	shutil.copy(self_dir + "morrowind/morrowind.desktop", os.getenv("HOME") + "/.local/share/applications/morrowind.desktop")
+	shutil.copy(self_dir + "morrowind.desktop", desk_dir + "/morrowind.desktop")
+	shutil.copy(self_dir + "morrowind.desktop", os.getenv("HOME") + "/.local/share/applications/morrowind.desktop")
 	qw.close()
 
 class Game:
@@ -78,7 +78,7 @@ class Game:
 		rootWindow.hide()
 		install_engine_inform = QMessageBox.information(qw, "Installing engine", "After you click OK, game engine will be downloaded and installed. It may take a while.", QMessageBox.Ok)
 		if QMessageBox.Ok:
-			link_file = open(self_dir + "morrowind/link.txt")
+			link_file = open(self_dir + "link.txt")
 			link = link_file.read()
 			if os.path.isdir(engineer_dir + "tmp") == False:
 				os.makedirs(engineer_dir + "tmp")
