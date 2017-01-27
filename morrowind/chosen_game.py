@@ -19,12 +19,12 @@ s_appid = "22320"
 
 def prepare_engine():
 	print("prepare engine")
-	for directory in next(os.walk(engineer_dir + "tmp/openmw/"))[1]:
+	for directory in next(os.walk(engineer_dir + "tmp/openmw-makson/"))[1]:
 		try:
 			shutil.rmtree(game_dir + directory)
 		except:
 			pass
-		shutil.copytree(engineer_dir + "tmp/openmw/" + directory, game_dir + directory, symlinks=True)
+		shutil.copytree(engineer_dir + "tmp/openmw-makson/" + directory, game_dir + directory, symlinks=True)
 	shutil.rmtree(engineer_dir + "tmp")
 	print("copy_config")
 	if os.path.isdir(os.getenv("HOME") + "/.config/openmw/") == False:
@@ -80,16 +80,13 @@ class Game:
 		if QMessageBox.Ok:
 			link_file = open(self_dir + "morrowind/link.txt")
 			link = link_file.read()
-			#try:
-			if os.path.isfile(engineer_dir + "openmw.tar.xz") == False:
-				urllib.request.urlretrieve(link, engineer_dir + "openmw.tar.xz")
-				tar = tarfile.open(engineer_dir + "openmw.tar.xz")
-				tar.extractall(engineer_dir + "tmp")
-				tar.close()
-			os.remove(engineer_dir + "openmw.tar.xz")
+			if os.path.isdir(engineer_dir + "tmp") == False:
+				os.makedirs(engineer_dir + "tmp")
+			if os.path.isfile(engineer_dir + "openmw-makson.deb") == False:
+				urllib.request.urlretrieve(link, engineer_dir + "tmp/openmw-makson.deb")
+				import unpack_deb
+				unpack_deb.unpack_deb(engineer_dir + "tmp/", "openmw-makson.deb")
 			prepare_engine()
-			#except:
-			#	print("Engine file not found please use latest version of Free-Engineer")
 	
 	def data(self, rootWindow = 0, nested = 0):
 		global qw
