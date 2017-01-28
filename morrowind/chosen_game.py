@@ -83,7 +83,9 @@ class Game:
 			if os.path.isdir(engineer_dir + "tmp") == False:
 				os.makedirs(engineer_dir + "tmp")
 			if os.path.isfile(engineer_dir + "openmw-makson.deb") == False:
-				urllib.request.urlretrieve(link, engineer_dir + "tmp/openmw-makson.deb")
+				from tools import download_engine
+				result = download_engine.download(link, engineer_dir + "tmp/openmw-makson.deb")
+				
 				from tools import unpack_deb
 				unpack_deb.unpack_deb(engineer_dir + "tmp/", "openmw-makson.deb")
 			prepare_engine()
