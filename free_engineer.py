@@ -13,6 +13,7 @@ from PyQt5.QtGui import *
 
 games = [ "Jedi Knight: Jedi Academy on OpenJK engine", "The Elder Scrolls III: Morrowind on OpenMW engine", "Doom 3 BFG on RBDOOM-3-BFG" ]
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
+engineer_dir = os.getenv("HOME") + "/.free-engineer/"
 
 class Window(QWidget):
 	
@@ -101,14 +102,19 @@ class Window(QWidget):
 			from doom3 import chosen_game
 			if self.status_list[2][0] == "Update available":
 				urllib.request.urlretrieve(self.status_list[2][1], self.status_list[2][2])
-		_thread.start_new_thread(chosen_game.start())
+		if os.path.isdir(engineer_dir) == False:
+			os.makedirs(engineer_dir)
+		_thread.start_new_thread(chosen_game.start, ())
+		print("new_thread_started")
+		deb_file_path, deb_url_path = chosen_game.info()
 		percent = 0
-		from tools import read_status
+		from tools import status
 		while percent != 100:
 			time.sleep(2)
-			status_list = read_status.status()
-			status = status_list[0]
-			percent = status_list[1]
+			status.write_status(engineer_dir, deb_file_path, deb_url_path)
+			result_list = status.read_status(engineer_dir)
+			result = result_list[0]
+			percent = result_list[1]
 			self.progress.setValue(percent)
 		self.close()
 
