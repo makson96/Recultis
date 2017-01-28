@@ -103,9 +103,12 @@ class Window(QWidget):
 				urllib.request.urlretrieve(self.status_list[2][1], self.status_list[2][2])
 		_thread.start_new_thread(chosen_game.start())
 		percent = 0
+		from tools import read_status
 		while percent != 100:
 			time.sleep(2)
-			status, percent = chosen_game.status()
+			status_list = read_status.status()
+			status = status_list[0]
+			percent = status_list[1]
 			self.progress.setValue(percent)
 		self.close()
 
