@@ -37,7 +37,7 @@ def prepare_engine():
 
 def start_steam(user):
 	print(user)
-	steamcmd = call("x-terminal-emulator -e 'python3 " + self_dir + "steam.py " + user + " " + s_appid + " " + engineer_dir + " " + game_dir + "'", shell=True)
+	steamcmd = call("x-terminal-emulator -e 'python3 " + self_dir + "tools/steam.py " + user + " " + s_appid + " " + engineer_dir + " " + game_dir + "'", shell=True)
 	while os.path.isdir(game_dir + "Data Files/") == False:
 		time.sleep(2)
 	launchers()
@@ -84,7 +84,7 @@ class Game:
 				os.makedirs(engineer_dir + "tmp")
 			if os.path.isfile(engineer_dir + "openmw-makson.deb") == False:
 				urllib.request.urlretrieve(link, engineer_dir + "tmp/openmw-makson.deb")
-				import unpack_deb
+				from tools import unpack_deb
 				unpack_deb.unpack_deb(engineer_dir + "tmp/", "openmw-makson.deb")
 			prepare_engine()
 	
