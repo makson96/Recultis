@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import sys, os, urllib.request
+import sys, os, urllib.request, _thread, time
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -34,6 +34,7 @@ class Window(QWidget):
 		self.r2 = QRadioButton(games[2] + " (" + self.status_list[2][0] + ")")
 		game_group.addButton(self.r2)
 		self.r0.setChecked(True)
+		self.progress = QProgressBar(self)
 		self.chooseButton = QPushButton("Choose")
 		self.exitButton = QPushButton("Exit")
 		
@@ -44,6 +45,7 @@ class Window(QWidget):
 		vbox1.addWidget(self.r0)
 		vbox1.addWidget(self.r1)
 		vbox1.addWidget(self.r2)
+		vbox1.addWidget(self.progress)
 		hbox1.addWidget(self.chooseButton)
 		hbox1.addWidget(self.exitButton)
 		vbox1.addLayout(hbox1)
@@ -99,7 +101,12 @@ class Window(QWidget):
 			from doom3 import chosen_game
 			if self.status_list[2][0] == "Update available":
 				urllib.request.urlretrieve(self.status_list[2][1], self.status_list[2][2])
-		download_game = chosen_game.Game(self, 1)
+		_thread.start_new_thread(chosen_game.start())
+		percent = 0
+		while percent != 100:
+			time.sleep(2)
+			status, percent = chosen_game.status()
+			self.progress.setValue(percent)
 		self.close()
 
 if __name__ == '__main__':
