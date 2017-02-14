@@ -68,8 +68,16 @@ def start():
 	start_steam(str("login text"))
 	launchers()
 
-def info():
+def info(requested_list):
 	link_file = open(self_dir + "link.txt")
 	link = link_file.read()
 	deb_file_path = engineer_dir + "tmp/openmw-makson.deb"
-	return deb_file_path, link
+	return_list = []
+	for requested_item in requested_list:
+		if requested_item == "deb_file_path":
+			return_list.append(deb_file_path)
+		elif requested_item == "deb_url_path":
+			return_list.append(link)
+		elif requested_item == "game_dir":
+			return_list.append(game_dir)
+	return return_list
