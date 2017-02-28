@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import sys, os, _thread, time
+import sys, os, _thread, time, pickle
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -98,12 +98,10 @@ class Window(QWidget):
 		percent = 0
 		while percent != 100:
 			time.sleep(2)
-			status.write_status(engineer_dir, deb_file_path, deb_url_path)
-			result_list = status.read_status(engineer_dir)
-			result = result_list[0]
-			percent = result_list[1]
+			status_list = pickle.load(open(engineer_dir+"status_list.p", "rb"))
+			result = status_list[0]
+			percent = status_list[1]
 			self.progress.setValue(percent)
-		self.close()
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)

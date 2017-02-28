@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import sys, os, tarfile, time, shutil, urllib.request
+import sys, os, tarfile, time, shutil, urllib.request, pickle
 from subprocess import call, check_output
 
 from free_engineer import engineer_dir
@@ -22,7 +22,7 @@ def prepare_engine():
 			pass
 		shutil.copytree(engineer_dir + "tmp/openmw-makson/" + directory, game_dir + directory, symlinks=True)
 	shutil.rmtree(engineer_dir + "tmp")
-	print("copy_config")
+	print("copy config")
 	if os.path.isdir(os.getenv("HOME") + "/.config/openmw/") == False:
 		os.makedirs(os.getenv("HOME") + "/.config/openmw/")
 	if os.path.isfile(os.getenv("HOME") + "/.config/openmw/openmw.cfg") == False:
@@ -38,12 +38,13 @@ def launchers():
 	if os.path.isdir(os.getenv("HOME") + "/.local/share/applications/") == False:
 		os.makedirs(os.getenv("HOME") + "/.local/share/applications/")
 	shutil.copy(self_dir + "openmw.png", os.getenv("HOME") + "/.icons/openmw.png")
-	print("make_launchers")
+	print("make launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 	shutil.copy(self_dir + "morrowind.desktop", desk_dir + "/morrowind.desktop")
 	shutil.copy(self_dir + "morrowind.desktop", os.getenv("HOME") + "/.local/share/applications/morrowind.desktop")
 
 def start(shop, shop_login, shop_password):
+	print("start install openmw")
 	if os.path.isdir(game_dir) == False:
 		os.makedirs(game_dir)
 	link_file = open(self_dir + "link.txt")
@@ -53,6 +54,7 @@ def start(shop, shop_login, shop_password):
 	else:
 		shutil.rmtree(engineer_dir + "tmp")
 		os.makedirs(engineer_dir + "tmp")
+	print("download game engine")
 	from tools import download_engine
 	result = download_engine.download(link, engineer_dir + "tmp/openmw-makson.deb")		
 	from tools import unpack_deb
@@ -60,8 +62,12 @@ def start(shop, shop_login, shop_password):
 	prepare_engine()
 	if shop == "steam":
 		from tools import steam
+		print("start steam")
 		steam.start(shop_login, shop_password, engineer_dir, s_appid, game_dir)
 	launchers()
+	status = "Installation succed"
+	percent = 100
+	pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
 
 def info(requested_list):
 	link_file = open(self_dir + "link.txt")

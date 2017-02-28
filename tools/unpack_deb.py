@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import os, tarfile, shutil
+import os, tarfile, shutil, pickle
 from subprocess import call
 
 def ar(deb_file, tmp_dir):
@@ -31,6 +31,9 @@ def clean_data(tmp_dir, deb_name):
 	os.remove(tmp_dir+deb_name)
 
 def unpack_deb(tmp_dir, deb_name):
+	status = "Installing engine"
+	percent = 25
+	pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
 	ar(tmp_dir+deb_name, tmp_dir)
 	untar_data(tmp_dir)
 	move_data(tmp_dir, deb_name)

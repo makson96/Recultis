@@ -5,19 +5,16 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import urllib.request
-
-def check_url_size(link):
-	d = urllib.request.urlopen(link)
-	u_size = d.getheaders()[2][1]
-	return int(u_size)
-
-def check_disk_size(file_path):
-	f = open(file_path, "rb")
-	f_size = len(f.read())
-	f.close()
-	return int(f_size)
+import urllib.request, pickle, _thread
 
 def download(link, file_path):
-	urllib.request.urlretrieve(link, file_path)
+	_thread.start_new_thread(urllib.request.urlretrieve, (link, file_path))
+	status = "Downloading engine"
+	f = open(file_path, "rb")
+	disk_s = int(len(f.read()))
+	f.close()
+	d = urllib.request.urlopen(link)
+	url_s = int(d.getheaders()[2][1])
+	percent = 20 * disk_s / url_s
+	pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
 	return 1
