@@ -31,8 +31,9 @@ def prepare_engine():
 		openmw_cfg.write('\ndata="' + game_dir + 'Data Files"')
 		openmw_cfg.close()
 
-def start_steam(user):
-	print(user)
+def start_steam(login, password):
+	print("Starting steam as: " + user)
+	
 	steamcmd = call("x-terminal-emulator -e 'python3 " + self_dir + "tools/steam.py " + user + " " + s_appid + " " + engineer_dir + " " + game_dir + "'", shell=True)
 	while os.path.isdir(game_dir + "Data Files/") == False:
 		time.sleep(2)
@@ -49,8 +50,7 @@ def launchers():
 	shutil.copy(self_dir + "morrowind.desktop", desk_dir + "/morrowind.desktop")
 	shutil.copy(self_dir + "morrowind.desktop", os.getenv("HOME") + "/.local/share/applications/morrowind.desktop")
 
-def start():
-	game_dir = engineer_dir + "morrowind/"
+def start(shop, shop_login, shop_password):
 	if os.path.isdir(game_dir) == False:
 		os.makedirs(game_dir)
 	link_file = open(self_dir + "link.txt")
@@ -65,7 +65,9 @@ def start():
 	from tools import unpack_deb
 	unpack_deb.unpack_deb(engineer_dir + "tmp/", "openmw-makson.deb")
 	prepare_engine()
-	start_steam(str("login text"))
+	if shop == "steam":
+		from tools import steam
+		steam.start(shop_login, shop_password, engineer_dir, s_appid, game_dir)
 	launchers()
 
 def info(requested_list):

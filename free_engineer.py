@@ -90,7 +90,7 @@ class Window(QWidget):
 			from doom3 import chosen_game
 		if os.path.isdir(engineer_dir) == False:
 			os.makedirs(engineer_dir)
-		_thread.start_new_thread(chosen_game.start, ())
+		_thread.start_new_thread(chosen_game.start, ("steam", str(self.loginText.text()), str(self.passwordText.text())))
 		print("new_thread_started")
 		deb_info = chosen_game.info(["deb_file_path", "deb_url_path"])
 		deb_file_path = deb_info[0]
