@@ -5,16 +5,24 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import urllib.request, pickle, _thread
+import urllib.request, pickle, _thread, time
+from free_engineer import engineer_dir
 
 def download(link, file_path):
 	_thread.start_new_thread(urllib.request.urlretrieve, (link, file_path))
 	status = "Downloading engine"
-	f = open(file_path, "rb")
-	disk_s = int(len(f.read()))
-	f.close()
-	d = urllib.request.urlopen(link)
-	url_s = int(d.getheaders()[2][1])
-	percent = 20 * disk_s / url_s
-	pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
+	disk_s = 0
+	url_s = 1
+	while disk_s != url_s:
+		time.sleep(2)
+		try:
+			f = open(file_path, "rb")
+			disk_s = int(len(f.read()))
+			f.close()
+		except:
+			pass
+		d = urllib.request.urlopen(link)
+		url_s = int(d.getheaders()[2][1])
+		percent = 20 * disk_s / url_s
+		pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
 	return 1

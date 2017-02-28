@@ -11,7 +11,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-from tools import status, update_check
+from tools import update_check
 
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 engineer_dir = os.getenv("HOME") + "/.free-engineer/"
@@ -96,11 +96,13 @@ class Window(QWidget):
 		deb_file_path = deb_info[0]
 		deb_url_path = deb_info[1]
 		percent = 0
+		time.sleep(4)
 		while percent != 100:
 			time.sleep(2)
 			status_list = pickle.load(open(engineer_dir+"status_list.p", "rb"))
 			result = status_list[0]
 			percent = status_list[1]
+			self.status1Label.setText(result)
 			self.progress.setValue(percent)
 
 if __name__ == '__main__':

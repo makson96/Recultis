@@ -7,8 +7,9 @@
 
 import os, tarfile, urllib.request, pickle
 from subprocess import call
+from free_engineer import engineer_dir
 
-start(login, password, engineer_dir, s_appid, game_dir):
+def start(login, password, engineer_dir, s_appid, game_dir):
 	status = "Downloading and installing game data"
 	percent = 90
 	pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))

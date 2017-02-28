@@ -7,6 +7,7 @@
 
 import os, tarfile, shutil, pickle
 from subprocess import call
+from free_engineer import engineer_dir
 
 def ar(deb_file, tmp_dir):
 	s_ar = call("cd " + tmp_dir + "; ar x " + deb_file, shell=True)
