@@ -31,13 +31,6 @@ def prepare_engine():
 		openmw_cfg.write('\ndata="' + game_dir + 'Data Files"')
 		openmw_cfg.close()
 
-def start_steam(login, password):
-	print("Starting steam as: " + user)
-	
-	steamcmd = call("x-terminal-emulator -e 'python3 " + self_dir + "tools/steam.py " + user + " " + s_appid + " " + engineer_dir + " " + game_dir + "'", shell=True)
-	while os.path.isdir(game_dir + "Data Files/") == False:
-		time.sleep(2)
-
 def launchers():
 	print("copy icon")
 	if os.path.isdir(os.getenv("HOME") + "/.icons") == False:
