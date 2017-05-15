@@ -1,1 +1,1 @@
-https://drive.google.com/uc?export=download&id=0B7Gn7LccdXTTbHlQM0s2NFlyMUk
+https://launchpad.net/~makson96/+archive/ubuntu/free-engine/+files/openjk_0+git20170515-trusty1_amd64.deb
