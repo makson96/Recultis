@@ -34,11 +34,16 @@ def move_data(tmp_dir):
 		shutil.move(tmp_dir + "opt/" + directory, tmp_dir + directory)
 
 def clean_data(tmp_dir, deb_name):
-	shutil.rmtree(tmp_dir + "opt")
-	os.remove(tmp_dir + "control.tar.gz")
-	os.remove(tmp_dir + "data.tar.xz")
-	os.remove(tmp_dir + "debian-binary")
-	os.remove(tmp_dir+deb_name)
+	try:
+		shutil.rmtree(tmp_dir + "opt")
+	except:
+		pass
+	clean_files = ["control.tar.gz", "data.tar.xz", "debian-binary", deb_name]
+	for clean_file in clean_files:
+		try:
+			os.remove(tmp_dir + clean_file)
+		except:
+			pass
 
 def unpack_deb(tmp_dir, deb_name):
 	status = "Installing engine"
