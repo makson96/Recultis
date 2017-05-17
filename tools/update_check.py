@@ -10,8 +10,9 @@ import os, urllib.request, importlib
 def start(game):
 	target_url = "https://raw.githubusercontent.com/makson96/free-engineer/master/" + game+ "/link.txt"
 	chosen_game = importlib.import_module(game+".chosen_game")
-	game_dir = chosen_game.info(["game_dir", "version"])
-	game_dir = game_dir[0]
+	game_info = chosen_game.info(["game_dir", "version"])
+	game_dir = game_info[0]
+	version = game_info[1]
 	
 	data = urllib.request.urlopen(target_url)
 	download_link_new = data.read().decode("utf-8")
