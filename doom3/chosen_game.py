@@ -30,11 +30,11 @@ def launchers():
 		os.makedirs(os.getenv("HOME") + "/.icons")
 	if os.path.isdir(os.getenv("HOME") + "/.local/share/applications/") == False:
 		os.makedirs(os.getenv("HOME") + "/.local/share/applications/")
-	shutil.copy(self_dir + "doom3/rbdoom-3-bfg.png", os.getenv("HOME") + "/.icons/rbdoom-3-bfg.png")
+	shutil.copy(self_dir + "rbdoom-3-bfg.png", os.getenv("HOME") + "/.icons/rbdoom-3-bfg.png")
 	print("make_launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
-	shutil.copy(self_dir + "doom3/doom3.desktop", desk_dir + "/doom3.desktop")
-	shutil.copy(self_dir + "doom3/doom3.desktop", os.getenv("HOME") + "/.local/share/applications/doom3.desktop")
+	shutil.copy(self_dir + "doom3.desktop", desk_dir + "/doom3.desktop")
+	shutil.copy(self_dir + "doom3.desktop", os.getenv("HOME") + "/.local/share/applications/doom3.desktop")
 
 def start(shop, shop_login, shop_password):
 	print("start install rbdoom-3-bfg")
