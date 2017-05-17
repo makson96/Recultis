@@ -13,6 +13,8 @@ from PyQt5.QtGui import *
 
 from tools import update_check
 
+free_engine_version = "1.0.0pre"
+
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 engineer_dir = os.getenv("HOME") + "/.free-engineer/"
 
@@ -79,7 +81,7 @@ class Window(QWidget):
 		mainLayout.addLayout(vbox1, 0, 1)
 		
 		self.setLayout(mainLayout)
-		self.setWindowTitle("Free Engineer")
+		self.setWindowTitle("Free Engineer " + free_engine_version)
 	
 	def choose(self):
 		if self.r0.isChecked():
