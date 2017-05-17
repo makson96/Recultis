@@ -25,11 +25,11 @@ class Window(QWidget):
 		
 		choose_game_Label = QLabel("Choose the game to install:")
 		game_group = QButtonGroup()
-		self.r0 = QRadioButton("Jedi Knight: Jedi Academy on OpenJK engine (" + update_check.start("jediacademy") + ")")
+		self.r0 = QRadioButton(self.game_descriptor(0))
 		game_group.addButton(self.r0)
-		self.r1 = QRadioButton("The Elder Scrolls III: Morrowind on OpenMW engine (" + update_check.start("morrowind") + ")")
+		self.r1 = QRadioButton(self.game_descriptor(1))
 		game_group.addButton(self.r1)
-		self.r2 = QRadioButton("Doom 3 BFG on RBDOOM-3-BFG (" + update_check.start("doom3") + ")")
+		self.r2 = QRadioButton(self.game_descriptor(2))
 		game_group.addButton(self.r2)
 		self.r0.setChecked(True)
 		choose_data_Label = QLabel("Choose digital distribution platform to download game data:")
@@ -78,6 +78,7 @@ class Window(QWidget):
 		self.setWindowTitle("Free Engineer " + free_engine_version)
 	
 	def choose(self):
+		self.installButton.setEnabled(False)
 		if self.r0.isChecked():
 			from jediacademy import chosen_game
 		elif self.r1.isChecked():
@@ -98,9 +99,27 @@ class Window(QWidget):
 			status_list = pickle.load(open(engineer_dir+"status_list.p", "rb"))
 			result = status_list[0]
 			percent = status_list[1]
-			self.status1Label.setText(result)
+			self.statusLabel2.setText(result)
 			self.progress.setValue(percent)
-
+		#Installation is complete. Unlock Intall button and update games descriptions
+		self.installButton.setEnabled(True)
+		self.r0.setText(self.game_descriptor(0))
+		self.r1.setText(self.game_descriptor(1))
+		self.r2.setText(self.game_descriptor(2))
+	
+	def game_descriptor(self, game_nr):
+		r0_description = "Jedi Knight: Jedi Academy on OpenJK engine ("
+		r1_description = "The Elder Scrolls III: Morrowind on OpenMW engine ("
+		r2_description = "Doom 3 BFG on RBDOOM-3-BFG ("
+		game_description = ""
+		if game_nr == 0:
+			game_description = r0_description + update_check.start("jediacademy") + ")"
+		elif game_nr == 1:
+			game_description = r1_description + update_check.start("morrowind") + ")"
+		elif game_nr == 2:
+			game_description = r2_description + update_check.start("doom3") + ")"
+		return game_description
+	
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	screen = Window()
