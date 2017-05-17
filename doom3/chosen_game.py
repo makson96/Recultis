@@ -5,15 +5,11 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import sys, os, tarfile, time, shutil, urllib.request
+import sys, os, tarfile, time, shutil, urllib.request, pickle
 from subprocess import call, check_output
 
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-
+from free_engineer import engineer_dir
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
-engineer_dir = os.getenv("HOME") + "/.free-engineer/"
 game_dir = engineer_dir + "doom3/"
 s_appid = "208200"
 
@@ -24,16 +20,9 @@ def prepare_engine():
 		shutil.rmtree(game_dir + "lib")
 	except:
 		pass
-	shutil.copy2(engineer_dir + "tmp/rbdoom-3-bfg/RBDoom3BFG", game_dir + "RBDoom3BFG")
+	shutil.copy(engineer_dir + "tmp/rbdoom-3-bfg/RBDoom3BFG", game_dir + "RBDoom3BFG")
 	shutil.copytree(engineer_dir + "tmp/rbdoom-3-bfg/lib", game_dir + "lib", symlinks=True)
 	shutil.rmtree(engineer_dir + "tmp")
-
-def start_steam(user):
-	print(user)
-	steamcmd = call("x-terminal-emulator -e 'python3 " + self_dir + "steam.py " + user + " " + s_appid + " " + engineer_dir + " " + game_dir + "'", shell=True)
-	while os.path.isdir(game_dir + "base/") == False:
-		time.sleep(2)
-	launchers()
 
 def launchers():
 	print("copy icon")
@@ -46,82 +35,43 @@ def launchers():
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 	shutil.copy(self_dir + "doom3/doom3.desktop", desk_dir + "/doom3.desktop")
 	shutil.copy(self_dir + "doom3/doom3.desktop", os.getenv("HOME") + "/.local/share/applications/doom3.desktop")
-	qw.close()
 
-class Game:
-	
-	nested = 0
-	
-	def __init__(self, rootWindow = 0, nested = 0):
-		if os.path.isdir(engineer_dir) == False:
-			os.makedirs(engineer_dir)
-		if os.path.isdir(game_dir) == False:
-			os.makedirs(game_dir)
-		self.engine(rootWindow, nested)
-		self.data(rootWindow, nested)
-	
-	def engine(self, rootWindow = 0, nested = 0):
-		self.nested = nested
-		if self.nested == 0:
-			s_app = QApplication(sys.argv)
-		else:
-			rootWindow.hide()
-		qw = QWidget()
-		#Window about game engine installation
-		rootWindow.hide()
-		install_engine_inform = QMessageBox.information(qw, "Installing engine", "After you click OK, game engine will be downloaded and installed. It may take a while.", QMessageBox.Ok)
-		if QMessageBox.Ok:
-			link_file = open(self_dir + "doom3/link.txt")
-			link = link_file.read()
-			if os.path.isfile(engineer_dir + "rbdoom-3-bfg.tar.xz") == False:
-				urllib.request.urlretrieve(link, engineer_dir + "rbdoom-3-bfg.tar.xz")
-				tar = tarfile.open(engineer_dir + "rbdoom-3-bfg.tar.xz")
-				tar.extractall(engineer_dir + "tmp")
-				tar.close()
-			os.remove(engineer_dir + "rbdoom-3-bfg.tar.xz")
-			prepare_engine()
-	
-	def data(self, rootWindow = 0, nested = 0):
-		global qw
-		self.nested = nested
-		if self.nested == 0:
-			s_app = QApplication(sys.argv)
-		#tutaj okno z wyborem skad pobrac game data
-		nameLabel = QLabel("Choose the platfrom from which you want to get game data:")
-		p_group = QButtonGroup()
-		r0 = QRadioButton("Steam")
-		p_group.addButton(r0)
-		#self.r1 = QRadioButton("1")
-		#p_group.addButton(r1)
-		r0.setChecked(True)
-		loginLabel = QLabel("Enter your Steam login:")
-		loginText = QLineEdit()
-		chooseButton = QPushButton("Choose")
-		exitButton = QPushButton("Exit")
-		
-		vbox1 = QVBoxLayout()
-		hbox1 = QHBoxLayout()
-		hbox2 = QHBoxLayout()
-		qw = QWidget()
+def start(shop, shop_login, shop_password):
+	print("start install rbdoom-3-bfg")
+	if os.path.isdir(game_dir) == False:
+		os.makedirs(game_dir)
+	link_file = open(self_dir + "link.txt")
+	link = link_file.read()
+	if os.path.isdir(engineer_dir + "tmp") == False:
+		os.makedirs(engineer_dir + "tmp")
+	else:
+		shutil.rmtree(engineer_dir + "tmp")
+		os.makedirs(engineer_dir + "tmp")
+	print("download game engine")
+	from tools import download_engine
+	result = download_engine.download(link, engineer_dir + "tmp/rbdoom-3-bfg.deb")		
+	from tools import unpack_deb
+	unpack_deb.unpack_deb(engineer_dir + "tmp/", "rbdoom-3-bfg.deb")
+	prepare_engine()
+	if shop == "steam":
+		from tools import steam
+		print("start steam")
+		steam.start(shop_login, shop_password, engineer_dir, s_appid, game_dir)
+	launchers()
+	status = "Installation succed"
+	percent = 100
+	pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
 
-		vbox1.addWidget(nameLabel)
-		vbox1.addWidget(r0)
-		#vbox1.addWidget(r1)
-		hbox1.addWidget(loginLabel)
-		hbox1.addWidget(loginText)
-		hbox2.addWidget(chooseButton)
-		hbox2.addWidget(exitButton)
-		vbox1.addLayout(hbox1)
-		vbox1.addLayout(hbox2)
-		
-		chooseButton.clicked.connect(lambda : start_steam(str(loginText.text())))
-		exitButton.clicked.connect(qw.close)
- 
-		mainLayout = QGridLayout()
-		mainLayout.addLayout(vbox1, 0, 1)
-		
-		qw.setLayout(mainLayout)
-		qw.setWindowTitle("Choose Game Data Platform")
-		qw.show()
-		if self.nested == 0:
-			s_app.exec_()
+def info(requested_list):
+	link_file = open(self_dir + "link.txt")
+	link = link_file.read()
+	deb_file_path = engineer_dir + "tmp/openmw-makson.deb"
+	return_list = []
+	for requested_item in requested_list:
+		if requested_item == "deb_file_path":
+			return_list.append(deb_file_path)
+		elif requested_item == "deb_url_path":
+			return_list.append(link)
+		elif requested_item == "game_dir":
+			return_list.append(game_dir)
+	return return_list

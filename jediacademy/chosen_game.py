@@ -40,7 +40,7 @@ def launchers():
 	shutil.copy(self_dir + "jediacademy/openjk_amd64_mp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_amd64_mp.desktop")
 
 def start(shop, shop_login, shop_password):
-	print("start install openmw")
+	print("start install openjk")
 	if os.path.isdir(game_dir) == False:
 		os.makedirs(game_dir)
 	link_file = open(self_dir + "link.txt")
