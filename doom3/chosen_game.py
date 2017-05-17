@@ -61,11 +61,18 @@ def start(shop, shop_login, shop_password):
 	status = "Installation succed"
 	percent = 100
 	pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
+	#Mark installed version by coping link file
+	shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")
 
 def info(requested_list):
+	if os.path.isfile(game_dir + "/version_link.txt"):
+		version_file = open(game_dir + "/version_link.txt")
+		version = version_file.read()
+	else:
+		version = "Update needed or no intall"
 	link_file = open(self_dir + "link.txt")
 	link = link_file.read()
-	deb_file_path = engineer_dir + "tmp/openmw-makson.deb"
+	deb_file_path = engineer_dir + "tmp/rbdoom-3-bfg.deb"
 	return_list = []
 	for requested_item in requested_list:
 		if requested_item == "deb_file_path":
@@ -74,4 +81,6 @@ def info(requested_list):
 			return_list.append(link)
 		elif requested_item == "game_dir":
 			return_list.append(game_dir)
+		elif requested_item == "version":
+			return_list.append(version)
 	return return_list
