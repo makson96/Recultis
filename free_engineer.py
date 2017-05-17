@@ -120,8 +120,7 @@ class Window(QWidget):
 			game_description = r2_description + update_check.start("doom3") + ")"
 		return game_description
 	
-if __name__ == '__main__':
-	app = QApplication(sys.argv)
-	screen = Window()
-	screen.show()
-	sys.exit(app.exec_())
+app = QApplication(sys.argv)
+screen = Window()
+screen.show()
+sys.exit(app.exec_())
