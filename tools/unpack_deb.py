@@ -45,7 +45,7 @@ def unpack_deb(tmp_dir, deb_name):
 	percent = 25
 	pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
 	dpkg_present = check_dpkg()
-	if dpkg_present = True:
+	if dpkg_present == True:
 		dpkg(tmp_dir+deb_name, tmp_dir)
 	else:
 		ar(tmp_dir+deb_name, tmp_dir)
