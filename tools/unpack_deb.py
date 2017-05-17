@@ -6,8 +6,17 @@
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
 import os, tarfile, shutil, pickle
-from subprocess import call
+from subprocess import call, check_call
 from free_engineer import engineer_dir
+
+def check_dpkg():
+	try:
+		subprocess.check_call(['dpkg'], stdout=open(os.devnull, 'wb'))
+	except subprocess.CalledProcessError:
+		dpkg_present = True
+	except OSError:
+		dpkg_present = False
+	return dpkg_present
 
 def ar(deb_file, tmp_dir):
 	s_ar = call("cd " + tmp_dir + "; ar x " + deb_file, shell=True)
@@ -35,7 +44,11 @@ def unpack_deb(tmp_dir, deb_name):
 	status = "Installing engine"
 	percent = 25
 	pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
-	ar(tmp_dir+deb_name, tmp_dir)
-	untar_data(tmp_dir)
+	dpkg_present = check_dpkg()
+	if dpkg_present = True:
+		dpkg(tmp_dir+deb_name, tmp_dir)
+	else:
+		ar(tmp_dir+deb_name, tmp_dir)
+		untar_data(tmp_dir)
 	move_data(tmp_dir, deb_name)
 	clean_data(tmp_dir, deb_name)
