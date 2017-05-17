@@ -29,8 +29,9 @@ def untar_data(tmp_dir):
 	tar.extractall()
 	tar.close()
 
-def move_data(tmp_dir, deb_name):
-	shutil.move(tmp_dir + "opt/" + deb_name[:-4], tmp_dir + deb_name[:-4])
+def move_data(tmp_dir):
+	for directory in next(os.walk(tmp_dir + "opt/"))[1]:
+		shutil.move(tmp_dir + "opt/" + directory, tmp_dir + directory)
 
 def clean_data(tmp_dir, deb_name):
 	shutil.rmtree(tmp_dir + "opt")
@@ -49,5 +50,5 @@ def unpack_deb(tmp_dir, deb_name):
 	else:
 		ar(tmp_dir+deb_name, tmp_dir)
 		untar_data(tmp_dir)
-	move_data(tmp_dir, deb_name)
+	move_data(tmp_dir)
 	clean_data(tmp_dir, deb_name)
