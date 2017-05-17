@@ -5,13 +5,12 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import os, tarfile, shutil, pickle
-from subprocess import call, check_call
+import os, tarfile, shutil, pickle, subprocess
 from free_engineer import engineer_dir
 
 def check_dpkg():
 	try:
-		subprocess.check_call(['dpkg'], stdout=open(os.devnull, 'wb'))
+		subprocess.check_call(['dpkg'], stdout=open(os.devnull, 'wb'), stderr=open(os.devnull, 'wb'))
 	except subprocess.CalledProcessError:
 		dpkg_present = True
 	except OSError:
@@ -19,10 +18,10 @@ def check_dpkg():
 	return dpkg_present
 
 def ar(deb_file, tmp_dir):
-	s_ar = call("cd " + tmp_dir + "; ar x " + deb_file, shell=True)
+	s_ar = subprocess.call("cd " + tmp_dir + "; ar x " + deb_file, shell=True)
 
 def dpkg(deb_file, tmp_dir):
-	s_dpkg = call("dpkg -x " + deb_file + " " + tmp_dir, shell=True)
+	s_dpkg = subprocess.call("dpkg -x " + deb_file + " " + tmp_dir, shell=True)
 
 def untar_data(tmp_dir):
 	os.chdir(tmp_dir)
