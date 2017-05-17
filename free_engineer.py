@@ -23,11 +23,11 @@ class Window(QWidget):
 		
 		choose_game_Label = QLabel("Choose the game to install:")
 		game_group = QButtonGroup()
-		self.r0 = QRadioButton("Jedi Knight: Jedi Academy on OpenJK engine (")# + update_check.start("jediacademy") + ")")
+		self.r0 = QRadioButton("Jedi Knight: Jedi Academy on OpenJK engine (" + update_check.start("jediacademy") + ")")
 		game_group.addButton(self.r0)
 		self.r1 = QRadioButton("The Elder Scrolls III: Morrowind on OpenMW engine (" + update_check.start("morrowind") + ")")
 		game_group.addButton(self.r1)
-		self.r2 = QRadioButton("Doom 3 BFG on RBDOOM-3-BFG (")# + update_check.start("doom3") + ")")
+		self.r2 = QRadioButton("Doom 3 BFG on RBDOOM-3-BFG (" + update_check.start("doom3") + ")")
 		game_group.addButton(self.r2)
 		self.r0.setChecked(True)
 		choose_data_Label = QLabel("Choose digital distribution platform to download game data:")
