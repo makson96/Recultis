@@ -21,7 +21,7 @@ def start(login, password, engineer_dir, s_appid, game_dir):
 		tar.close()
 	if os.path.isfile(engineer_dir+"steam_log.txt") == True:
 		os.remove(engineer_dir+"steam_log.txt")
-	s_download = call("./steamcmd.sh +@sSteamCmdForcePlatformType windows +login " + login + " " + password + " +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit > steam_log.txt", shell=True)
+	s_download = call("./steamcmd.sh +@sSteamCmdForcePlatformType windows +login '" + login + "' '" + password + "' +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit > steam_log.txt", shell=True)
 	status = "Finalising Installation"
 	percent = 95
 	pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
