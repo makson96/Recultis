@@ -3,7 +3,7 @@ Type=Application
 Name=Free Engineer
 Comment=Install free game engines with proprietary content.
 Path=/opt/free-engineer
-Exec=python3 free_engineer.py
+Exec=bash -c '_PWD="$PWD"; cd "`echo $0 | sed s/free-engineer.desktop$//`"; python3 free_engineer.py; cd "_PWD"' %k
 Icon=/opt/free-engineer/icon.png
 Categories=Game;
 Terminal=false
