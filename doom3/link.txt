@@ -1,1 +1,1 @@
-https://googledrive.com/host/0B7Gn7LccdXTTMlNCZ3RmV0hhUFE
+https://launchpad.net/~makson96/+archive/ubuntu/free-engine/+files/rbdoom-3-bfg_1.1.0~git20170228-trusty1_amd64.deb
