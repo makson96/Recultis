@@ -20,16 +20,20 @@ engineer_dir = os.getenv("HOME") + "/.free-engineer/"
 
 class Window(QWidget):
 	
+	r0_description = "Jedi Knight: Jedi Academy on OpenJK engine"
+	r1_description = "The Elder Scrolls III: Morrowind on OpenMW engine"
+	r2_description = "Doom 3 BFG on RBDOOM-3-BFG"
+	
 	def __init__(self, parent=None):
 		super(Window, self).__init__(parent)
 		
 		choose_game_Label = QLabel("Choose the game to install:")
 		game_group = QButtonGroup()
-		self.r0 = QRadioButton(self.game_descriptor(0))
+		self.r0 = QRadioButton(self.r0_description)
 		game_group.addButton(self.r0)
-		self.r1 = QRadioButton(self.game_descriptor(1))
+		self.r1 = QRadioButton(self.r1_description)
 		game_group.addButton(self.r1)
-		self.r2 = QRadioButton(self.game_descriptor(2))
+		self.r2 = QRadioButton(self.r2_description)
 		game_group.addButton(self.r2)
 		self.r0.setChecked(True)
 		choose_data_Label = QLabel("Choose digital distribution platform to download game data:")
@@ -76,6 +80,8 @@ class Window(QWidget):
  
 		self.setLayout(vbox1)
 		self.setWindowTitle("Free Engineer " + free_engine_version)
+		self.get_thread = UpdateGameDes(self.r0)
+		self.get_thread.start()
 	
 	def choose(self):
 		self.installButton.setEnabled(False)
@@ -108,18 +114,35 @@ class Window(QWidget):
 		self.r2.setText(self.game_descriptor(2))
 	
 	def game_descriptor(self, game_nr):
-		r0_description = "Jedi Knight: Jedi Academy on OpenJK engine ("
-		r1_description = "The Elder Scrolls III: Morrowind on OpenMW engine ("
-		r2_description = "Doom 3 BFG on RBDOOM-3-BFG ("
 		game_description = ""
 		if game_nr == 0:
-			game_description = r0_description + update_check.start("jediacademy") + ")"
+			game_description = self.r0_description + " (" + update_check.start("jediacademy") + ")"
 		elif game_nr == 1:
-			game_description = r1_description + update_check.start("morrowind") + ")"
+			game_description = self.r1_description + " (" + update_check.start("morrowind") + ")"
 		elif game_nr == 2:
-			game_description = r2_description + update_check.start("doom3") + ")"
+			game_description = self.r2_description + " (" + update_check.start("doom3") + ")"
 		return game_description
-	
+
+class UpdateGameDes(QThread):
+
+	def __init__(self, game_desc_widget):
+		QThread.__init__(self)
+		self.game_desc_widget = game_desc_widget
+
+	def __del__(self):
+		self.wait()
+
+	def run(self):
+		time.sleep(1)
+		print("bla")
+		self.game_desc_widget.setText("aaa")
+		print("bla")
+		
+#time.sleep(15)
+#screen.r0.setText(screen.game_descriptor(0))
+#screen.r1.setText(screen.game_descriptor(1))
+#screen.r2.setText(screen.game_descriptor(2))
+
 app = QApplication(sys.argv)
 screen = Window()
 screen.show()
