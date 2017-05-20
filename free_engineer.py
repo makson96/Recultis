@@ -80,8 +80,14 @@ class Window(QWidget):
  
 		self.setLayout(vbox1)
 		self.setWindowTitle("Free Engineer " + free_engine_version)
-		self.get_thread = UpdateGameDes(self.r0, 0)
-		self.get_thread.start()
+		
+		#After Windows is drawn, lets check status of the games
+		self.update_game_thread0 = UpdateGameDes(self.r0, 0)
+		self.update_game_thread0.start()
+		self.update_game_thread1 = UpdateGameDes(self.r1, 1)
+		self.update_game_thread1.start()
+		self.update_game_thread2 = UpdateGameDes(self.r2, 2)
+		self.update_game_thread2.start()
 	
 	def choose(self):
 		self.installButton.setEnabled(False)
