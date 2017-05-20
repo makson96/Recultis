@@ -8,7 +8,7 @@
 import sys, os, tarfile, time, shutil, urllib.request, pickle
 from subprocess import call, check_output
 
-from free_engineer import engineer_dir
+engineer_dir = os.getenv("HOME") + "/.free-engineer/"
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 game_dir = engineer_dir + "morrowind/"
 s_appid = "22320"
