@@ -7,7 +7,6 @@
 
 import os, tarfile, urllib.request, pickle, _thread, time
 from subprocess import call
-from free_engineer import engineer_dir
 
 def start(login, password, engineer_dir, s_appid, game_dir):
 	status = "Downloading and installing game data"
@@ -34,12 +33,15 @@ def start(login, password, engineer_dir, s_appid, game_dir):
 		if steam_last_line == "not yet downloading":
 			print("TODO: not yet downloading"):
 		elif steam_last_line == "bad login or password":
-			print("TODO: not yet downloading"):
+			print("TODO: bad login or password"):
+			status = "Error: Steam - bad login or password. Please correct and start again."
+			percent = 0
+			pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
 		elif steam_last_line == "dowloadaning":
 			print("TODO: downloading"):
-		status = "Downloading and installing game data"
-		percent = 25
-		pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
+			status = "Downloading and installing game data"
+			percent = 25
+			pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
 		time.sleep(2)
 	status = "Finalising Installation"
 	percent = 95
