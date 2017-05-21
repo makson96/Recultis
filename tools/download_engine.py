@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import urllib.request, pickle, _thread, time
+import urllib.request, pickle, _thread, time, os
 
 def download(link, file_path):
 	_thread.start_new_thread(urllib.request.urlretrieve, (link, file_path))

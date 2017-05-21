@@ -5,8 +5,8 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import os, tarfile, urllib.request, pickle, _thread, time
-from subprocess import call
+import os, tarfile, urllib.request, pickle, time
+from subprocess import Popen
 
 def start(login, password, engineer_dir, s_appid, game_dir):
 	status = "Downloading and installing game data"
@@ -20,27 +20,30 @@ def start(login, password, engineer_dir, s_appid, game_dir):
 		tar.close()
 	if os.path.isfile(engineer_dir+"steam_log.txt") == True:
 		os.remove(engineer_dir+"steam_log.txt")
-	_thread.start_new_thread(call("./steamcmd.sh +@sSteamCmdForcePlatformType windows +login '" + login + "' '" + password + "' +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit > steam_log.txt", (shell=True,)))
-	while 1 == 1:
+	steam_download = Popen("stdbuf -oL ./steamcmd.sh +@sSteamCmdForcePlatformType windows +login '" + login + "' '" + password + "' +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit > steam_log.txt", shell=True)
+	while steam_download.poll() is None:
 		try:
 			steam_log_file = open("steam_log.txt", "r")
 			steam_log_lines = steam_log_file.readlines()
-			steam_last_line = steam_log_lines[-1]
+			steam_last_line = steam_log_lines[-2]
 			steam_log_file.close()
 		except:
 			steam_last_line = "progress: 0"
-		print(steam_last_line)
-		if steam_last_line == "not yet downloading":
-			print("TODO: not yet downloading"):
-		elif steam_last_line == "bad login or password":
-			print("TODO: bad login or password"):
+		print(steam_last_line) #debug
+		if "Steam>" in steam_last_line:
+			print("TODO: bad login or password")
 			status = "Error: Steam - bad login or password. Please correct and start again."
 			percent = 0
 			pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
-		elif steam_last_line == "dowloadaning":
-			print("TODO: downloading"):
+			steam_download.terminate()
+		elif "progress: " in steam_last_line:
+			steam_value = steam_last_line.split("progress: ")[1]
+			steam_value = steam_value.split(" (")[0]
+			steam_value = steam_value.split(",")[0]
+			steam_value = int(steam_value) * 70 / 100
+			print(steam_value)
 			status = "Downloading and installing game data"
-			percent = 25
+			percent = 25 + steam_value
 			pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
 		time.sleep(2)
 	status = "Finalising Installation"

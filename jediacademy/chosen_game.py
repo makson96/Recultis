@@ -43,6 +43,8 @@ def start(shop, shop_login, shop_password):
 	print("start install openjk")
 	if os.path.isdir(game_dir) == False:
 		os.makedirs(game_dir)
+	if os.path.isdir(game_dir + "GameData/") == False:
+		os.makedirs(game_dir + "GameData/")
 	link_file = open(self_dir + "link.txt")
 	link = link_file.read()
 	if os.path.isdir(engineer_dir + "tmp") == False:
