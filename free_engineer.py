@@ -105,12 +105,14 @@ class Window(QWidget):
 		time.sleep(4)
 		while percent != 100:
 			time.sleep(2)
+			sys.stdout.flush()
 			status_list = pickle.load(open(engineer_dir+"status_list.p", "rb"))
 			result = status_list[0]
 			percent = status_list[1]
 			self.statusLabel2.setText(result)
 			self.progress.setValue(percent)
 		#Installation is complete. Unlock Intall button and update games descriptions
+		#This is buggy and needs to be fixed
 		self.installButton.setEnabled(True)
 		self.r0.setText(game_descriptor(0))
 		self.r1.setText(game_descriptor(1))

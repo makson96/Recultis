@@ -20,7 +20,7 @@ def start(login, password, engineer_dir, s_appid, game_dir):
 		tar.close()
 	if os.path.isfile(engineer_dir+"steam_log.txt") == True:
 		os.remove(engineer_dir+"steam_log.txt")
-	steam_download = Popen("stdbuf -oL ./steamcmd.sh +@sSteamCmdForcePlatformType windows +login '" + login + "' '" + password + "' +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit > steam_log.txt", shell=True)
+	steam_download = Popen("./steamcmd.sh +@sSteamCmdForcePlatformType windows +login '" + login + "' '" + password + "' +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit", shell=True, stdout=open("steam_log.txt", "wb"))
 	while steam_download.poll() is None:
 		try:
 			steam_log_file = open("steam_log.txt", "r")
@@ -30,8 +30,7 @@ def start(login, password, engineer_dir, s_appid, game_dir):
 		except:
 			steam_last_line = "progress: 0"
 		print(steam_last_line) #debug
-		if "Steam>" in steam_last_line:
-			print("TODO: bad login or password")
+		if "Login Failure" in steam_last_line:
 			status = "Error: Steam - bad login or password. Please correct and start again."
 			percent = 0
 			pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
