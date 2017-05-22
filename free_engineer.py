@@ -5,13 +5,13 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import sys, os, _thread, time, pickle
+import sys, os, _thread, time
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-from tools import update_check
+from tools import update_check, download_engine, unpack_deb, steam
 
 free_engine_version = "1.0.0pre"
 
@@ -102,13 +102,23 @@ class Window(QWidget):
 		_thread.start_new_thread(chosen_game.start, ("steam", str(self.loginText.text()), str(self.passwordText.text())))
 		print("new_thread_started")
 		percent = 0
-		time.sleep(4)
+		time.sleep(1)
 		while percent != 100:
-			time.sleep(2)
-			sys.stdout.flush()
-			status_list = pickle.load(open(engineer_dir+"status_list.p", "rb"))
-			result = status_list[0]
-			percent = status_list[1]
+			#Status of download engine
+			if percent < 20:
+				links_list = chosen_game.info(["deb_url_path", "deb_file_path"])
+				result, percent = download_engine.status(links_list[0], links_list[1])
+			#Status of engine prepare
+			elif percent < 25:
+				result, percent = unpack_deb.status(engineer_dir + "tmp/")
+			#Status of downloading game data
+			elif percent < 95:
+				result, percent = steam.status(engineer_dir)
+			#Status of finishing installation
+			else:
+				result = "Installation succed"
+				percent = 100
+			time.sleep(1)
 			self.statusLabel2.setText(result)
 			self.progress.setValue(percent)
 		#Installation is complete. Unlock Intall button and update games descriptions

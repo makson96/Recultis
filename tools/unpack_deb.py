@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import os, tarfile, shutil, pickle, subprocess
+import os, tarfile, shutil, subprocess
 
 def check_dpkg():
 	try:
@@ -54,9 +54,6 @@ def clean_data(tmp_dir, deb_name):
 			pass
 
 def unpack_deb(tmp_dir, deb_name):
-	status = "Installing engine"
-	percent = 25
-	pickle.dump([status, percent], open(os.getenv("HOME") + "/.free-engineer/status_list.p", "wb"))
 	dpkg_present = check_dpkg()
 	if dpkg_present == True:
 		dpkg(tmp_dir+deb_name, tmp_dir)
@@ -65,3 +62,12 @@ def unpack_deb(tmp_dir, deb_name):
 		untar_data(tmp_dir)
 	move_data(tmp_dir)
 	clean_data(tmp_dir, deb_name)
+
+def status(tmp_dir):
+	if os.path.isdir(tmp_dir + "opt") == True:
+		status = "Installing engine"
+		percent = 21
+	else:
+		status = "Engine installed"
+		percent = 25
+	return status, percent

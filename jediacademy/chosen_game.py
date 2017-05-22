@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import sys, os, tarfile, time, shutil, urllib.request, pickle
+import sys, os, tarfile, time, shutil, urllib.request
 from subprocess import call, check_output
 
 engineer_dir = os.getenv("HOME") + "/.free-engineer/"
@@ -63,9 +63,6 @@ def start(shop, shop_login, shop_password):
 		print("start steam")
 		steam.start(shop_login, shop_password, engineer_dir, s_appid, game_dir)
 	launchers()
-	status = "Installation succed"
-	percent = 100
-	pickle.dump([status, percent], open(engineer_dir+"status_list.p", "wb"))
 	#Mark installed version by coping link file
 	shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")
 
