@@ -29,6 +29,9 @@ class Window(QWidget):
 	def __init__(self, parent=None):
 		super(Window, self).__init__(parent)
 		
+		app_staus_label = QLabel("Free Enginner status is: Waiting...")
+		app_updateButton = QPushButton("Update Now")
+		app_updateButton.setEnabled(False)
 		choose_game_Label = QLabel("Choose the game to install:")
 		game_group = QButtonGroup()
 		self.r0 = QRadioButton(r0_description)
@@ -54,11 +57,16 @@ class Window(QWidget):
 		self.progress = QProgressBar(self)
 		self.installButton = QPushButton("Install")
 		self.exitButton = QPushButton("Exit")
+		choose_game_Label = QLabel("Choose the game to install:")
 		
 		vbox1 = QVBoxLayout()
+		hbox0 = QHBoxLayout()
 		hbox1 = QHBoxLayout()
 		grid1 = QGridLayout()
-
+		
+		hbox0.addWidget(app_staus_label)
+		hbox0.addWidget(app_updateButton)
+		vbox1.addLayout(hbox0)
 		vbox1.addWidget(choose_game_Label)
 		vbox1.addWidget(self.r0)
 		vbox1.addWidget(self.r1)
