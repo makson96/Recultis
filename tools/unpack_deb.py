@@ -62,12 +62,3 @@ def unpack_deb(tmp_dir, deb_name):
 		untar_data(tmp_dir)
 	move_data(tmp_dir)
 	clean_data(tmp_dir, deb_name)
-
-def status(tmp_dir):
-	if os.path.isdir(tmp_dir + "opt") == True:
-		status = "Installing engine"
-		percent = 21
-	else:
-		status = "Engine installed"
-		percent = 25
-	return status, percent

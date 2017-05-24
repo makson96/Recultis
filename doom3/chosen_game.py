@@ -40,6 +40,10 @@ def start(shop, shop_login, shop_password):
 	print("start install rbdoom-3-bfg")
 	if os.path.isdir(game_dir) == False:
 		os.makedirs(game_dir)
+	if shop == "steam":
+		from tools import steam
+		print("start steam")
+		steam.start(shop_login, shop_password, engineer_dir, s_appid, game_dir)
 	link_file = open(self_dir + "link.txt")
 	link = link_file.read()
 	if os.path.isdir(engineer_dir + "tmp") == False:
@@ -53,10 +57,6 @@ def start(shop, shop_login, shop_password):
 	from tools import unpack_deb
 	unpack_deb.unpack_deb(engineer_dir + "tmp/", "rbdoom-3-bfg.deb")
 	prepare_engine()
-	if shop == "steam":
-		from tools import steam
-		print("start steam")
-		steam.start(shop_login, shop_password, engineer_dir, s_appid, game_dir)
 	launchers()
 	#Mark installed version by coping link file
 	shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")

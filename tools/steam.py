@@ -22,29 +22,3 @@ def start(login, password, engineer_dir, s_appid, game_dir):
 		#Terminate the process if bad login or password
 		#steam_download.terminate()
 		time.sleep(2)
-
-def status(engineer_dir):
-	os.chdir(engineer_dir)
-	status = "Downloading and installing game data"
-	percent = 25
-	try:
-		steam_log_file = open("steam_log.txt", "r")
-		steam_log_lines = steam_log_file.readlines()
-		steam_last_line = steam_log_lines[-1]
-		steam_log_file.close()
-	except:
-		steam_last_line = "progress: 0,0 ("
-	if "Login Failure" in steam_last_line:
-		status = "Error: Steam - bad login or password. Please correct and start again."
-		percent = 0
-	elif "progress: " in steam_last_line:
-		steam_value = steam_last_line.split("progress: ")[1]
-		steam_value = steam_value.split(" (")[0]
-		steam_value = steam_value.split(",")[0]
-		steam_value = int(steam_value) * 70 / 100
-		status = "Downloading and installing game data"
-		percent = 25 + steam_value
-	elif "Success!" in steam_last_line:
-		status = "Downloadof game data completed"
-		percent = 95
-	return status, percent

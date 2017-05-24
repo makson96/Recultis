@@ -11,7 +11,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-from tools import update_check, download_engine, unpack_deb, steam
+from tools import update_check, status
 
 free_engine_version = "1.0.0pre"
 
@@ -93,10 +93,13 @@ class Window(QWidget):
 		self.installButton.setEnabled(False)
 		if self.r0.isChecked():
 			from jediacademy import chosen_game
+			game = "jediacademy"
 		elif self.r1.isChecked():
 			from morrowind import chosen_game
+			game = "morrowind"
 		elif self.r2.isChecked():
 			from doom3 import chosen_game
+			game = "doom3"
 		if os.path.isdir(engineer_dir) == False:
 			os.makedirs(engineer_dir)
 		_thread.start_new_thread(chosen_game.start, ("steam", str(self.loginText.text()), str(self.passwordText.text())))
@@ -104,23 +107,12 @@ class Window(QWidget):
 		percent = 0
 		time.sleep(1)
 		while percent != 100:
-			#Status of download engine
-			if percent < 20:
-				links_list = chosen_game.info(["deb_url_path", "deb_file_path"])
-				result, percent = download_engine.status(links_list[0], links_list[1])
-			#Status of engine prepare
-			elif percent < 25:
-				result, percent = unpack_deb.status(engineer_dir + "tmp/")
-			#Status of downloading game data
-			elif percent < 95:
-				result, percent = steam.status(engineer_dir)
-			#Status of finishing installation
-			else:
-				result = "Installation succed"
-				percent = 100
+			result, percent = status.check(game)
 			time.sleep(1)
 			self.statusLabel2.setText(result)
 			self.progress.setValue(percent)
+			if "Error" in result:
+				break
 		#Installation is complete. Unlock Intall button and update games descriptions
 		#This is buggy and needs to be fixed
 		self.installButton.setEnabled(True)
