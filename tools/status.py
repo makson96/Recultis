@@ -27,14 +27,14 @@ def steam_status():
 		steam_last_line = steam_log_lines[-1]
 		steam_log_file.close()
 	except:
-		steam_last_line = "progress: 0,0 ("
+		steam_last_line = "downloading, progress: 0,0 ("
 	if "Login Failure" in steam_last_line:
 		status = "Error: Steam - bad login or password. Please correct and start again."
 		percent = 0
 	elif "Failed to install app" in steam_last_line:
 		status = "Error: Steam - you are not game owner. Please correct and start again."
 		percent = 0
-	elif "progress: " in steam_last_line:
+	elif "downloading, progress: " in steam_last_line:
 		steam_value = steam_last_line.split("progress: ")[1]
 		steam_value = steam_value.split(" (")[0]
 		steam_value = steam_value.split(",")[0]
