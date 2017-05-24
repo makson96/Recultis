@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import sys, os, _thread, time
+import sys, os, _thread, time, urllib
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -29,9 +29,9 @@ class Window(QWidget):
 	def __init__(self, parent=None):
 		super(Window, self).__init__(parent)
 		
-		app_staus_label = QLabel("Free Enginner status is: Waiting...")
-		app_updateButton = QPushButton("Update Now")
-		app_updateButton.setEnabled(False)
+		self.app_staus_label = QLabel("Free Enginner status is: Waiting...")
+		self.app_updateButton = QPushButton("Update Now")
+		self.app_updateButton.setEnabled(False)
 		choose_game_Label = QLabel("Choose the game to install:")
 		game_group = QButtonGroup()
 		self.r0 = QRadioButton(r0_description)
@@ -64,8 +64,8 @@ class Window(QWidget):
 		hbox1 = QHBoxLayout()
 		grid1 = QGridLayout()
 		
-		hbox0.addWidget(app_staus_label)
-		hbox0.addWidget(app_updateButton)
+		hbox0.addWidget(self.app_staus_label)
+		hbox0.addWidget(self.app_updateButton)
 		vbox1.addLayout(hbox0)
 		vbox1.addWidget(choose_game_Label)
 		vbox1.addWidget(self.r0)
@@ -93,7 +93,7 @@ class Window(QWidget):
 		
 		#After Windows is drawn, lets check status of the games
 		self.radio_list = [self.r0, self.r1, self.r2]
-		self.update_game_thread = UpdateGameDes(self.radio_list)
+		self.update_game_thread = UpdateApp(self.app_staus_label, self.app_updateButton, self.installButton, self.radio_list)
 		self.update_game_thread.start()
 	
 	def choose(self):
@@ -126,19 +126,50 @@ class Window(QWidget):
 		self.r1.setText(game_descriptor(1))
 		self.r2.setText(game_descriptor(2))
 
-class UpdateGameDes(QThread):
+class UpdateApp(QThread):
 
-	def __init__(self, radio_list):
+	def __init__(self, status_label, update_button, install_button, radio_list):
 		QThread.__init__(self)
+		self.status_label = status_label
+		self.update_button = update_button
+		self.install_button = install_button
 		self.radio_list = radio_list
 
 	def __del__(self):
 		self.wait()
 
 	def run(self):
-		self.radio_list[0].setText(game_descriptor(0))
-		self.radio_list[1].setText(game_descriptor(1))
-		self.radio_list[2].setText(game_descriptor(2))
+		#Check for internet connection
+		try:
+			urllib.request.urlopen("https://github.com", timeout=1)
+			connection = 1
+		except urllib.request.URLError:
+			connection = 0
+			self.status_label.setText("Free Enginner status is: No internet connection")
+			self.install_button.setEnabled(False)
+		if connection == 1:
+			#Check if update is available
+			v_major = str(int(free_engine_version[0]) + 1) + ".0.0"
+			v_minor = free_engine_version[0:2] + str(int(free_engine_version[2]) + 1) + ".0"
+			v_patch = free_engine_version[0:4] + str(int(free_engine_version[4]) + 1)
+			update_list = [v_major, v_minor, v_patch]
+			patch_url = ""
+			for potential_patch in update_list:
+				try:
+					patch_url = "https://github.com/makson96/free-engineer/archive/" + potential_patch + ".tar.gz"
+					print(patch_url)
+					urllib.request.urlopen(patch_url, timeout=1)
+					self.update_button.setEnabled(True)
+					self.status_label.setText("Free Enginner status is: Updata available")
+					break					
+				except urllib.request.URLError:
+					patch_url = ""
+			if patch_url == "":
+				self.status_label.setText("Free Enginner status is: Up to date")
+			#Check game status (if internet connection)
+			self.radio_list[0].setText(game_descriptor(0))
+			self.radio_list[1].setText(game_descriptor(1))
+			self.radio_list[2].setText(game_descriptor(2))
 
 def game_descriptor(game_nr):
 	game_description = ""
