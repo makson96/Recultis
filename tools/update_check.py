@@ -7,7 +7,7 @@
 
 import os, urllib.request, importlib
 
-def start(game):
+def start(game, self_dir):
 	target_url = "https://raw.githubusercontent.com/makson96/free-engineer/master/" + game+ "/link.txt"
 	chosen_game = importlib.import_module(game+".chosen_game")
 	game_info = chosen_game.info(["game_dir", "version"])
@@ -22,13 +22,13 @@ def start(game):
 			status = "Update available"
 	else:
 		status = "Not installed"
-	update_link(game)
+	update_link(game, self_dir)
 	print(game + " status is " + status)
 	return status
 
-def update_link(game):
+def update_link(game, self_dir):
 	target_url = "https://raw.githubusercontent.com/makson96/free-engineer/master/" + game+ "/link.txt"
-	target_file = os.getcwd() + "/" + game + "/link.txt"
+	target_file = self_dir + game + "/link.txt"
 	urllib.request.urlretrieve(target_url, target_file)
 	print("Game engine link updated")
 	return 0

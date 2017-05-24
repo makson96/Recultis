@@ -24,6 +24,8 @@ r2_description = "Doom 3 BFG on RBDOOM-3-BFG"
 
 class Window(QWidget):
 	
+	radio_list = []
+	
 	def __init__(self, parent=None):
 		super(Window, self).__init__(parent)
 		
@@ -82,12 +84,9 @@ class Window(QWidget):
 		self.setWindowTitle("Free Engineer " + free_engine_version)
 		
 		#After Windows is drawn, lets check status of the games
-		self.update_game_thread0 = UpdateGameDes(self.r0, 0)
-		self.update_game_thread0.start()
-		self.update_game_thread1 = UpdateGameDes(self.r1, 1)
-		self.update_game_thread1.start()
-		self.update_game_thread2 = UpdateGameDes(self.r2, 2)
-		self.update_game_thread2.start()
+		self.radio_list = [self.r0, self.r1, self.r2]
+		self.update_game_thread = UpdateGameDes(self.radio_list)
+		self.update_game_thread.start()
 	
 	def choose(self):
 		self.installButton.setEnabled(False)
@@ -103,7 +102,7 @@ class Window(QWidget):
 		if os.path.isdir(engineer_dir) == False:
 			os.makedirs(engineer_dir)
 		_thread.start_new_thread(chosen_game.start, ("steam", str(self.loginText.text()), str(self.passwordText.text())))
-		print("new_thread_started")
+		print("new thread started")
 		percent = 0
 		time.sleep(1)
 		while percent != 100:
@@ -114,7 +113,6 @@ class Window(QWidget):
 			if "Error" in result:
 				break
 		#Installation is complete. Unlock Intall button and update games descriptions
-		#This is buggy and needs to be fixed
 		self.installButton.setEnabled(True)
 		self.r0.setText(game_descriptor(0))
 		self.r1.setText(game_descriptor(1))
@@ -122,25 +120,26 @@ class Window(QWidget):
 
 class UpdateGameDes(QThread):
 
-	def __init__(self, game_desc_widget, game_nr):
+	def __init__(self, radio_list):
 		QThread.__init__(self)
-		self.game_desc_widget = game_desc_widget
-		self.game_nr = game_nr
+		self.radio_list = radio_list
 
 	def __del__(self):
 		self.wait()
 
 	def run(self):
-		self.game_desc_widget.setText(game_descriptor(self.game_nr))
+		self.radio_list[0].setText(game_descriptor(0))
+		self.radio_list[1].setText(game_descriptor(1))
+		self.radio_list[2].setText(game_descriptor(2))
 
 def game_descriptor(game_nr):
 	game_description = ""
 	if game_nr == 0:
-		game_description = r0_description + " (" + update_check.start("jediacademy") + ")"
+		game_description = r0_description + " (" + update_check.start("jediacademy", self_dir) + ")"
 	elif game_nr == 1:
-		game_description = r1_description + " (" + update_check.start("morrowind") + ")"
+		game_description = r1_description + " (" + update_check.start("morrowind", self_dir) + ")"
 	elif game_nr == 2:
-		game_description = r2_description + " (" + update_check.start("doom3") + ")"
+		game_description = r2_description + " (" + update_check.start("doom3", self_dir) + ")"
 	return game_description
 	
 app = QApplication(sys.argv)
