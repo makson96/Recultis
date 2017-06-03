@@ -21,7 +21,6 @@ def prepare_engine():
 		except:
 			pass
 		shutil.copytree(engineer_dir + "tmp/openmw-makson/" + directory, game_dir + directory, symlinks=True)
-	shutil.rmtree(engineer_dir + "tmp")
 	print("copy config")
 	if os.path.isdir(os.getenv("HOME") + "/.config/openmw/") == False:
 		os.makedirs(os.getenv("HOME") + "/.config/openmw/")
@@ -67,6 +66,7 @@ def start(shop, shop_login, shop_password):
 	launchers()
 	#Mark installed version by coping link file
 	shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")
+	shutil.rmtree(engineer_dir + "tmp")
 
 def info(requested_list):
 	if os.path.isfile(game_dir + "/version_link.txt"):

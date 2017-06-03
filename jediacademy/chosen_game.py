@@ -23,7 +23,6 @@ def prepare_engine():
 		except:
 			pass
 		shutil.copytree(engineer_dir + "tmp/JediAcademy/" + directory, game_dir + "GameData/" + directory, symlinks=True)
-	shutil.rmtree(engineer_dir + "tmp")
 
 def launchers():
 	print("copy icon")
@@ -65,6 +64,7 @@ def start(shop, shop_login, shop_password):
 	launchers()
 	#Mark installed version by coping link file
 	shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")
+	shutil.rmtree(engineer_dir + "tmp")
 
 def info(requested_list):
 	if os.path.isfile(game_dir + "/version_link.txt"):

@@ -22,7 +22,6 @@ def prepare_engine():
 		pass
 	shutil.copy(engineer_dir + "tmp/rbdoom-3-bfg/RBDoom3BFG", game_dir + "RBDoom3BFG")
 	shutil.copytree(engineer_dir + "tmp/rbdoom-3-bfg/lib", game_dir + "lib", symlinks=True)
-	shutil.rmtree(engineer_dir + "tmp")
 
 def launchers():
 	print("copy icon")
@@ -60,6 +59,7 @@ def start(shop, shop_login, shop_password):
 	launchers()
 	#Mark installed version by coping link file
 	shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")
+	shutil.rmtree(engineer_dir + "tmp")
 
 def info(requested_list):
 	if os.path.isfile(game_dir + "/version_link.txt"):

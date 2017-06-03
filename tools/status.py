@@ -34,7 +34,7 @@ def steam_status():
 	elif "Failed to install app" in steam_last_line:
 		status = "Error: Steam - you are not game owner. Please correct and start again."
 		percent = 0
-	elif "downloading, progress: " in steam_last_line:
+	elif ("downloading, progress: " in steam_last_line) or ("validating, progress: " in steam_last_line):
 		steam_value = steam_last_line.split("progress: ")[1]
 		steam_value = steam_value.split(" (")[0]
 		steam_value = steam_value.split(",")[0]
@@ -64,7 +64,7 @@ def engine_status(game):
 		percent = 20 * disk_s / url_s
 		status = "Downloading engine"
 		percent = percent + 75
-	elif os.path.isdir(engineer_dir + "tmp/opt") == True:
+	elif os.path.isdir(engineer_dir + "tmp") == True:
 		status = "Installing engine"
 		percent = 96
 	else:
