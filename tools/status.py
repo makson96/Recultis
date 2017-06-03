@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import os, importlib
+import os, importlib, urllib
 
 engineer_dir = os.getenv("HOME") + "/.free-engineer/"
 
