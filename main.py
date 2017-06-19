@@ -42,8 +42,5 @@ if dep_error != "":
 	import sys
 	sys.exit(2)
 
-#Check for update
-print("TODO: Check for update")
-
 #Start main program
 import recultis.py
