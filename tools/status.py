@@ -7,7 +7,7 @@
 
 import os, importlib, urllib
 
-engineer_dir = os.getenv("HOME") + "/.free-engineer/"
+recultis_dir = os.getenv("HOME") + "/.recultis/"
 
 def check(game):
 	status = "Waiting for user action"
@@ -18,7 +18,7 @@ def check(game):
 	return status, percent
 	
 def steam_status():
-	os.chdir(engineer_dir)
+	os.chdir(recultis_dir)
 	status = "Downloading and installing game data"
 	percent = 0
 	try:
@@ -64,7 +64,7 @@ def engine_status(game):
 		percent = 20 * disk_s / url_s
 		status = "Downloading engine"
 		percent = percent + 75
-	elif os.path.isdir(engineer_dir + "tmp") == True:
+	elif os.path.isdir(recultis_dir + "tmp") == True:
 		status = "Installing engine"
 		percent = 96
 	else:

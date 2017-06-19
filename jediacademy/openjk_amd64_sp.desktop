@@ -2,7 +2,7 @@
 Type=Application
 Name=Jedi Knight: Jedi Academy - SinglePlayer
 Comment=Play Jedi Knights Academy
-Path=.free-engineer/JediAcademy/GameData/
+Path=.recultis/JediAcademy/GameData/
 Exec=./openjk_sp.x86_64
 Icon=openjk.png
 Categories=Game;

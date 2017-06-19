@@ -2,8 +2,8 @@
 Type=Application
 Name=The Elder Scrolls III: Morrowind
 Comment=Play The Elder Scrolls III: Morrowind
-Path=.free-engineer/morrowind/bin/
-Exec=sh -c "OSG_LIBRARY_PATH=$HOME/.free-engineer/morrowind/lib/osgPlugins-3.4.0 ./openmw"
+Path=.recultis/morrowind/bin/
+Exec=sh -c "OSG_LIBRARY_PATH=$HOME/.recultis/morrowind/lib/osgPlugins-3.4.0 ./openmw"
 Icon=openmw.png
 Categories=Game;
 Terminal=false

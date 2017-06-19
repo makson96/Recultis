@@ -8,19 +8,19 @@
 import sys, os, tarfile, time, shutil, urllib.request
 from subprocess import call, check_output
 
-engineer_dir = os.getenv("HOME") + "/.free-engineer/"
+recultis_dir = os.getenv("HOME") + "/.recultis/"
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
-game_dir = engineer_dir + "morrowind/"
+game_dir = recultis_dir + "morrowind/"
 s_appid = "22320"
 
 def prepare_engine():
 	print("prepare engine")
-	for directory in next(os.walk(engineer_dir + "tmp/openmw-makson/"))[1]:
+	for directory in next(os.walk(recultis_dir + "tmp/openmw-makson/"))[1]:
 		try:
 			shutil.rmtree(game_dir + directory)
 		except:
 			pass
-		shutil.copytree(engineer_dir + "tmp/openmw-makson/" + directory, game_dir + directory, symlinks=True)
+		shutil.copytree(recultis_dir + "tmp/openmw-makson/" + directory, game_dir + directory, symlinks=True)
 	print("copy config")
 	if os.path.isdir(os.getenv("HOME") + "/.config/openmw/") == False:
 		os.makedirs(os.getenv("HOME") + "/.config/openmw/")
@@ -49,24 +49,24 @@ def start(shop, shop_login, shop_password):
 	if shop == "steam":
 		from tools import steam
 		print("start steam")
-		steam.start(shop_login, shop_password, engineer_dir, s_appid, game_dir)
+		steam.start(shop_login, shop_password, recultis_dir, s_appid, game_dir)
 	link_file = open(self_dir + "link.txt")
 	link = link_file.read()
-	if os.path.isdir(engineer_dir + "tmp") == False:
-		os.makedirs(engineer_dir + "tmp")
+	if os.path.isdir(recultis_dir + "tmp") == False:
+		os.makedirs(recultis_dir + "tmp")
 	else:
-		shutil.rmtree(engineer_dir + "tmp")
-		os.makedirs(engineer_dir + "tmp")
+		shutil.rmtree(recultis_dir + "tmp")
+		os.makedirs(recultis_dir + "tmp")
 	print("download game engine")
 	from tools import download_engine
-	result = download_engine.download(link, engineer_dir + "tmp/openmw-makson.deb")		
+	result = download_engine.download(link, recultis_dir + "tmp/openmw-makson.deb")		
 	from tools import unpack_deb
-	unpack_deb.unpack_deb(engineer_dir + "tmp/", "openmw-makson.deb")
+	unpack_deb.unpack_deb(recultis_dir + "tmp/", "openmw-makson.deb")
 	prepare_engine()
 	launchers()
 	#Mark installed version by coping link file
 	shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")
-	shutil.rmtree(engineer_dir + "tmp")
+	shutil.rmtree(recultis_dir + "tmp")
 
 def info(requested_list):
 	if os.path.isfile(game_dir + "/version_link.txt"):
@@ -76,7 +76,7 @@ def info(requested_list):
 		version = "Update needed or no intall"
 	link_file = open(self_dir + "link.txt")
 	link = link_file.read()
-	deb_file_path = engineer_dir + "tmp/openmw-makson.deb"
+	deb_file_path = recultis_dir + "tmp/openmw-makson.deb"
 	return_list = []
 	for requested_item in requested_list:
 		if requested_item == "deb_file_path":

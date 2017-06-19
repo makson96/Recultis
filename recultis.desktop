@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Recultis
+Comment=Install free game engines with proprietary content.
+Exec=bash -c '_PWD="$PWD"; cd "`echo $0 | sed s/recultis.desktop$//`"; python3 main.py; cd "_PWD"' %k
+Icon=recultis.png
+Categories=Game;
+Terminal=false

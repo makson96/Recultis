@@ -8,9 +8,9 @@
 import sys, os, tarfile, time, shutil, urllib.request
 from subprocess import call, check_output
 
-engineer_dir = os.getenv("HOME") + "/.free-engineer/"
+recultis_dir = os.getenv("HOME") + "/.recultis/"
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
-game_dir = engineer_dir + "doom3/"
+game_dir = recultis_dir + "doom3/"
 s_appid = "208200"
 
 def prepare_engine():
@@ -20,8 +20,8 @@ def prepare_engine():
 		shutil.rmtree(game_dir + "lib")
 	except:
 		pass
-	shutil.copy(engineer_dir + "tmp/rbdoom-3-bfg/RBDoom3BFG", game_dir + "RBDoom3BFG")
-	shutil.copytree(engineer_dir + "tmp/rbdoom-3-bfg/lib", game_dir + "lib", symlinks=True)
+	shutil.copy(recultis_dir + "tmp/rbdoom-3-bfg/RBDoom3BFG", game_dir + "RBDoom3BFG")
+	shutil.copytree(recultis_dir + "tmp/rbdoom-3-bfg/lib", game_dir + "lib", symlinks=True)
 
 def launchers():
 	print("copy icon")
@@ -42,24 +42,24 @@ def start(shop, shop_login, shop_password):
 	if shop == "steam":
 		from tools import steam
 		print("start steam")
-		steam.start(shop_login, shop_password, engineer_dir, s_appid, game_dir)
+		steam.start(shop_login, shop_password, recultis_dir, s_appid, game_dir)
 	link_file = open(self_dir + "link.txt")
 	link = link_file.read()
-	if os.path.isdir(engineer_dir + "tmp") == False:
-		os.makedirs(engineer_dir + "tmp")
+	if os.path.isdir(recultis_dir + "tmp") == False:
+		os.makedirs(recultis_dir + "tmp")
 	else:
-		shutil.rmtree(engineer_dir + "tmp")
-		os.makedirs(engineer_dir + "tmp")
+		shutil.rmtree(recultis_dir + "tmp")
+		os.makedirs(recultis_dir + "tmp")
 	print("download game engine")
 	from tools import download_engine
-	result = download_engine.download(link, engineer_dir + "tmp/rbdoom-3-bfg.deb")		
+	result = download_engine.download(link, recultis_dir + "tmp/rbdoom-3-bfg.deb")		
 	from tools import unpack_deb
-	unpack_deb.unpack_deb(engineer_dir + "tmp/", "rbdoom-3-bfg.deb")
+	unpack_deb.unpack_deb(recultis_dir + "tmp/", "rbdoom-3-bfg.deb")
 	prepare_engine()
 	launchers()
 	#Mark installed version by coping link file
 	shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")
-	shutil.rmtree(engineer_dir + "tmp")
+	shutil.rmtree(recultis_dir + "tmp")
 
 def info(requested_list):
 	if os.path.isfile(game_dir + "/version_link.txt"):
@@ -69,7 +69,7 @@ def info(requested_list):
 		version = "Update needed or no intall"
 	link_file = open(self_dir + "link.txt")
 	link = link_file.read()
-	deb_file_path = engineer_dir + "tmp/rbdoom-3-bfg.deb"
+	deb_file_path = recultis_dir + "tmp/rbdoom-3-bfg.deb"
 	return_list = []
 	for requested_item in requested_list:
 		if requested_item == "deb_file_path":

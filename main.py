@@ -11,8 +11,8 @@
 import os, shutil
 if os.path.isdir(os.getenv("HOME") + "/.icons") == False:
 	os.makedirs(os.getenv("HOME") + "/.icons")
-if os.path.isfile(os.getenv("HOME") + "/.icons/free-engineer.png") == False:
-	shutil.copy(os.path.dirname(os.path.abspath(__file__)) + "/data/icon.png", os.getenv("HOME") + "/.icons/free-engineer.png")
+if os.path.isfile(os.getenv("HOME") + "/.icons/recultis.png") == False:
+	shutil.copy(os.path.dirname(os.path.abspath(__file__)) + "/data/icon.png", os.getenv("HOME") + "/.icons/recultis.png")
 del os, shutil
 
 #Check for dependencies
@@ -46,4 +46,4 @@ if dep_error != "":
 print("TODO: Check for update")
 
 #Start main program
-import free_engineer.py
+import recultis.py

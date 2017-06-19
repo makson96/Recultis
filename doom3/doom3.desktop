@@ -2,7 +2,7 @@
 Type=Application
 Name=Doom 3 BFG
 Comment=Play Doom 3 BFG
-Path=.free-engineer/doom3/
+Path=.recultis/doom3/
 Exec=./RBDoom3BFG
 Icon=rbdoom-3-bfg.png
 Categories=Game;

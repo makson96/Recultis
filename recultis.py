@@ -13,14 +13,14 @@ from PyQt5.QtGui import *
 
 from tools import update_check, status
 
-free_engine_version = "1.0.0pre"
+recultis_version = "1.0.0pre"
 
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
-engineer_dir = os.getenv("HOME") + "/.free-engineer/"
+recultis_dir = os.getenv("HOME") + "/.recultis/"
 
 r0_description = "Jedi Knight: Jedi Academy on OpenJK engine"
 r1_description = "The Elder Scrolls III: Morrowind on OpenMW engine"
-r2_description = "Doom 3 BFG on RBDOOM-3-BFG"
+r2_description = "Doom 3 BFG on RBDOOM-3-BFG engine"
 
 class Window(QWidget):
 	
@@ -29,7 +29,7 @@ class Window(QWidget):
 	def __init__(self, parent=None):
 		super(Window, self).__init__(parent)
 		
-		self.app_staus_label = QLabel("Free Enginner status is: Checking for update...")
+		self.app_staus_label = QLabel("Recultis status is: Checking for update...")
 		self.app_updateButton = QPushButton("Update Now")
 		self.app_updateButton.setEnabled(False)
 		choose_game_Label = QLabel("Choose the game to install:")
@@ -89,7 +89,7 @@ class Window(QWidget):
 		self.exitButton.clicked.connect(self.close)
  
 		self.setLayout(vbox1)
-		self.setWindowTitle("Free Engineer " + free_engine_version)
+		self.setWindowTitle("Recultis " + recultis_version)
 		
 		#After Windows is drawn, lets check status of the games
 		self.radio_list = [self.r0, self.r1, self.r2]
@@ -107,8 +107,8 @@ class Window(QWidget):
 		elif self.r2.isChecked():
 			from doom3 import chosen_game
 			game = "doom3"
-		if os.path.isdir(engineer_dir) == False:
-			os.makedirs(engineer_dir)
+		if os.path.isdir(recultis_dir) == False:
+			os.makedirs(recultis_dir)
 		_thread.start_new_thread(chosen_game.start, ("steam", str(self.loginText.text()), str(self.passwordText.text())))
 		print("new thread started")
 		percent = 0
@@ -145,27 +145,27 @@ class UpdateApp(QThread):
 			connection = 1
 		except urllib.request.URLError:
 			connection = 0
-			self.status_label.setText("Free Enginner status is: No internet connection")
+			self.status_label.setText("Recultis status is: No internet connection")
 			self.install_button.setEnabled(False)
 		if connection == 1:
 			#Check if update is available
-			v_major = str(int(free_engine_version[0]) + 1) + ".0.0"
-			v_minor = free_engine_version[0:2] + str(int(free_engine_version[2]) + 1) + ".0"
-			v_patch = free_engine_version[0:4] + str(int(free_engine_version[4]) + 1)
+			v_major = str(int(recultis_version[0]) + 1) + ".0.0"
+			v_minor = recultis_version[0:2] + str(int(recultis_version[2]) + 1) + ".0"
+			v_patch = recultis_version[0:4] + str(int(recultis_version[4]) + 1)
 			update_list = [v_major, v_minor, v_patch]
 			patch_url = ""
 			for potential_patch in update_list:
 				try:
-					patch_url = "https://github.com/makson96/free-engineer/archive/" + potential_patch + ".tar.gz"
+					patch_url = "https://github.com/makson96/Recultis/archive/" + potential_patch + ".tar.gz"
 					print(patch_url)
 					urllib.request.urlopen(patch_url, timeout=1)
 					self.update_button.setEnabled(True)
-					self.status_label.setText("Free Enginner status is: Updata available")
+					self.status_label.setText("Recultis status is: Updata available")
 					break					
 				except urllib.request.URLError:
 					patch_url = ""
 			if patch_url == "":
-				self.status_label.setText("Free Enginner status is: Up to date")
+				self.status_label.setText("Recultis status is: Up to date")
 			#Check game status (if internet connection)
 			self.radio_list[0].setText(game_descriptor(0))
 			self.radio_list[1].setText(game_descriptor(1))
