@@ -12,7 +12,7 @@ import os, shutil
 if os.path.isdir(os.getenv("HOME") + "/.icons") == False:
 	os.makedirs(os.getenv("HOME") + "/.icons")
 if os.path.isfile(os.getenv("HOME") + "/.icons/recultis.png") == False:
-	shutil.copy(os.path.dirname(os.path.abspath(__file__)) + "/data/icon.png", os.getenv("HOME") + "/.icons/recultis.png")
+	shutil.copy(os.path.dirname(os.path.abspath(__file__)) + "/assets/icon.png", os.getenv("HOME") + "/.icons/recultis.png")
 del os, shutil
 
 #Check for dependencies

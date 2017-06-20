@@ -1,3 +1,5 @@
 # Compiled python code
 *.pyc
 __pycache__/
+_site
+Gemfile.lock
