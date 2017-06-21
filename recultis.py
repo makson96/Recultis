@@ -85,6 +85,7 @@ class Window(QWidget):
 		hbox1.addWidget(self.exitButton)
 		vbox1.addLayout(hbox1)
 		
+		self.app_updateButton.clicked.connect(self.autoupdate)
 		self.installButton.clicked.connect(self.choose)
 		self.exitButton.clicked.connect(self.close)
  
@@ -126,6 +127,16 @@ class Window(QWidget):
 		self.r1.setText(game_descriptor(1))
 		self.r2.setText(game_descriptor(2))
 
+	def autoupdate(self):
+		self.app_staus_label.setText("Recultis status is: Updating. Please wait.")
+		patch_link_file = open(self_dir + "patch_link.txt", "r")
+		patch_link = patch_link_file.read()
+		from tools import update_tool
+		update_tool.autoupdate(self_dir, patch_link)
+		QMessageBox.information(w, "Message", "Update complete. Recultis will now turn off. Please start it again to apply patch.")
+		self.close()
+		
+
 class UpdateApp(QThread):
 
 	def __init__(self, status_label, update_button, install_button, radio_list):
@@ -141,7 +152,7 @@ class UpdateApp(QThread):
 	def run(self):
 		#Check for internet connection
 		try:
-			urllib.request.urlopen("https://github.com", timeout=1)
+			urllib.request.urlopen("https://github.com", timeout=3)
 			connection = 1
 		except urllib.request.URLError:
 			connection = 0
@@ -156,9 +167,11 @@ class UpdateApp(QThread):
 			patch_url = ""
 			for potential_patch in update_list:
 				try:
-					patch_url = "https://github.com/makson96/Recultis/archive/" + potential_patch + ".tar.gz"
-					print(patch_url)
+					patch_url = "https://github.com/makson96/Recultis/archive/v" + potential_patch + ".tar.gz"
 					urllib.request.urlopen(patch_url, timeout=1)
+					patch_link_file = open(self_dir + "patch_link.txt", "w")
+					patch_link_file.write(link)
+					patch_link_file.close()
 					self.update_button.setEnabled(True)
 					self.status_label.setText("Recultis status is: Updata available")
 					break					

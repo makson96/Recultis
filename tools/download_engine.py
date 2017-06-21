@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import urllib.request, os, time
+import urllib.request
 
 def download(link, file_path):
 	urllib.request.urlretrieve(link, file_path)
