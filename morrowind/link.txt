@@ -1,1 +1,1 @@
-https://launchpad.net/~makson96/+archive/ubuntu/free-engine/+files/openmw-makson_0.41.0+git20170603-trusty1_amd64.deb
+https://launchpad.net/~makson96/+archive/ubuntu/free-engine/+files/openmw-makson_0.41.0+git20170621-trusty1_amd64.deb
