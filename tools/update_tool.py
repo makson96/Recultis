@@ -26,6 +26,6 @@ def autoupdate(self_dir, patch_link):
 	os.remove(self_dir + patch_file)
 	#copy everything one directory backs
 	patch_dir = os.listdir(self_dir)[0]
-	for the_file_or_dir in patch_dir:
-		shutil.move(os.path.join(patch_dir + the_file_or_dir), os.path.join(self_dir + the_file_or_dir))
+	for the_file_or_dir in os.listdir(patch_dir):
+		shutil.move(os.path.join(patch_dir, the_file_or_dir), os.path.join(self_dir, the_file_or_dir))
 	shutil.rmtree(patch_dir)
