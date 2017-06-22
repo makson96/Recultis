@@ -133,7 +133,7 @@ class Window(QWidget):
 		patch_link = patch_link_file.read()
 		from tools import update_tool
 		update_tool.autoupdate(self_dir, patch_link)
-		QMessageBox.information(w, "Message", "Update complete. Recultis will now turn off. Please start it again to apply patch.")
+		QMessageBox.information(self, "Message", "Update complete. Recultis will now turn off. Please start it again to apply patch.")
 		self.close()
 		
 
@@ -170,7 +170,7 @@ class UpdateApp(QThread):
 					patch_url = "https://github.com/makson96/Recultis/archive/v" + potential_patch + ".tar.gz"
 					urllib.request.urlopen(patch_url, timeout=1)
 					patch_link_file = open(self_dir + "patch_link.txt", "w")
-					patch_link_file.write(link)
+					patch_link_file.write(patch_url)
 					patch_link_file.close()
 					self.update_button.setEnabled(True)
 					self.status_label.setText("Recultis status is: Updata available")
