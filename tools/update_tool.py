@@ -8,6 +8,7 @@
 import os, urllib.request, tarfile, shutil
 
 def autoupdate(self_dir, patch_link):
+	print("starting autoupdate")
 	#download patch
 	patch_file = "patch.tar.gz"
 	urllib.request.urlretrieve(patch_link, self_dir + patch_file)
