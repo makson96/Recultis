@@ -18,11 +18,15 @@ def prepare_engine():
 	for binary in next(os.walk(recultis_dir + "tmp/JediAcademy/"))[2]:
 		shutil.copy(recultis_dir + "tmp/JediAcademy/" + binary, game_dir + "GameData/" + binary)
 	for directory in next(os.walk(recultis_dir + "tmp/JediAcademy/"))[1]:
-		try:
-			shutil.rmtree(game_dir + "GameData/" + directory)
-		except:
-			pass
-		shutil.copytree(recultis_dir + "tmp/JediAcademy/" + directory, game_dir + "GameData/" + directory, symlinks=True)
+		if directory == "lib":
+			if os.path.isdir(game_dir + "GameData/" + directory):
+				shutil.rmtree(game_dir + "GameData/" + directory)
+			shutil.copytree(recultis_dir + "tmp/JediAcademy/" + directory, game_dir + "GameData/" + directory, symlinks=True)
+		else:
+			if os.path.isdir(game_dir + "GameData/" + directory) == False:
+				os.makedirs(game_dir + "GameData/" + directory)
+			for binary in next(os.walk(recultis_dir + "tmp/JediAcademy/" + directory))[2]:
+				shutil.copy(os.path.join(recultis_dir, "tmp/JediAcademy/", directory, binary), os.path.join(game_dir, "GameData/", directory, binary))
 
 def launchers():
 	print("copy icon")
