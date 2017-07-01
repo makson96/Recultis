@@ -123,6 +123,7 @@ class Window(QWidget):
 				break
 		#Installation is complete. Unlock Intall button and update games descriptions
 		self.installButton.setEnabled(True)
+		time.sleep(2)
 		self.r0.setText(game_descriptor(0))
 		self.r1.setText(game_descriptor(1))
 		self.r2.setText(game_descriptor(2))
