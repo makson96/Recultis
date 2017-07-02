@@ -2,8 +2,7 @@
 Type=Application
 Name=Jedi Knight: Jedi Academy - SinglePlayer
 Comment=Play Jedi Knights Academy
-Path=.recultis/JediAcademy/GameData/
-Exec=./openjk_sp.x86_64
+Exec=bash -c 'cd $HOME/.recultis/JediAcademy/GameData/; ./openjk_sp.x86_64'
 Icon=openjk.png
 Categories=Game;
 Terminal=false

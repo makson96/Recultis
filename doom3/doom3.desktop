@@ -2,8 +2,7 @@
 Type=Application
 Name=Doom 3 BFG
 Comment=Play Doom 3 BFG
-Path=.recultis/doom3/
-Exec=./RBDoom3BFG
+Exec=bash -c 'cd $HOME/.recultis/doom3/; ./RBDoom3BFG'
 Icon=rbdoom-3-bfg.png
 Categories=Game;
 Terminal=false
