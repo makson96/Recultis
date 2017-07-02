@@ -46,17 +46,17 @@ def start(shop, shop_login, shop_password):
 	print("start install openmw")
 	if os.path.isdir(game_dir) == False:
 		os.makedirs(game_dir)
+	if os.path.isdir(recultis_dir + "tmp") == False:
+		os.makedirs(recultis_dir + "tmp")
+	else:
+		shutil.rmtree(recultis_dir + "tmp")
+		os.makedirs(recultis_dir + "tmp")
 	if shop == "steam":
 		from tools import steam
 		print("start steam")
 		steam.start(shop_login, shop_password, recultis_dir, s_appid, game_dir)
 	link_file = open(self_dir + "link.txt")
 	link = link_file.read()
-	if os.path.isdir(recultis_dir + "tmp") == False:
-		os.makedirs(recultis_dir + "tmp")
-	else:
-		shutil.rmtree(recultis_dir + "tmp")
-		os.makedirs(recultis_dir + "tmp")
 	print("download game engine")
 	from tools import download_engine
 	result = download_engine.download(link, recultis_dir + "tmp/openmw-makson.deb")		
