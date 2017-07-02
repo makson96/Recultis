@@ -34,6 +34,9 @@ def steam_status():
 	elif "Failed to install app" in steam_last_line:
 		status = "Error: Steam - you are not game owner. Please correct and start again."
 		percent = 0
+	elif "Steamcmd Error." in steam_last_line:
+		status = "Error: Steamcmd internal error. Please contact Recultis project for support."
+		percent = 0
 	elif ("downloading, progress: " in steam_last_line) or ("validating, progress: " in steam_last_line):
 		steam_value = steam_last_line.split("progress: ")[1]
 		steam_value = steam_value.split(" (")[0]

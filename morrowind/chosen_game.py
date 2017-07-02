@@ -51,6 +51,7 @@ def start(shop, shop_login, shop_password):
 	else:
 		shutil.rmtree(recultis_dir + "tmp")
 		os.makedirs(recultis_dir + "tmp")
+	open(recultis_dir + "tmp/openmw-makson.deb", 'a').close()
 	if shop == "steam":
 		from tools import steam
 		print("start steam")
