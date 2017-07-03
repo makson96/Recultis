@@ -6,7 +6,7 @@
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
 import os, tarfile, urllib.request, time
-from subprocess import Popen
+from subprocess import Popen, PIPE
 
 def start(login, password, recultis_dir, s_appid, game_dir):
 	os.chdir(recultis_dir)
@@ -37,10 +37,17 @@ def get_last_log_line():
 	steam_log_file.close()
 	return steam_last_line
 
+def steam_guard():
+	print('Steam Guard')
+	##Show text box asking for steam_guard_code
+	steam_guard_code = "aaa"
+	return str(steam_guard_code)
+	
+
 def run(login, password, recultis_dir, s_appid, game_dir):
 	if os.path.isfile(recultis_dir+"steam_log.txt") == True:
 		os.remove(recultis_dir+"steam_log.txt")
-	steam_download = Popen("script -q -c \"./steamcmd.sh +@sSteamCmdForcePlatformType windows +login '" + login + "' '" + password + "' +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit\" /dev/null", shell=True, bufsize=1, stdout=open("steam_log.txt", "wb"))
+	steam_download = Popen("script -q -c \"./steamcmd.sh +@sSteamCmdForcePlatformType windows +login '" + login + "' '" + password + "' +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit\" /dev/null", shell=True, bufsize=1, stdout=open("steam_log.txt", "wb"), stdin=PIPE)
 	while steam_download.poll() is None:
 		time.sleep(2)
 		steam_last_line = get_last_log_line()
@@ -50,6 +57,12 @@ def run(login, password, recultis_dir, s_appid, game_dir):
 		#Terminate the process if not owning the game
 		elif "Failed to install app" in steam_last_line:
 			steam_download.terminate()
+		#Retry 5 times if steamcmd has memory access error
 		elif '$DEBUGGER "$STEAMEXE" "$@"' in steam_last_line:
 			return 1
+		#If computer is not registered on Steam, handle Steam Guard
+		elif 'Steam Guard' in steam_last_line:
+			steam_guard_code = steam_guard()
+			steam_download.stdin.write(bytes(steam_guard_code + '\n', 'ascii'))
+			steam_download.stdin.flush()
 	return 0

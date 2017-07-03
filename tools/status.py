@@ -34,6 +34,9 @@ def steam_status():
 	elif "Failed to install app" in steam_last_line:
 		status = "Error: Steam - you are not game owner. Please correct and start again."
 		percent = 0
+	elif "FAILED with result code" in steam_last_line:
+		status = "Error: Could not perform Steam Guard authentication. Please try again."
+		percent = 0
 	elif "Steamcmd Error." in steam_last_line:
 		status = "Error: Steamcmd internal error. Please contact Recultis project for support."
 		percent = 0
