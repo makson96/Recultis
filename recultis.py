@@ -92,8 +92,6 @@ class Window(QWidget):
 		self.setLayout(vbox1)
 		self.setWindowTitle("Recultis " + recultis_version)
 		
-		self.nw = AskWindow(1, self) #This should not allways be 1
-		
 		#After Windows is drawn, lets check status of the games
 		self.radio_list = [self.r0, self.r1, self.r2]
 		self.update_game_thread = UpdateApp(self.app_staus_label, self.app_updateButton, self.installButton, self.radio_list)
@@ -122,6 +120,7 @@ class Window(QWidget):
 			self.statusLabel2.setText(result)
 			self.progress.setValue(percent)
 			if "Warning" in result:
+				self.nw = AskWindow(1, self) #This should not allways be 1
 				self.nw.show()
 			elif "Error" in result:
 				break
@@ -196,21 +195,19 @@ class AskWindow(QMainWindow):
 	def __init__(self, reason, parent=None):
 		super(AskWindow, self).__init__(parent)
 		self.reason = reason
-		print(self.reason)
 		if self.reason == 1:
 			self.title = 'Steam Guard authentication.'
-			self.MessageLabel = QLabel("Please provide Steam Guard code, which was just send via email.")
+			self.MessageLabel = QLabel("Please provide Steam Guard code, which was just send via email.", self)
 		self.setWindowTitle(self.title)
 		self.textbox = QLineEdit(self)
 		self.button = QPushButton('OK', self)
 		self.button.clicked.connect(self.on_click)
-		
-		#layout=QVBoxLayout()
-		#layout.addWidget(self.MessageLabel)
-		#layout.addWidget(self.textbox)
-		#layout.addWidget(self.button)
-		#self.setLayout(layout)
-		#self.show()
+		self.MessageLabel.move(0,0)
+		self.MessageLabel.resize(self.MessageLabel.minimumSizeHint())
+		self.textbox.move(0,27)
+		self.textbox.resize(400, 30)
+		self.button.move(150,60)
+		self.setGeometry(250, 250, 400, 90)
 		
 	def on_click(self):
 		steam_guard_key = self.textbox.text()

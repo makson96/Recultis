@@ -37,11 +37,16 @@ def get_last_log_line():
 	steam_log_file.close()
 	return steam_last_line
 
-def steam_guard():
+def steam_guard(recultis_dir):
 	print('Steam Guard')
-	##Show text box asking for steam_guard_code
-	steam_guard_code = "aaa"
-	return str(steam_guard_code)
+	while os.path.isfile(recultis_dir + "steam_guard_key.txt") == False:
+		time.sleep(2)
+	steam_guard_file = open(recultis_dir + "steam_guard_key.txt", "r")
+	steam_guard_code = steam_guard_file.readline()
+	steam_guard_file.close()
+	os.remove(recultis_dir + "steam_guard_key.txt")
+	print(str(steam_guard_code).upper())
+	return str(steam_guard_code.upper())
 	
 
 def run(login, password, recultis_dir, s_appid, game_dir):
@@ -62,7 +67,7 @@ def run(login, password, recultis_dir, s_appid, game_dir):
 			return 1
 		#If computer is not registered on Steam, handle Steam Guard
 		elif 'Steam Guard' in steam_last_line:
-			steam_guard_code = steam_guard()
+			steam_guard_code = steam_guard(recultis_dir)
 			steam_download.stdin.write(bytes(steam_guard_code + '\n', 'ascii'))
 			steam_download.stdin.flush()
 	return 0
