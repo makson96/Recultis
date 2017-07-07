@@ -112,24 +112,7 @@ class Window(QWidget):
 			os.makedirs(recultis_dir)
 		_thread.start_new_thread(chosen_game.start, ("steam", str(self.loginText.text()), str(self.passwordText.text())))
 		print("new thread started")
-		percent = 0
-		time.sleep(1)
-		while percent != 100:
-			result, percent = status.check(game)
-			time.sleep(1)
-			self.statusLabel2.setText(result)
-			self.progress.setValue(percent)
-			if "Warning" in result:
-				self.nw = AskWindow(1, self) #This should not allways be 1
-				self.nw.show()
-			elif "Error" in result:
-				break
-		#Installation is complete. Unlock Intall button and update games descriptions
-		self.installButton.setEnabled(True)
-		time.sleep(2)
-		self.r0.setText(game_descriptor(0))
-		self.r1.setText(game_descriptor(1))
-		self.r2.setText(game_descriptor(2))
+		percent_update_loop(game)
 
 	def autoupdate(self):
 		self.app_staus_label.setText("Recultis status is: Updating. Please wait.")
@@ -191,10 +174,12 @@ class AskWindow(QMainWindow):
 	#Available reasons: 1 - Steam Guard, ...
 	
 	reason = 0
+	game = "No title"
 	
-	def __init__(self, reason, parent=None):
+	def __init__(self, reason, game, parent=None):
 		super(AskWindow, self).__init__(parent)
 		self.reason = reason
+		self.game = game
 		if self.reason == 1:
 			self.title = 'Steam Guard authentication.'
 			self.MessageLabel = QLabel("Please provide Steam Guard code, which was just send via email.", self)
@@ -215,6 +200,7 @@ class AskWindow(QMainWindow):
 		steam_guard_key_file.write(steam_guard_key)
 		steam_guard_key_file.close()
 		self.close()
+		percent_update_loop(self.game)
 
 def game_descriptor(game_nr):
 	game_description = ""
@@ -225,6 +211,28 @@ def game_descriptor(game_nr):
 	elif game_nr == 2:
 		game_description = r2_description + " (" + update_check.start("doom3", self_dir) + ")"
 	return game_description
+
+def percent_update_loop(game):
+	time.sleep(0.5)
+	percent = 0
+	while percent != 100:
+		result, percent = status.check(game)
+		time.sleep(1)
+		screen.statusLabel2.setText(result)
+		screen.progress.setValue(percent)
+		if "Warning" in result:
+			nw = AskWindow(1, game, screen) #This should not allways be 1
+			nw.show()
+			break
+		elif "Error" in result:
+			break
+	#Installation is complete or error occured. Unlock Intall button and update games descriptions
+	if (percent == 100) or ("Error" in result):
+		screen.installButton.setEnabled(True)
+		time.sleep(1)
+		screen.r0.setText(game_descriptor(0))
+		screen.r1.setText(game_descriptor(1))
+		screen.r2.setText(game_descriptor(2))
 
 app = QApplication(sys.argv)
 screen = Window()
