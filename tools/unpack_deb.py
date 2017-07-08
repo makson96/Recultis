@@ -45,7 +45,7 @@ def untar_data(tmp_dir):
 
 def move_data(tmp_dir):
 	for directory in next(os.walk(tmp_dir + "opt/"))[1]:
-		print("move from: " + tmp_dir + "opt/" + directory + "to: " + tmp_dir + directory
+		print("move from: " + tmp_dir + "opt/" + directory + "to: " + tmp_dir + directory)
 		shutil.move(tmp_dir + "opt/" + directory, tmp_dir + directory)
 
 def clean_data(tmp_dir, deb_name):
