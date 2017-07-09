@@ -8,7 +8,7 @@
 import os, urllib.request, tarfile, shutil
 
 def autoupdate(self_dir, patch_link):
-	print("starting autoupdate")
+	print("Starting autoupdate.")
 	#download patch
 	patch_file = "patch.tar.gz"
 	urllib.request.urlretrieve(patch_link, self_dir + patch_file)
@@ -30,3 +30,4 @@ def autoupdate(self_dir, patch_link):
 	for the_file_or_dir in os.listdir(patch_dir):
 		shutil.move(os.path.join(patch_dir, the_file_or_dir), os.path.join(self_dir, the_file_or_dir))
 	shutil.rmtree(patch_dir)
+	print("Autoupdate complete.")

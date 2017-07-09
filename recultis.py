@@ -110,8 +110,8 @@ class Window(QWidget):
 			game = "doom3"
 		if os.path.isdir(recultis_dir) == False:
 			os.makedirs(recultis_dir)
+		print("tarting new thread, which will install: " + game)
 		_thread.start_new_thread(chosen_game.start, ("steam", str(self.loginText.text()), str(self.passwordText.text())))
-		print("new thread started")
 		percent_update_loop(game)
 
 	def autoupdate(self):
@@ -221,10 +221,12 @@ def percent_update_loop(game):
 		screen.statusLabel2.setText(result)
 		screen.progress.setValue(percent)
 		if "Warning" in result:
+			print(result)
 			nw = AskWindow(1, game, screen) #This should not allways be 1
 			nw.show()
 			break
 		elif "Error" in result:
+			print(result)
 			break
 	#Installation is complete or error occured. Unlock Intall button and update games descriptions
 	if (percent == 100) or ("Error" in result):

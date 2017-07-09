@@ -30,5 +30,5 @@ def update_link(game, self_dir):
 	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/" + game+ "/link.txt"
 	target_file = self_dir + game + "/link.txt"
 	urllib.request.urlretrieve(target_url, target_file)
-	print("Game engine link updated")
+	print("Game engine link updated.")
 	return 0
