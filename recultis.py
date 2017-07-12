@@ -200,6 +200,7 @@ class AskWindow(QMainWindow):
 		steam_guard_key_file.write(steam_guard_key)
 		steam_guard_key_file.close()
 		self.close()
+		time.sleep(1)
 		percent_update_loop(self.game)
 
 def game_descriptor(game_nr):
