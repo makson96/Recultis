@@ -47,6 +47,7 @@ def steam_status():
 		steam_value = steam_last_line.split("progress: ")[1]
 		steam_value = steam_value.split(" (")[0]
 		steam_value = steam_value.split(",")[0]
+		steam_value = steam_value.split(".")[0]
 		steam_value = int(steam_value) * 70 / 100
 		status = "Downloading and installing game data"
 		percent = steam_value
