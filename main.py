@@ -9,11 +9,11 @@
 
 #Copy icon
 import os, shutil
-if os.path.isdir(os.getenv("HOME") + "/.icons") == False:
-	os.makedirs(os.getenv("HOME") + "/.icons")
-if os.path.isfile(os.getenv("HOME") + "/.icons/recultis.png") == False:
+if os.path.isdir(os.getenv("HOME") + "/.local/share/icons") == False:
+	os.makedirs(os.getenv("HOME") + "/.local/share/icons")
+if os.path.isfile(os.getenv("HOME") + "/.local/share/icons/recultis.png") == False:
 	print("Prepare Recultis launcher icon.")
-	shutil.copy(os.path.dirname(os.path.abspath(__file__)) + "/assets/icon.png", os.getenv("HOME") + "/.icons/recultis.png")
+	shutil.copy(os.path.dirname(os.path.abspath(__file__)) + "/assets/icon.png", os.getenv("HOME") + "/.local/share/icons/recultis.png")
 del os, shutil
 
 #Check for dependencies

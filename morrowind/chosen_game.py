@@ -44,11 +44,11 @@ def prepare_engine():
 
 def launchers():
 	print("copy icon")
-	if os.path.isdir(os.getenv("HOME") + "/.icons") == False:
-		os.makedirs(os.getenv("HOME") + "/.icons")
+	if os.path.isdir(os.getenv("HOME") + "/.local/share/icons") == False:
+		os.makedirs(os.getenv("HOME") + "/.local/share/icons")
 	if os.path.isdir(os.getenv("HOME") + "/.local/share/applications/") == False:
 		os.makedirs(os.getenv("HOME") + "/.local/share/applications/")
-	shutil.copy(self_dir + "openmw.png", os.getenv("HOME") + "/.icons/openmw.png")
+	shutil.copy(self_dir + "openmw.png", os.getenv("HOME") + "/.local/share/icons/openmw.png")
 	print("make launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 	shutil.copy(self_dir + "morrowind.desktop", desk_dir + "/morrowind.desktop")

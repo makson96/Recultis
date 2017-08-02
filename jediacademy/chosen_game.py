@@ -42,11 +42,11 @@ def prepare_engine():
 
 def launchers():
 	print("copy icon")
-	if os.path.isdir(os.getenv("HOME") + "/.icons") == False:
-		os.makedirs(os.getenv("HOME") + "/.icons")
+	if os.path.isdir(os.getenv("HOME") + "/.local/share/icons") == False:
+		os.makedirs(os.getenv("HOME") + "/.local/share/icons")
 	if os.path.isdir(os.getenv("HOME") + "/.local/share/applications/") == False:
 		os.makedirs(os.getenv("HOME") + "/.local/share/applications/")
-	shutil.copy(self_dir + "openjk.png", os.getenv("HOME") + "/.icons/openjk.png")
+	shutil.copy(self_dir + "openjk.png", os.getenv("HOME") + "/.local/share/icons/openjk.png")
 	print("make_launchers")
 	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 	shutil.copy(self_dir + "openjk_amd64_sp.desktop", desk_dir + "/openjk_amd64_sp.desktop")
