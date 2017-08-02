@@ -18,9 +18,12 @@ recultis_version = "1.1.0pre"
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 recultis_dir = os.getenv("HOME") + "/.recultis/"
 
-r0_description = "Jedi Knight: Jedi Academy on OpenJK engine"
-r1_description = "The Elder Scrolls III: Morrowind on OpenMW engine"
-r2_description = "Doom 3 BFG on RBDOOM-3-BFG engine"
+from jediacademy.chosen_game import name
+r0_name = name
+from morrowind.chosen_game import name
+r1_name = name
+from doom3.chosen_game import name
+r2_name = name
 
 class Window(QWidget):
 	
@@ -34,13 +37,15 @@ class Window(QWidget):
 		self.app_updateButton.setEnabled(False)
 		choose_game_Label = QLabel("Choose the game to install:")
 		game_group = QButtonGroup()
-		self.r0 = QRadioButton(r0_description + " (Checking for update...)")
+		self.r0 = QRadioButton(r0_name + " (Checking for update...)")
+		self.r0.toggled.connect(self.r0_clicked)
 		game_group.addButton(self.r0)
-		self.r1 = QRadioButton(r1_description + " (Checking for update...)")
+		self.r1 = QRadioButton(r1_name + " (Checking for update...)")
+		self.r1.toggled.connect(self.r1_clicked)
 		game_group.addButton(self.r1)
-		self.r2 = QRadioButton(r2_description + " (Checking for update...)")
+		self.r2 = QRadioButton(r2_name + " (Checking for update...)")
+		self.r2.toggled.connect(self.r2_clicked)
 		game_group.addButton(self.r2)
-		self.r0.setChecked(True)
 		choose_data_Label = QLabel("Choose digital distribution platform to download game data:")
 		data_group = QButtonGroup()
 		self.r0a = QRadioButton("Steam")
@@ -59,14 +64,23 @@ class Window(QWidget):
 		self.exitButton = QPushButton("Exit")
 		choose_game_Label = QLabel("Choose the game to install:")
 		
+		#Default game selection
+		self.description_image = QLabel() 
+		self.description_label = QLabel()
+		self.description_steam_link = QLabel()
+		self.description_steam_link.setOpenExternalLinks(True)
+		self.r0.setChecked(True)
+		
 		vbox1 = QVBoxLayout()
+		vbox2 = QVBoxLayout()
 		hbox0 = QHBoxLayout()
 		hbox1 = QHBoxLayout()
+		hbox2 = QHBoxLayout()
 		grid1 = QGridLayout()
 		
-		hbox0.addWidget(self.app_staus_label)
-		hbox0.addWidget(self.app_updateButton)
-		vbox1.addLayout(hbox0)
+		hbox1.addWidget(self.app_staus_label)
+		hbox1.addWidget(self.app_updateButton)
+		vbox1.addLayout(hbox1)
 		vbox1.addWidget(choose_game_Label)
 		vbox1.addWidget(self.r0)
 		vbox1.addWidget(self.r1)
@@ -81,15 +95,20 @@ class Window(QWidget):
 		grid1.addWidget(self.statusLabel2, 2, 1)
 		vbox1.addLayout(grid1)
 		vbox1.addWidget(self.progress)
-		hbox1.addWidget(self.installButton)
-		hbox1.addWidget(self.exitButton)
-		vbox1.addLayout(hbox1)
+		hbox2.addWidget(self.installButton)
+		hbox2.addWidget(self.exitButton)
+		vbox1.addLayout(hbox2)
+		vbox2.addWidget(self.description_image)
+		vbox2.addWidget(self.description_label)
+		vbox2.addWidget(self.description_steam_link)
+		hbox0.addLayout(vbox1)
+		hbox0.addLayout(vbox2)
 		
 		self.app_updateButton.clicked.connect(self.autoupdate)
 		self.installButton.clicked.connect(self.choose)
 		self.exitButton.clicked.connect(self.close)
  
-		self.setLayout(vbox1)
+		self.setLayout(hbox0)
 		self.setWindowTitle("Recultis " + recultis_version)
 		
 		#After Windows is drawn, lets check status of the games
@@ -121,7 +140,31 @@ class Window(QWidget):
 		from tools import update_tool
 		update_tool.autoupdate(self_dir, patch_link)
 		QMessageBox.information(self, "Message", "Update complete. Recultis will now turn off. Please start it again to apply patch.")
-		self.close()		
+		self.close()
+	
+	def r0_clicked(self, enabled):
+		if enabled:
+			from jediacademy.chosen_game import description, screenshot_path, steam_link
+			description_pixmap = QPixmap(screenshot_path)
+			self.description_image.setPixmap(description_pixmap)
+			self.description_label.setText(description)
+			self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
+	
+	def r1_clicked(self, enabled):
+		if enabled:
+			from morrowind.chosen_game import description, screenshot_path, steam_link
+			description_pixmap = QPixmap(screenshot_path)
+			self.description_image.setPixmap(description_pixmap)
+			self.description_label.setText(description)
+			self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
+	
+	def r2_clicked(self, enabled):
+		if enabled:
+			from doom3.chosen_game import description, screenshot_path, steam_link
+			description_pixmap = QPixmap(screenshot_path)
+			self.description_image.setPixmap(description_pixmap)
+			self.description_label.setText(description)
+			self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
 
 class UpdateApp(QThread):
 
@@ -206,11 +249,11 @@ class AskWindow(QMainWindow):
 def game_descriptor(game_nr):
 	game_description = ""
 	if game_nr == 0:
-		game_description = r0_description + " (" + update_check.start("jediacademy", self_dir) + ")"
+		game_description = r0_name + " (" + update_check.start("jediacademy", self_dir) + ")"
 	elif game_nr == 1:
-		game_description = r1_description + " (" + update_check.start("morrowind", self_dir) + ")"
+		game_description = r1_name + " (" + update_check.start("morrowind", self_dir) + ")"
 	elif game_nr == 2:
-		game_description = r2_description + " (" + update_check.start("doom3", self_dir) + ")"
+		game_description = r2_name + " (" + update_check.start("doom3", self_dir) + ")"
 	return game_description
 
 def percent_update_loop(game):

@@ -13,6 +13,18 @@ self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 game_dir = recultis_dir + "morrowind/"
 s_appid = "22320"
 
+name = "The Elder Scrolls III: Morrowind on OpenMW engine"
+description = """Morrowind is revolutionary RPG. With open world, endless possibilities
+and interesting story. What is more, it has well done 3D art and
+feature great character development. Morrowind was never released
+on Linux. Fortunately team of developers are working hard on
+OpenMW project to provide us drop in replacement for original
+Morrowind engine with tons of new features. To run this game you
+need to have it in your Steam Library.
+"""
+steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
+screenshot_path = self_dir + "../assets/html/openmw-screen.png"
+
 def prepare_engine():
 	print("prepare engine")
 	for directory in next(os.walk(recultis_dir + "tmp/openmw-makson/"))[1]:

@@ -13,6 +13,18 @@ self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 game_dir = recultis_dir + "doom3/"
 s_appid = "208200"
 
+name = "Doom 3 BFG on RBDOOM-3-BFG engine"
+description = """Doom 3: BFG is the remaster of classic Doom 3 with all expansions. It
+features enhanced graphic and audio to original game. Doom 3 is one of
+the best FPS games of all time. Unfortunately, it was never released
+on Linux, but game engine was release open source. With many
+enhancements and new features, game is now available on Linux and it
+is better than ever before. Recultis uses RBDOOM-3-BFG flavor of the
+engine and requires game to be present in your Steam Library.
+"""
+steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
+screenshot_path = self_dir + "../assets/html/rdoom3-screen.png"
+
 def prepare_engine():
 	print("prepare engine")
 	try:

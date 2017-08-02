@@ -13,6 +13,18 @@ self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 game_dir = recultis_dir + "JediAcademy/"
 s_appid = "6020"
 
+name = "Jedi Knight: Jedi Academy on OpenJK engine"
+description = """Jedi Academy is fast and fun TPS set in Star Wars universe. Fight with
+Lightsabers, train yourself in Lightside or Darkside of the force. Meet
+your favorite characters from the original series and uncover the plot
+of evil Empire. This great game was never released on Linux, but thanks
+to the source code release, the engine is now developed in OpenJK
+project. To run the game by Recultis, you need to have it in your Steam
+Library.
+"""
+steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
+screenshot_path = self_dir + "../assets/html/openjk-screen.png"
+
 def prepare_engine():
 	print("prepare engine")
 	for binary in next(os.walk(recultis_dir + "tmp/JediAcademy/"))[2]:
