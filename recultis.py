@@ -5,7 +5,8 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import sys, os, _thread, time, urllib
+import sys, os, _thread, time, urllib, stat
+from subprocess import check_output
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -35,6 +36,7 @@ class Window(QWidget):
 		self.app_staus_label = QLabel("Recultis status is: Checking for update...")
 		self.app_updateButton = QPushButton("Update Now")
 		self.app_updateButton.setEnabled(False)
+		self.app_create_launcher = QPushButton("Add Desktop Launcher")
 		choose_game_Label = QLabel("Choose the game to install:")
 		game_group = QButtonGroup()
 		self.r0 = QRadioButton(r0_name + " (Checking for update...)")
@@ -80,6 +82,7 @@ class Window(QWidget):
 		
 		hbox1.addWidget(self.app_staus_label)
 		hbox1.addWidget(self.app_updateButton)
+		hbox1.addWidget(self.app_create_launcher)
 		vbox1.addLayout(hbox1)
 		vbox1.addWidget(choose_game_Label)
 		vbox1.addWidget(self.r0)
@@ -105,6 +108,7 @@ class Window(QWidget):
 		hbox0.addLayout(vbox2)
 		
 		self.app_updateButton.clicked.connect(self.autoupdate)
+		self.app_create_launcher.clicked.connect(self.add_launcher)
 		self.installButton.clicked.connect(self.choose)
 		self.exitButton.clicked.connect(self.close)
  
@@ -141,6 +145,28 @@ class Window(QWidget):
 		update_tool.autoupdate(self_dir, patch_link)
 		QMessageBox.information(self, "Message", "Update complete. Recultis will now turn off. Please start it again to apply patch.")
 		self.close()
+	
+	def add_launcher(self):
+		launcher_text = """[Desktop Entry]
+Type=Application
+Name=Recultis
+Comment=Install free game engines with proprietary content.
+Exec=bash -c 'cd \"""" + self_dir + """\"; python3 main.py'
+Icon=recultis.png
+Categories=Game;
+Terminal=false"""
+		desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
+		desktop_file = open(desk_dir + "/recultis.desktop", "w")
+		desktop_file.write(launcher_text)
+		desktop_file.close()
+		st = os.stat(desk_dir + "/recultis.desktop")
+		os.chmod(desk_dir + "/recultis.desktop", st.st_mode | stat.S_IEXEC)
+		menu_file = open(os.getenv("HOME") + "/.local/share/applications/recultis.desktop", "w")
+		menu_file.write(launcher_text)
+		menu_file.close()
+		st = os.stat(os.getenv("HOME") + "/.local/share/applications/recultis.desktop")
+		os.chmod(os.getenv("HOME") + "/.local/share/applications/recultis.desktop", st.st_mode | stat.S_IEXEC)
+		QMessageBox.information(self, "Message", "Desktop and Menu launchers for Recultis are now successfully created.")
 	
 	def r0_clicked(self, enabled):
 		if enabled:
