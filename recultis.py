@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import sys, os, _thread, time, urllib, stat
+import sys, os, _thread, time, urllib
 from subprocess import check_output
 
 from PyQt5.QtCore import *
@@ -159,13 +159,11 @@ Terminal=false"""
 		desktop_file = open(desk_dir + "/recultis.desktop", "w")
 		desktop_file.write(launcher_text)
 		desktop_file.close()
-		st = os.stat(desk_dir + "/recultis.desktop")
-		os.chmod(desk_dir + "/recultis.desktop", st.st_mode | stat.S_IEXEC)
+		os.chmod(desk_dir + "/recultis.desktop", 0o755)
 		menu_file = open(os.getenv("HOME") + "/.local/share/applications/recultis.desktop", "w")
 		menu_file.write(launcher_text)
 		menu_file.close()
-		st = os.stat(os.getenv("HOME") + "/.local/share/applications/recultis.desktop")
-		os.chmod(os.getenv("HOME") + "/.local/share/applications/recultis.desktop", st.st_mode | stat.S_IEXEC)
+		os.chmod(os.getenv("HOME") + "/.local/share/applications/recultis.desktop", 0o755)
 		QMessageBox.information(self, "Message", "Desktop and Menu launchers for Recultis are now successfully created.")
 	
 	def r0_clicked(self, enabled):
