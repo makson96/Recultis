@@ -48,6 +48,7 @@ class Window(QWidget):
 		self.r2 = QRadioButton(r2_name + " (Checking for update...)")
 		self.r2.toggled.connect(self.r2_clicked)
 		game_group.addButton(self.r2)
+		self.only_engine_checkbox = QCheckBox("Only engine update")
 		choose_data_Label = QLabel("Choose digital distribution platform to download game data:")
 		data_group = QButtonGroup()
 		self.r0a = QRadioButton("Steam")
@@ -89,6 +90,7 @@ class Window(QWidget):
 		vbox1.addWidget(self.r1)
 		vbox1.addWidget(self.r2)
 		vbox1.addWidget(choose_data_Label)
+		vbox1.addWidget(self.only_engine_checkbox)
 		vbox1.addWidget(self.r0a)
 		grid1.addWidget(loginLabel, 0, 0)
 		grid1.addWidget(self.loginText, 0, 1)
@@ -133,8 +135,12 @@ class Window(QWidget):
 			game = "doom3"
 		if os.path.isdir(recultis_dir) == False:
 			os.makedirs(recultis_dir)
-		print("tarting new thread, which will install: " + game)
-		_thread.start_new_thread(chosen_game.start, ("steam", str(self.loginText.text()), str(self.passwordText.text())))
+		print("starting new thread, which will install: " + game)
+		if self.only_engine_checkbox.isChecked():
+			game_shop = "none"
+		else:
+			game_shop = "steam"
+		_thread.start_new_thread(chosen_game.start, (game_shop, str(self.loginText.text()), str(self.passwordText.text())))
 		percent_update_loop(game)
 
 	def autoupdate(self):
