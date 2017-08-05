@@ -46,6 +46,7 @@ class Window(QWidget):
 		self.r2.toggled.connect(self.r2_clicked)
 		choose_data_box = QGroupBox("Choose digital distribution platform to download game data:")
 		self.r0a = QRadioButton("Only engine update")
+		self.r0a.setEnabled(False)
 		self.r1a = QRadioButton("Steam")
 		self.r1a.setChecked(True)
 		loginLabel = QLabel("Login:")
@@ -117,7 +118,7 @@ class Window(QWidget):
 		
 		#After Windows is drawn, lets check status of the games
 		self.radio_list = [self.r0, self.r1, self.r2]
-		self.update_game_thread = UpdateApp(self.app_staus_label, self.app_updateButton, self.installButton, self.radio_list)
+		self.update_game_thread = UpdateApp(self.app_staus_label, self.app_updateButton, self.installButton, self.radio_list, self.r0a)
 		self.update_game_thread.start()
 	
 	def choose(self):
@@ -177,6 +178,13 @@ Terminal=false"""
 			self.description_image.setPixmap(description_pixmap)
 			self.description_label.setText(description)
 			self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
+			if "Update" in self.r0.text():
+				self.r0a.setEnabled(True)
+			elif self.r0a.isChecked() == True:
+				self.r1a.setChecked(True)
+				self.r0a.setEnabled(False)
+			else:
+				self.r0a.setEnabled(False)
 	
 	def r1_clicked(self, enabled):
 		if enabled:
@@ -185,6 +193,13 @@ Terminal=false"""
 			self.description_image.setPixmap(description_pixmap)
 			self.description_label.setText(description)
 			self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
+			if "Update" in self.r1.text():
+				self.r0a.setEnabled(True)
+			elif self.r0a.isChecked() == True:
+				self.r1a.setChecked(True)
+				self.r0a.setEnabled(False)
+			else:
+				self.r0a.setEnabled(False)
 	
 	def r2_clicked(self, enabled):
 		if enabled:
@@ -193,15 +208,23 @@ Terminal=false"""
 			self.description_image.setPixmap(description_pixmap)
 			self.description_label.setText(description)
 			self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
+			if "Update" in self.r2.text():
+				self.r0a.setEnabled(True)
+			elif self.r0a.isChecked() == True:
+				self.r1a.setChecked(True)
+				self.r0a.setEnabled(False)
+			else:
+				self.r0a.setEnabled(False)
 
 class UpdateApp(QThread):
 
-	def __init__(self, status_label, update_button, install_button, radio_list):
+	def __init__(self, status_label, update_button, install_button, radio_list, only_engine_radio):
 		QThread.__init__(self)
 		self.status_label = status_label
 		self.update_button = update_button
 		self.install_button = install_button
 		self.radio_list = radio_list
+		self.only_engine_radio = only_engine_radio
 
 	def __del__(self):
 		self.wait()
@@ -216,7 +239,14 @@ class UpdateApp(QThread):
 			self.status_label.setText("Recultis status is: No internet connection")
 			self.install_button.setEnabled(False)
 		if connection == 1:
-			#Check if update is available
+			#Check game status (if internet connection)
+			game_nr = 0
+			for radio_button in self.radio_list:
+				radio_button.setText(game_descriptor(game_nr))
+				game_nr += 1
+				if "Update" in radio_button.text() and radio_button.isChecked() == True:
+					self.only_engine_radio.setEnabled(True)
+			#Check if update is available (if internet connection)
 			v_major = str(int(recultis_version[0]) + 1) + ".0.0"
 			v_minor = recultis_version[0:2] + str(int(recultis_version[2]) + 1) + ".0"
 			v_patch = recultis_version[0:4] + str(int(recultis_version[4]) + 1)
@@ -236,10 +266,6 @@ class UpdateApp(QThread):
 					patch_url = ""
 			if patch_url == "":
 				self.status_label.setText("Recultis status is: Up to date")
-			#Check game status (if internet connection)
-			self.radio_list[0].setText(game_descriptor(0))
-			self.radio_list[1].setText(game_descriptor(1))
-			self.radio_list[2].setText(game_descriptor(2))
 
 class AskWindow(QMainWindow):
 	#Available reasons: 1 - Steam Guard, ...
