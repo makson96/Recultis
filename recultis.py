@@ -47,8 +47,10 @@ class Window(QWidget):
 		choose_data_box = QGroupBox("Choose digital distribution platform to download game data:")
 		self.r0a = QRadioButton("Only engine update")
 		self.r0a.setEnabled(False)
+		self.r0a.toggled.connect(self.r0a_clicked)
 		self.r1a = QRadioButton("Steam")
 		self.r1a.setChecked(True)
+		self.r1a.toggled.connect(self.r1a_clicked)
 		loginLabel = QLabel("Login:")
 		self.loginText = QLineEdit()
 		passwordLabel = QLabel("Password:")
@@ -215,6 +217,16 @@ Terminal=false"""
 				self.r0a.setEnabled(False)
 			else:
 				self.r0a.setEnabled(False)
+	
+	def r0a_clicked(self, enabled):
+		if enabled:
+			self.loginText.setEnabled(False)
+			self.passwordText.setEnabled(False)
+	
+	def r1a_clicked(self, enabled):
+		if enabled:
+			self.loginText.setEnabled(True)
+			self.passwordText.setEnabled(True)
 
 class UpdateApp(QThread):
 
