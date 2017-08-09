@@ -61,6 +61,7 @@ class Window(QWidget):
 		self.statusLabel2.setAlignment(Qt.AlignCenter)
 		self.progress = QProgressBar(self)
 		self.installButton = QPushButton("Install")
+		self.uninstallButton = QPushButton("Uninstall")
 		self.exitButton = QPushButton("Exit")
 		choose_game_Label = QLabel("Choose the game to install:")
 		
@@ -102,6 +103,7 @@ class Window(QWidget):
 		vbox1.addLayout(grid1)
 		vbox1.addWidget(self.progress)
 		hbox2.addWidget(self.installButton)
+		hbox2.addWidget(self.uninstallButton)
 		hbox2.addWidget(self.exitButton)
 		vbox1.addLayout(hbox2)
 		vbox2.addWidget(self.description_image)
@@ -113,6 +115,7 @@ class Window(QWidget):
 		self.app_updateButton.clicked.connect(self.autoupdate)
 		self.app_create_launcher.clicked.connect(self.add_launcher)
 		self.installButton.clicked.connect(self.choose)
+		self.uninstallButton.clicked.connect(self.uninstall_game)
 		self.exitButton.clicked.connect(self.close)
  
 		self.setLayout(hbox0)
@@ -143,6 +146,21 @@ class Window(QWidget):
 			game_shop = "steam"
 		_thread.start_new_thread(chosen_game.start, (game_shop, str(self.loginText.text()), str(self.passwordText.text())))
 		percent_update_loop(game)
+	
+	def uninstall_game(self):
+		self.installButton.setEnabled(False)
+		if self.r0.isChecked():
+			from jediacademy import chosen_game
+			game = "jediacademy"
+		elif self.r1.isChecked():
+			from morrowind import chosen_game
+			game = "morrowind"
+		elif self.r2.isChecked():
+			from doom3 import chosen_game
+			game = "doom3"
+		print("Uninstalling game")
+		chosen_game.uninstall()
+		QMessageBox.information(self, "Message", "Game uninstallation complete.")
 
 	def autoupdate(self):
 		self.app_staus_label.setText("Recultis status is: Updating. Please wait.")
@@ -187,6 +205,10 @@ Terminal=false"""
 				self.r0a.setEnabled(False)
 			else:
 				self.r0a.setEnabled(False)
+			if "Not installed" in self.r0.text() or "Checking for update" in self.r0.text():
+				self.uninstallButton.setEnabled(False)
+			else:
+				self.uninstallButton.setEnabled(True)
 	
 	def r1_clicked(self, enabled):
 		if enabled:
@@ -202,6 +224,10 @@ Terminal=false"""
 				self.r0a.setEnabled(False)
 			else:
 				self.r0a.setEnabled(False)
+			if "Not installed" in self.r1.text():
+				self.uninstallButton.setEnabled(False)
+			else:
+				self.uninstallButton.setEnabled(True)
 	
 	def r2_clicked(self, enabled):
 		if enabled:
@@ -217,6 +243,10 @@ Terminal=false"""
 				self.r0a.setEnabled(False)
 			else:
 				self.r0a.setEnabled(False)
+			if "Not installed" in self.r2.text():
+				self.uninstallButton.setEnabled(False)
+			else:
+				self.uninstallButton.setEnabled(True)
 	
 	def r0a_clicked(self, enabled):
 		if enabled:
