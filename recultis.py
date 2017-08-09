@@ -193,60 +193,41 @@ Terminal=false"""
 	
 	def r0_clicked(self, enabled):
 		if enabled:
-			from jediacademy.chosen_game import description, screenshot_path, steam_link
-			description_pixmap = QPixmap(screenshot_path)
-			self.description_image.setPixmap(description_pixmap)
-			self.description_label.setText(description)
-			self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
-			if "Update" in self.r0.text():
-				self.r0a.setEnabled(True)
-			elif self.r0a.isChecked() == True:
-				self.r1a.setChecked(True)
-				self.r0a.setEnabled(False)
-			else:
-				self.r0a.setEnabled(False)
-			if "Not installed" in self.r0.text() or "Checking for update" in self.r0.text():
-				self.uninstallButton.setEnabled(False)
-			else:
-				self.uninstallButton.setEnabled(True)
+			self.game_radiobutton_effect(0)
 	
 	def r1_clicked(self, enabled):
 		if enabled:
-			from morrowind.chosen_game import description, screenshot_path, steam_link
-			description_pixmap = QPixmap(screenshot_path)
-			self.description_image.setPixmap(description_pixmap)
-			self.description_label.setText(description)
-			self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
-			if "Update" in self.r1.text():
-				self.r0a.setEnabled(True)
-			elif self.r0a.isChecked() == True:
-				self.r1a.setChecked(True)
-				self.r0a.setEnabled(False)
-			else:
-				self.r0a.setEnabled(False)
-			if "Not installed" in self.r1.text():
-				self.uninstallButton.setEnabled(False)
-			else:
-				self.uninstallButton.setEnabled(True)
+			self.game_radiobutton_effect(1)
 	
 	def r2_clicked(self, enabled):
 		if enabled:
+			self.game_radiobutton_effect(2)
+	
+	def game_radiobutton_effect(self, which_one):
+		if which_one == 0:
+			rbutton = self.r0
+			from jediacademy.chosen_game import description, screenshot_path, steam_link
+		elif which_one == 1:
+			rbutton = self.r1
+			from morrowind.chosen_game import description, screenshot_path, steam_link
+		elif which_one == 2:
 			from doom3.chosen_game import description, screenshot_path, steam_link
-			description_pixmap = QPixmap(screenshot_path)
-			self.description_image.setPixmap(description_pixmap)
-			self.description_label.setText(description)
-			self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
-			if "Update" in self.r2.text():
-				self.r0a.setEnabled(True)
-			elif self.r0a.isChecked() == True:
-				self.r1a.setChecked(True)
-				self.r0a.setEnabled(False)
-			else:
-				self.r0a.setEnabled(False)
-			if "Not installed" in self.r2.text():
-				self.uninstallButton.setEnabled(False)
-			else:
-				self.uninstallButton.setEnabled(True)
+			rbutton = self.r2
+		description_pixmap = QPixmap(screenshot_path)
+		self.description_image.setPixmap(description_pixmap)
+		self.description_label.setText(description)
+		self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
+		if "Update" in rbutton.text():
+			self.r0a.setEnabled(True)
+		elif self.r0a.isChecked() == True:
+			self.r1a.setChecked(True)
+			self.r0a.setEnabled(False)
+		else:
+			self.r0a.setEnabled(False)
+		if "Not installed" in rbutton.text() or "Checking for update" in rbutton.text():
+			self.uninstallButton.setEnabled(False)
+		else:
+			self.uninstallButton.setEnabled(True)
 	
 	def r0a_clicked(self, enabled):
 		if enabled:
