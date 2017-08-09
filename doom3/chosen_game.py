@@ -24,6 +24,7 @@ engine and requires game to be present in your Steam Library.
 """
 steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
 screenshot_path = self_dir + "../assets/html/rdoom3-screen.png"
+desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 
 def prepare_engine():
 	print("prepare engine")
@@ -43,7 +44,6 @@ def launchers():
 		os.makedirs(os.getenv("HOME") + "/.local/share/applications/")
 	shutil.copy(self_dir + "rbdoom-3-bfg.png", os.getenv("HOME") + "/.local/share/icons/rbdoom-3-bfg.png")
 	print("make_launchers")
-	desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 	shutil.copy(self_dir + "doom3.desktop", desk_dir + "/doom3.desktop")
 	shutil.copy(self_dir + "doom3.desktop", os.getenv("HOME") + "/.local/share/applications/doom3.desktop")
 
@@ -73,6 +73,16 @@ def start(shop, shop_login, shop_password):
 	#Mark installed version by coping link file
 	shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")
 	shutil.rmtree(recultis_dir + "tmp")
+
+def uninstall():
+	if os.path.isfile(desk_dir + "/doom3.desktop"):
+		os.remove(desk_dir + "/doom3.desktop")
+	if os.path.isfile(os.getenv("HOME") + "/.local/share/applications/doom3.desktop"):
+		os.remove(os.getenv("HOME") + "/.local/share/applications/doom3.desktop")
+	if os.path.isfile(os.getenv("HOME") + "/.local/share/icons/rbdoom-3-bfg.png"):
+		os.remove(os.getenv("HOME") + "/.local/share/icons/rbdoom-3-bfg.png")
+	if os.path.isdir(game_dir):
+		shutil.rmtree(game_dir)
 
 def info(requested_list):
 	if os.path.isfile(game_dir + "/version_link.txt"):
