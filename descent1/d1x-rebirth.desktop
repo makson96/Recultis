@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Descent 1
+Comment=Descent 1
+Exec=bash -c 'cd $HOME/.recultis/descent1/; ./d1x-rebirth'
+Icon=d1x-rebirth.png
+Categories=Game;
+Terminal=false

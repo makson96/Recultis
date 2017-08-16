@@ -29,6 +29,10 @@ from aliensvspredator.chosen_game import name
 r3_name = name
 from xcomufodefense.chosen_game import name
 r4_name = name
+from descent1.chosen_game import name
+r5_name = name
+from descent2.chosen_game import name
+r6_name = name
 
 class Window(QWidget):
 	
@@ -52,6 +56,10 @@ class Window(QWidget):
 		self.r3.toggled.connect(self.r3_clicked)
 		self.r4 = QRadioButton(r4_name + " (Checking for update...)")
 		self.r4.toggled.connect(self.r4_clicked)
+		self.r5 = QRadioButton(r5_name + " (Checking for update...)")
+		self.r5.toggled.connect(self.r5_clicked)
+		self.r6 = QRadioButton(r6_name + " (Checking for update...)")
+		self.r6.toggled.connect(self.r6_clicked)
 		choose_data_box = QGroupBox("Choose digital distribution platform to download game data:")
 		self.r0a = QRadioButton("Only engine update")
 		self.r0a.setEnabled(False)
@@ -101,6 +109,8 @@ class Window(QWidget):
 		vbox1_1.addWidget(self.r2)
 		vbox1_1.addWidget(self.r3)
 		vbox1_1.addWidget(self.r4)
+		vbox1_1.addWidget(self.r5)
+		vbox1_1.addWidget(self.r6)
 		vbox1.addWidget(choose_data_box)
 		vbox1_2.addWidget(self.r0a)
 		vbox1_2.addWidget(self.r1a)
@@ -132,7 +142,7 @@ class Window(QWidget):
 		self.setWindowTitle("Recultis " + recultis_version)
 		
 		#After Windows is drawn, lets check status of the games
-		self.radio_list = [self.r0, self.r1, self.r2, self.r3, self.r4]
+		self.radio_list = [self.r0, self.r1, self.r2, self.r3, self.r4, self.r5, self.r6]
 		self.update_game_thread = UpdateApp(self.app_staus_label, self.app_updateButton, self.installButton, self.radio_list, self.r0a)
 		self.update_game_thread.start()
 	
@@ -153,6 +163,12 @@ class Window(QWidget):
 		elif self.r4.isChecked():
 			from xcomufodefense import chosen_game
 			game = "xcomufodefense"
+		elif self.r5.isChecked():
+			from descent1 import chosen_game
+			game = "descent1"
+		elif self.r6.isChecked():
+			from descent2 import chosen_game
+			game = "descent2"
 		if os.path.isdir(recultis_dir) == False:
 			os.makedirs(recultis_dir)
 		print("starting new thread, which will install: " + game)
@@ -180,6 +196,12 @@ class Window(QWidget):
 		elif self.r4.isChecked():
 			from xcomufodefense import chosen_game
 			game = "xcomufodefense"
+		elif self.r5.isChecked():
+			from descent1 import chosen_game
+			game = "descent1"
+		elif self.r6.isChecked():
+			from descent2 import chosen_game
+			game = "descent2"
 		print("Uninstalling game")
 		chosen_game.uninstall()
 		QMessageBox.information(self, "Message", "Game uninstallation complete.")
@@ -232,6 +254,14 @@ Terminal=false"""
 	def r4_clicked(self, enabled):
 		if enabled:
 			self.game_radiobutton_effect(4)
+
+	def r5_clicked(self, enabled):
+		if enabled:
+			self.game_radiobutton_effect(5)
+	
+	def r6_clicked(self, enabled):
+		if enabled:
+			self.game_radiobutton_effect(6)
 	
 	def game_radiobutton_effect(self, which_one):
 		if which_one == 0:
@@ -248,6 +278,12 @@ Terminal=false"""
 			rbutton = self.r3
 		elif which_one == 4:
 			from xcomufodefense.chosen_game import description, screenshot_path, steam_link
+			rbutton = self.r4
+		elif which_one == 5:
+			from descent1.chosen_game import description, screenshot_path, steam_link
+			rbutton = self.r5
+		elif which_one == 6:
+			from descent2.chosen_game import description, screenshot_path, steam_link
 			rbutton = self.r4
 		description_pixmap = QPixmap(screenshot_path)
 		self.description_image.setPixmap(description_pixmap)
@@ -371,6 +407,10 @@ def game_descriptor(game_nr):
 		game_description = r3_name + " (" + update_check.start("aliensvspredator", self_dir) + ")"
 	elif game_nr == 4:
 		game_description = r4_name + " (" + update_check.start("xcomufodefense", self_dir) + ")"
+	elif game_nr == 5:
+		game_description = r5_name + " (" + update_check.start("descent1", self_dir) + ")"
+	elif game_nr == 6:
+		game_description = r6_name + " (" + update_check.start("descent2", self_dir) + ")"
 	return game_description
 
 def percent_update_loop(game):
@@ -398,6 +438,8 @@ def percent_update_loop(game):
 		screen.r2.setText(game_descriptor(2))
 		screen.r3.setText(game_descriptor(3))
 		screen.r4.setText(game_descriptor(4))
+		screen.r5.setText(game_descriptor(5))
+		screen.r6.setText(game_descriptor(6))
 
 app = QApplication(sys.argv)
 screen = Window()
