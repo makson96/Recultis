@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=X-COM: UFO Defense
+Comment=Play X-COM: UFO Defense
+Exec=bash -c 'cd $HOME/.recultis/xcom/bin/; ./openxcom'
+Icon=openxcom.png
+Categories=Game;
+Terminal=false

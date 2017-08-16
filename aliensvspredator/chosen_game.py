@@ -13,11 +13,11 @@ self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 game_dir = recultis_dir + "AliensVsPredator/"
 s_appid = "3730"
 
-name = "Aliens vs Predator Classic 2000"
+name = "Aliens vs Predator Classic 2000 on avp engine"
 description = """Aliens vs Predator is revolutionary FPS, which combines the best of both
 Aliens and Predator franchises. You can play as Colonial Marine, Alien or
 Predator in great campaigns, single player skirmishes or in multiplayer.
-Each speacies introduce completly different playstale - Colonial Marine
+Each species introduce completely different play-style - Colonial Marine
 relies on guns; Alien who can run on walls, sneak and fast attack; and
 Predator with, masking suit and hunting weapons.
 Important shortcuts: ALT-ENTER for fullscreen; CTRL-G for mouse grab.

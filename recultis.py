@@ -27,6 +27,8 @@ from doom3.chosen_game import name
 r2_name = name
 from aliensvspredator.chosen_game import name
 r3_name = name
+from xcomufodefense.chosen_game import name
+r4_name = name
 
 class Window(QWidget):
 	
@@ -48,6 +50,8 @@ class Window(QWidget):
 		self.r2.toggled.connect(self.r2_clicked)
 		self.r3 = QRadioButton(r3_name + " (Checking for update...)")
 		self.r3.toggled.connect(self.r3_clicked)
+		self.r4 = QRadioButton(r4_name + " (Checking for update...)")
+		self.r4.toggled.connect(self.r4_clicked)
 		choose_data_box = QGroupBox("Choose digital distribution platform to download game data:")
 		self.r0a = QRadioButton("Only engine update")
 		self.r0a.setEnabled(False)
@@ -96,6 +100,7 @@ class Window(QWidget):
 		vbox1_1.addWidget(self.r1)
 		vbox1_1.addWidget(self.r2)
 		vbox1_1.addWidget(self.r3)
+		vbox1_1.addWidget(self.r4)
 		vbox1.addWidget(choose_data_box)
 		vbox1_2.addWidget(self.r0a)
 		vbox1_2.addWidget(self.r1a)
@@ -127,7 +132,7 @@ class Window(QWidget):
 		self.setWindowTitle("Recultis " + recultis_version)
 		
 		#After Windows is drawn, lets check status of the games
-		self.radio_list = [self.r0, self.r1, self.r2, self.r3]
+		self.radio_list = [self.r0, self.r1, self.r2, self.r3, self.r4]
 		self.update_game_thread = UpdateApp(self.app_staus_label, self.app_updateButton, self.installButton, self.radio_list, self.r0a)
 		self.update_game_thread.start()
 	
@@ -145,6 +150,9 @@ class Window(QWidget):
 		elif self.r3.isChecked():
 			from aliensvspredator import chosen_game
 			game = "aliensvspredator"
+		elif self.r4.isChecked():
+			from xcomufodefense import chosen_game
+			game = "xcomufodefense"
 		if os.path.isdir(recultis_dir) == False:
 			os.makedirs(recultis_dir)
 		print("starting new thread, which will install: " + game)
@@ -169,6 +177,9 @@ class Window(QWidget):
 		elif self.r3.isChecked():
 			from aliensvspredator import chosen_game
 			game = "aliensvspredator"
+		elif self.r4.isChecked():
+			from xcomufodefense import chosen_game
+			game = "xcomufodefense"
 		print("Uninstalling game")
 		chosen_game.uninstall()
 		QMessageBox.information(self, "Message", "Game uninstallation complete.")
@@ -218,6 +229,10 @@ Terminal=false"""
 		if enabled:
 			self.game_radiobutton_effect(3)
 	
+	def r4_clicked(self, enabled):
+		if enabled:
+			self.game_radiobutton_effect(4)
+	
 	def game_radiobutton_effect(self, which_one):
 		if which_one == 0:
 			rbutton = self.r0
@@ -231,6 +246,9 @@ Terminal=false"""
 		elif which_one == 3:
 			from aliensvspredator.chosen_game import description, screenshot_path, steam_link
 			rbutton = self.r3
+		elif which_one == 4:
+			from xcomufodefense.chosen_game import description, screenshot_path, steam_link
+			rbutton = self.r4
 		description_pixmap = QPixmap(screenshot_path)
 		self.description_image.setPixmap(description_pixmap)
 		self.description_label.setText(description)
@@ -351,6 +369,8 @@ def game_descriptor(game_nr):
 		game_description = r2_name + " (" + update_check.start("doom3", self_dir) + ")"
 	elif game_nr == 3:
 		game_description = r3_name + " (" + update_check.start("aliensvspredator", self_dir) + ")"
+	elif game_nr == 4:
+		game_description = r4_name + " (" + update_check.start("xcomufodefense", self_dir) + ")"
 	return game_description
 
 def percent_update_loop(game):
@@ -377,6 +397,7 @@ def percent_update_loop(game):
 		screen.r1.setText(game_descriptor(1))
 		screen.r2.setText(game_descriptor(2))
 		screen.r3.setText(game_descriptor(3))
+		screen.r4.setText(game_descriptor(4))
 
 app = QApplication(sys.argv)
 screen = Window()
