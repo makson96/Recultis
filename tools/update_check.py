@@ -14,15 +14,21 @@ def start(game, self_dir):
 	game_dir = game_info[0]
 	version = game_info[1]
 	
-	data = urllib.request.urlopen(target_url)
-	download_link_new = data.read().decode("utf-8")
+	try:
+		data = urllib.request.urlopen(target_url)
+		download_link_new = data.read().decode("utf-8")
+	#If can't get link assume that local link is most recent.
+	except urllib.request.URLError:
+		download_link_new = version
 	if os.path.isdir(game_dir) == True:
 		status = "Installed"
 		if version != download_link_new:
 			status = "Update available"
 	else:
 		status = "Not installed"
-	update_link(game, self_dir)
+	#Update link only if needed
+	if version != download_link_new:
+		update_link(game, self_dir)
 	print(game + " status is " + status)
 	return status
 
