@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Aliens vs Predator Classic 2000
+Comment=Play Aliens vs Predator Classic 2000
+Exec=bash -c 'cd $HOME/.recultis/AliensVsPredator/; ./avp'
+Icon=avp.png
+Categories=Game;
+Terminal=false
