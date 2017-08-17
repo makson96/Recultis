@@ -28,12 +28,16 @@ desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 
 def prepare_engine():
 	print("prepare engine")
+	#All content needs to be lowercase
 	for avp_file_or_dir in os.listdir(game_dir):
 		if os.path.isdir(game_dir + avp_file_or_dir) == True:
 			print("entering dir " + avp_file_or_dir)
 			for avp_file in os.listdir(game_dir + avp_file_or_dir):
 				os.rename(game_dir + avp_file_or_dir + "/" + avp_file, game_dir + avp_file_or_dir + "/" + avp_file.lower())
+		if os.path.isdir(game_dir + avp_file_or_dir.lower()):
+			shutil.rmtree(game_dir + avp_file_or_dir.lower())
 		os.rename(game_dir + avp_file_or_dir, game_dir + avp_file_or_dir.lower())
+	#Copy game engine and libs
 	shutil.copy(recultis_dir + "tmp/avp/avp", game_dir + "avp")
 	if os.path.isdir(game_dir + "lib/") == True:
 		shutil.rmtree(game_dir + "lib/")
