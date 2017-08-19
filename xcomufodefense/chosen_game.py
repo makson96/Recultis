@@ -37,22 +37,19 @@ def prepare_engine():
 	if os.path.isdir(game_dir + "share/") == True:
 		shutil.rmtree(game_dir + "share/")
 	shutil.copytree(recultis_dir + "tmp/openxcom/share/", game_dir + "share/", symlinks=True)
-	local_data_dir = os.getenv("HOME") + "/.local/share/openxcom/data/"
+	local_data_dir = os.getenv("HOME") + "/.local/share/openxcom/UFO/"
 	if os.path.isdir(local_data_dir) == False:
 		os.makedirs(local_data_dir)
 	print("symlinking game data to xcom local data")
 	dirs = ["GEODATA", "GEOGRAPH", "MAPS", "ROUTES", "SOUND", "TERRAIN", "UFOGRAPH", "UFOINTRO", "UNITS"]
 	for xdir in dirs:
-		if os.path.exists(local_data_dir + xdir) == False:
-			os.symlink(game_dir + "XCOM/" + xdir, local_data_dir + xdir)
-	dirs = ["Language", "Resources", "Shaders", "SoldierName"]
-	for xdir in dirs:
-		if os.path.exists(local_data_dir + xdir) == False:
-			os.symlink(game_dir + "/share/openxcom/common/" + xdir, local_data_dir + xdir)
-	dirs = ["MAPS/FIRES.MAP", "MAPS/INTERC.MAP", "ROUTES/FIRES.RMP", "ROUTES/INTERC.RMP"]
-	for xdir in dirs:
-		if os.path.exists(game_dir + "XCOM/" + xdir) == False:
-			os.symlink(game_dir + "/share/openxcom/data/" + xdir, game_dir + "XCOM/" + xdir)
+		if os.path.islink(local_data_dir + xdir):
+			os.unlink(local_data_dir + xdir)
+		elif os.path.isfile(local_data_dir + xdir):
+			os.remove(local_data_dir + xdir)
+		elif os.path.isdir(local_data_dir + xdir):
+			shutil.rmtree(local_data_dir + xdir)
+		os.symlink(game_dir + "XCOM/" + xdir, local_data_dir + xdir)
 
 def launchers():
 	print("copy icon")
