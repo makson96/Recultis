@@ -67,19 +67,22 @@ def start(shop, shop_login, shop_password):
 	if shop == "steam":
 		from tools import steam
 		print("start steam")
-		steam.start(shop_login, shop_password, recultis_dir, s_appid, game_dir)
-	link_file = open(self_dir + "link.txt")
-	link = link_file.read()
-	print("download game engine")
-	from tools import download_engine
-	result = download_engine.download(link, recultis_dir + "tmp/avp.deb")		
-	from tools import unpack_deb
-	unpack_deb.unpack_deb(recultis_dir + "tmp/", "avp.deb")
-	prepare_engine()
-	launchers()
-	#Mark installed version by coping link file
-	shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")
-	shutil.rmtree(recultis_dir + "tmp")
+		shop_status_ok = steam.start(shop_login, shop_password, recultis_dir, s_appid, game_dir)
+	else:
+		shop_status_ok = True
+	if shop_status_ok == True:
+		link_file = open(self_dir + "link.txt")
+		link = link_file.read()
+		print("download game engine")
+		from tools import download_engine
+		result = download_engine.download(link, recultis_dir + "tmp/avp.deb")		
+		from tools import unpack_deb
+		unpack_deb.unpack_deb(recultis_dir + "tmp/", "avp.deb")
+		prepare_engine()
+		launchers()
+		#Mark installed version by coping link file
+		shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")
+		shutil.rmtree(recultis_dir + "tmp")
 
 def uninstall():
 	if os.path.isfile(desk_dir + "/avp.desktop"):
@@ -96,7 +99,7 @@ def info(requested_list):
 		version_file = open(game_dir + "/version_link.txt")
 		version = version_file.read()
 	else:
-		version = "Update needed or no intall"
+		version = "No proper install"
 	link_file = open(self_dir + "link.txt")
 	link = link_file.read()
 	deb_file_path = recultis_dir + "tmp/avp.deb"

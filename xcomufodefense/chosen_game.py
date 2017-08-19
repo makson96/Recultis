@@ -45,10 +45,10 @@ def prepare_engine():
 	for xdir in dirs:
 		if os.path.exists(local_data_dir + xdir) == False:
 			os.symlink(game_dir + "XCOM/" + xdir, local_data_dir + xdir)
-	dirs = ["Language", "Resources", "Ruleset", "Shaders", "SoldierName"]
+	dirs = ["Language", "Resources", "Shaders", "SoldierName"]
 	for xdir in dirs:
 		if os.path.exists(local_data_dir + xdir) == False:
-			os.symlink(game_dir + "/share/openxcom/data/" + xdir, local_data_dir + xdir)
+			os.symlink(game_dir + "/share/openxcom/common/" + xdir, local_data_dir + xdir)
 	dirs = ["MAPS/FIRES.MAP", "MAPS/INTERC.MAP", "ROUTES/FIRES.RMP", "ROUTES/INTERC.RMP"]
 	for xdir in dirs:
 		if os.path.exists(game_dir + "XCOM/" + xdir) == False:
@@ -78,19 +78,22 @@ def start(shop, shop_login, shop_password):
 	if shop == "steam":
 		from tools import steam
 		print("start steam")
-		steam.start(shop_login, shop_password, recultis_dir, s_appid, game_dir)
-	link_file = open(self_dir + "link.txt")
-	link = link_file.read()
-	print("download game engine")
-	from tools import download_engine
-	result = download_engine.download(link, recultis_dir + "tmp/openxcom.deb")		
-	from tools import unpack_deb
-	unpack_deb.unpack_deb(recultis_dir + "tmp/", "openxcom.deb")
-	prepare_engine()
-	launchers()
-	#Mark installed version by coping link file
-	shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")
-	shutil.rmtree(recultis_dir + "tmp")
+		shop_status_ok = steam.start(shop_login, shop_password, recultis_dir, s_appid, game_dir)
+	else:
+		shop_status_ok = True
+	if shop_status_ok == True:
+		link_file = open(self_dir + "link.txt")
+		link = link_file.read()
+		print("download game engine")
+		from tools import download_engine
+		result = download_engine.download(link, recultis_dir + "tmp/openxcom.deb")		
+		from tools import unpack_deb
+		unpack_deb.unpack_deb(recultis_dir + "tmp/", "openxcom.deb")
+		prepare_engine()
+		launchers()
+		#Mark installed version by coping link file
+		shutil.copy(self_dir + "link.txt", game_dir + "/version_link.txt")
+		shutil.rmtree(recultis_dir + "tmp")
 
 def uninstall():
 	if os.path.isfile(desk_dir + "/openxcom.desktop"):
@@ -107,7 +110,7 @@ def info(requested_list):
 		version_file = open(game_dir + "/version_link.txt")
 		version = version_file.read()
 	else:
-		version = "Update needed or no intall"
+		version = "No proper install"
 	link_file = open(self_dir + "link.txt")
 	link = link_file.read()
 	deb_file_path = recultis_dir + "tmp/openxcom.deb"

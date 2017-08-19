@@ -10,9 +10,8 @@ import os, urllib.request, importlib
 def start(game, self_dir):
 	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/" + game+ "/link.txt"
 	chosen_game = importlib.import_module(game+".chosen_game")
-	game_info = chosen_game.info(["game_dir", "version"])
-	game_dir = game_info[0]
-	version = game_info[1]
+	game_info = chosen_game.info(["version"])
+	version = game_info[0]
 	
 	try:
 		data = urllib.request.urlopen(target_url)
@@ -20,7 +19,7 @@ def start(game, self_dir):
 	#If can't get link assume that local link is most recent.
 	except urllib.request.URLError:
 		download_link_new = version
-	if os.path.isdir(game_dir) == True:
+	if version != "No proper install":
 		status = "Installed"
 		if version != download_link_new:
 			status = "Update available"

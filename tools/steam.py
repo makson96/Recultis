@@ -5,16 +5,12 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import os, tarfile, urllib.request, time
+import os, tarfile, urllib.request, time, shutil
 from subprocess import Popen, PIPE
 
 def start(login, password, recultis_dir, s_appid, game_dir):
 	os.chdir(recultis_dir)
-	if os.path.isfile(recultis_dir+"steamcmd.sh") == False:
-		urllib.request.urlretrieve("http://media.steampowered.com/client/steamcmd_linux.tar.gz", recultis_dir + "steamcmd_linux.tar.gz")
-		tar = tarfile.open(recultis_dir + "steamcmd_linux.tar.gz")
-		tar.extractall()
-		tar.close()
+	steamcmd_install(recultis_dir)
 	steam_error = 1
 	retry_nr = 0
 	while steam_error == 1:
@@ -22,13 +18,23 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 		if steam_error == 1:
 			print("Steamcmd error. Retry.")
 			retry_nr = retry_nr + 1
-			if retry_nr > 4:
+			if retry_nr == 5:
+				print("Steamcmd error. Reinstall steamcmd.")
+				steamcmd_reinstall(recultis_dir)
+			elif retry_nr == 8:
 				steam_log_file = open("steam_log.txt", "a")
 				steam_log_file.write("\nSteamcmd Error. Terminate.")
 				steam_log_file.close()
 				print("Steamcmd Error. Terminate.")
-				break
-			
+				return 0
+	return 1
+
+def steamcmd_install(recultis_dir):
+	if os.path.isfile(recultis_dir+"steamcmd.sh") == False:
+		urllib.request.urlretrieve("http://media.steampowered.com/client/steamcmd_linux.tar.gz", recultis_dir + "steamcmd_linux.tar.gz")
+		tar = tarfile.open(recultis_dir + "steamcmd_linux.tar.gz")
+		tar.extractall()
+		tar.close()
 
 def get_last_log_line():
 	steam_log_file = open("steam_log.txt", "r")
@@ -74,3 +80,20 @@ def run(login, password, recultis_dir, s_appid, game_dir):
 			steam_download.stdin.write(bytes(steam_guard_code + '\n', 'ascii'))
 			steam_download.stdin.flush()
 	return 0
+
+def steamcmd_reinstall(recultis_dir):
+	if os.path.isfile(recultis_dir+"steam.sh") == True:
+		os.remove(recultis_dir+"steam.sh")
+	if os.path.isfile(recultis_dir+"steamcmd.sh") == True:
+		os.remove(recultis_dir+"steamcmd.sh")
+	if os.path.isfile(recultis_dir+"steamcmd_linux.tar.gz") == True:
+		os.remove(recultis_dir+"steamcmd_linux.tar.gz")
+	if os.path.isdir(recultis_dir+"linux32") == True:
+		shutil.rmtree(recultis_dir+"linux32")
+	if os.path.isdir(recultis_dir+"linux64") == True:
+		shutil.rmtree(recultis_dir+"linux64")
+	if os.path.isdir(recultis_dir+"package") == True:
+		shutil.rmtree(recultis_dir+"package")
+	if os.path.isdir(recultis_dir+"public") == True:
+		shutil.rmtree(recultis_dir+"public")
+	steamcmd_install(recultis_dir)
