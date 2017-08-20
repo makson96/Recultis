@@ -385,6 +385,7 @@ class SecondThread(QThread):
 				game_nr += 1
 		#End of Temporary solution
 		self.install_button.setEnabled(False)
+		self.uninstall_button.setEnabled(False)
 		time.sleep(0.5)
 		percent = 0
 		while percent != 100:
@@ -401,6 +402,7 @@ class SecondThread(QThread):
 			print(result)
 			return 0
 		self.install_button.setEnabled(True)
+		self.uninstall_button.setEnabled(True)
 
 def tick():
     print('tick')
