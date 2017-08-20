@@ -32,8 +32,6 @@ r4_name = name
 
 class Window(QWidget):
 	
-	radio_list = []
-	
 	def __init__(self, parent=None):
 		super(Window, self).__init__(parent)
 		
@@ -132,12 +130,14 @@ class Window(QWidget):
 		self.setWindowTitle("Recultis " + recultis_version)
 		
 		#After Windows is drawn, lets check status of the games
-		self.radio_list = [self.r0, self.r1, self.r2, self.r3, self.r4]
-		self.update_game_thread = UpdateApp(self.app_staus_label, self.app_updateButton, self.installButton, self.radio_list, self.r0a)
+		radio_list = [self.r0, self.r1, self.r2, self.r3, self.r4]
+		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.installButton, radio_list, self.r0a, self.statusLabel2, self.progress]
+		self.update_game_app = SecondThread(1, self.second_thread_list)
+		self.update_game_app.start()
+		self.update_game_thread = SecondThread(2, self.second_thread_list)
 		self.update_game_thread.start()
 	
 	def choose(self):
-		self.installButton.setEnabled(False)
 		if self.r0.isChecked():
 			from jediacademy import chosen_game
 			game = "jediacademy"
@@ -161,7 +161,10 @@ class Window(QWidget):
 		else:
 			game_shop = "steam"
 		_thread.start_new_thread(chosen_game.start, (game_shop, str(self.loginText.text()), str(self.passwordText.text())))
-		percent_update_loop(game)
+		self.update_status_bar_thread = SecondThread(3, self.second_thread_list)
+		self.update_status_bar_thread.result_text.connect(self.statusLabel2.setText)
+		self.update_status_bar_thread.percent_num.connect(self.progress.setValue)
+		self.update_status_bar_thread.start()
 	
 	def uninstall_game(self):
 		self.installButton.setEnabled(False)
@@ -275,56 +278,125 @@ Terminal=false"""
 			self.loginText.setEnabled(True)
 			self.passwordText.setEnabled(True)
 
-class UpdateApp(QThread):
+class SecondThread(QThread):
+	
+	result_text = pyqtSignal(str)
+	percent_num = pyqtSignal(int)
 
-	def __init__(self, status_label, update_button, install_button, radio_list, only_engine_radio):
+	def __init__(self, task_nr, widget_list):
 		QThread.__init__(self)
-		self.status_label = status_label
-		self.update_button = update_button
-		self.install_button = install_button
-		self.radio_list = radio_list
-		self.only_engine_radio = only_engine_radio
+		len_widget_list = 7
+		if len(widget_list) != len_widget_list:
+			print("SecondThread error: widget list for has wrong size. Should be: " + str(len_widget_list) + " ,but is: " + str(len(widget_list)))
+			return 0
+		self.status_label = widget_list[0]
+		self.update_button = widget_list[1]
+		self.install_button = widget_list[2]
+		self.radio_list = widget_list[3]
+		self.only_engine_radio = widget_list[4]
+		self.progress_status = widget_list[5]
+		self.progress_bar = widget_list[6]
+		self.connection = 1
+		self.task_nr = task_nr
 
 	def __del__(self):
 		self.wait()
 
 	def run(self):
-		#Check for internet connection
+		#Check for net connection
+		self.check_net_connection()
+		if self.connection == 0:
+			print("SecondThread error: no internet connection.")
+			return 0
+		#Check task
+		if self.task_nr == 1:
+			print("SecondThread: Update app status")
+			self.check_app_update()
+		#Check if game installed/updated
+		elif self.task_nr == 2:
+			print("SecondThread: Update game status")
+			self.check_games_update()
+		#Update progress bar
+		elif self.task_nr == 3:
+			print("SecondThread: Update progress bar in a loop")
+			self.update_progress_bar()
+			self.check_games_update()
+			print("SecondThread: Progress bar loop finished")
+		else:
+			print("SecondThread error: wrong task_nr.")
+			return 0		
+					
+	def check_net_connection(self):
 		try:
 			urllib.request.urlopen("https://github.com", timeout=3)
-			connection = 1
+			self.connection = 1
 		except urllib.request.URLError:
-			connection = 0
+			self.connection = 0
 			self.status_label.setText("Recultis status is: No internet connection")
 			self.install_button.setEnabled(False)
-		if connection == 1:
-			#Check game status (if internet connection)
-			game_nr = 0
-			for radio_button in self.radio_list:
-				radio_button.setText(game_descriptor(game_nr))
+	
+	def check_app_update(self):
+		v_major = str(int(recultis_version[0]) + 1) + ".0.0"
+		v_minor = recultis_version[0:2] + str(int(recultis_version[2]) + 1) + ".0"
+		v_patch = recultis_version[0:4] + str(int(recultis_version[4]) + 1)
+		update_list = [v_major, v_minor, v_patch]
+		patch_url = ""
+		for potential_patch in update_list:
+			try:
+				patch_url = "https://github.com/makson96/Recultis/archive/v" + potential_patch + ".tar.gz"
+				urllib.request.urlopen(patch_url, timeout=1)
+				patch_link_file = open(self_dir + "patch_link.txt", "w")
+				patch_link_file.write(patch_url)
+				patch_link_file.close()
+				self.update_button.setEnabled(True)
+				self.status_label.setText("Recultis status is: Updata available")
+				break					
+			except urllib.request.URLError:
+				patch_url = ""
+		if patch_url == "":
+			self.status_label.setText("Recultis status is: Up to date")
+			
+	def check_games_update(self):
+		game_nr = 0
+		game_list = ["jediacademy", "morrowind", "doom3", "aliensvspredator", "xcomufodefense"] # Temporary solution
+		game_r0_name_list = [r0_name, r1_name, r2_name, r3_name, r4_name]  # Temporary solution
+		for radio_button in self.radio_list:
+			game_status_description = update_check.start(game_list[game_nr], self_dir)
+			radio_button.setText(game_r0_name_list[game_nr] + " (" + game_status_description + ")")
+			game_nr += 1
+			if "Update" in radio_button.text() and radio_button.isChecked() == True:
+				self.only_engine_radio.setEnabled(True)
+	
+	def update_progress_bar(self):
+		#Temporary solution
+		game_nr = 0
+		game_list = ["jediacademy", "morrowind", "doom3", "aliensvspredator", "xcomufodefense"]
+		for radio_button in self.radio_list:
+			if radio_button.isChecked() == True:
+				game = game_list[game_nr]
+			else:
 				game_nr += 1
-				if "Update" in radio_button.text() and radio_button.isChecked() == True:
-					self.only_engine_radio.setEnabled(True)
-			#Check if update is available (if internet connection)
-			v_major = str(int(recultis_version[0]) + 1) + ".0.0"
-			v_minor = recultis_version[0:2] + str(int(recultis_version[2]) + 1) + ".0"
-			v_patch = recultis_version[0:4] + str(int(recultis_version[4]) + 1)
-			update_list = [v_major, v_minor, v_patch]
-			patch_url = ""
-			for potential_patch in update_list:
-				try:
-					patch_url = "https://github.com/makson96/Recultis/archive/v" + potential_patch + ".tar.gz"
-					urllib.request.urlopen(patch_url, timeout=1)
-					patch_link_file = open(self_dir + "patch_link.txt", "w")
-					patch_link_file.write(patch_url)
-					patch_link_file.close()
-					self.update_button.setEnabled(True)
-					self.status_label.setText("Recultis status is: Updata available")
-					break					
-				except urllib.request.URLError:
-					patch_url = ""
-			if patch_url == "":
-				self.status_label.setText("Recultis status is: Up to date")
+		#End of Temporary solution
+		self.install_button.setEnabled(False)
+		time.sleep(0.5)
+		percent = 0
+		while percent != 100:
+			result, percent = status.check(game)
+			self.result_text.emit(result)
+			self.percent_num.emit(percent)
+			time.sleep(1)
+		if "Warning" in result:
+			print(result)
+			nw = AskWindow(1, game, screen) #This should not allways be 1
+			nw.show()
+			return 0
+		elif "Error" in result:
+			print(result)
+			return 0
+		self.install_button.setEnabled(True)
+
+def tick():
+    print('tick')
 
 class AskWindow(QMainWindow):
 	#Available reasons: 1 - Steam Guard, ...
@@ -356,48 +428,8 @@ class AskWindow(QMainWindow):
 		steam_guard_key_file.write(steam_guard_key)
 		steam_guard_key_file.close()
 		self.close()
-		time.sleep(1)
-		percent_update_loop(self.game)
-
-def game_descriptor(game_nr):
-	game_description = ""
-	if game_nr == 0:
-		game_description = r0_name + " (" + update_check.start("jediacademy", self_dir) + ")"
-	elif game_nr == 1:
-		game_description = r1_name + " (" + update_check.start("morrowind", self_dir) + ")"
-	elif game_nr == 2:
-		game_description = r2_name + " (" + update_check.start("doom3", self_dir) + ")"
-	elif game_nr == 3:
-		game_description = r3_name + " (" + update_check.start("aliensvspredator", self_dir) + ")"
-	elif game_nr == 4:
-		game_description = r4_name + " (" + update_check.start("xcomufodefense", self_dir) + ")"
-	return game_description
-
-def percent_update_loop(game):
-	time.sleep(0.5)
-	percent = 0
-	while percent != 100:
-		result, percent = status.check(game)
-		time.sleep(1)
-		screen.statusLabel2.setText(result)
-		screen.progress.setValue(percent)
-		if "Warning" in result:
-			print(result)
-			nw = AskWindow(1, game, screen) #This should not allways be 1
-			nw.show()
-			break
-		elif "Error" in result:
-			print(result)
-			break
-	#Installation is complete or error occured. Unlock Intall button and update games descriptions
-	if (percent == 100) or ("Error" in result):
-		screen.installButton.setEnabled(True)
-		time.sleep(1)
-		screen.r0.setText(game_descriptor(0))
-		screen.r1.setText(game_descriptor(1))
-		screen.r2.setText(game_descriptor(2))
-		screen.r3.setText(game_descriptor(3))
-		screen.r4.setText(game_descriptor(4))
+		#time.sleep(1)
+		#percent_update_loop(self.game)
 
 app = QApplication(sys.argv)
 screen = Window()
