@@ -131,7 +131,7 @@ class Window(QWidget):
 		
 		#After Windows is drawn, lets check status of the games
 		radio_list = [self.r0, self.r1, self.r2, self.r3, self.r4]
-		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.installButton, radio_list, self.r0a, self.statusLabel2, self.progress]
+		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.installButton, self.uninstallButton, radio_list, self.r0a]
 		self.update_game_app = SecondThread(1, self.second_thread_list)
 		self.update_game_app.start()
 		self.update_game_thread = SecondThread(2, self.second_thread_list)
@@ -160,7 +160,9 @@ class Window(QWidget):
 			game_shop = "none"
 		else:
 			game_shop = "steam"
+		#This is game install/update thread
 		_thread.start_new_thread(chosen_game.start, (game_shop, str(self.loginText.text()), str(self.passwordText.text())))
+		#This is thread for GUI
 		self.update_status_bar_thread = SecondThread(3, self.second_thread_list)
 		self.update_status_bar_thread.result_text.connect(self.statusLabel2.setText)
 		self.update_status_bar_thread.percent_num.connect(self.progress.setValue)
@@ -285,17 +287,16 @@ class SecondThread(QThread):
 
 	def __init__(self, task_nr, widget_list):
 		QThread.__init__(self)
-		len_widget_list = 7
+		len_widget_list = 6
 		if len(widget_list) != len_widget_list:
 			print("SecondThread error: widget list for has wrong size. Should be: " + str(len_widget_list) + " ,but is: " + str(len(widget_list)))
 			return 0
 		self.status_label = widget_list[0]
 		self.update_button = widget_list[1]
 		self.install_button = widget_list[2]
-		self.radio_list = widget_list[3]
-		self.only_engine_radio = widget_list[4]
-		self.progress_status = widget_list[5]
-		self.progress_bar = widget_list[6]
+		self.uninstall_button = widget_list[3]
+		self.radio_list = widget_list[4]
+		self.only_engine_radio = widget_list[5]
 		self.connection = 1
 		self.task_nr = task_nr
 
@@ -364,8 +365,14 @@ class SecondThread(QThread):
 			game_status_description = update_check.start(game_list[game_nr], self_dir)
 			radio_button.setText(game_r0_name_list[game_nr] + " (" + game_status_description + ")")
 			game_nr += 1
-			if "Update" in radio_button.text() and radio_button.isChecked() == True:
-				self.only_engine_radio.setEnabled(True)
+			if radio_button.isChecked() == True:
+				if "Installed" in radio_button.text():
+					self.uninstall_button.setEnabled(True)
+				elif "Update available" in radio_button.text():
+					self.uninstall_button.setEnabled(True)
+					self.only_engine_radio.setEnabled(True)
+				elif "Not installed" in radio_button.text():
+					self.uninstall_button.setEnabled(False)
 	
 	def update_progress_bar(self):
 		#Temporary solution
@@ -428,8 +435,11 @@ class AskWindow(QMainWindow):
 		steam_guard_key_file.write(steam_guard_key)
 		steam_guard_key_file.close()
 		self.close()
-		#time.sleep(1)
-		#percent_update_loop(self.game)
+		time.sleep(1)
+		self.update_status_bar_thread = SecondThread(3, screen.second_thread_list)
+		self.update_status_bar_thread.result_text.connect(screen.statusLabel2.setText)
+		self.update_status_bar_thread.percent_num.connect(screen.progress.setValue)
+		self.update_status_bar_thread.start()
 
 app = QApplication(sys.argv)
 screen = Window()
