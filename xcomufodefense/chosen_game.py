@@ -101,8 +101,8 @@ def uninstall():
 		os.remove(os.getenv("HOME") + "/.local/share/icons/openxcom.png")
 	if os.path.isdir(game_dir):
 		shutil.rmtree(game_dir)
-	if os.path.isdir(os.getenv("HOME") + "/.local/share/openxcom/):
-		shutil.rmtree(os.getenv("HOME") + "/.local/share/openxcom/)
+	if os.path.isdir(os.getenv("HOME") + "/.local/share/openxcom/"):
+		shutil.rmtree(os.getenv("HOME") + "/.local/share/openxcom/")
 
 def info(requested_list):
 	if os.path.isfile(game_dir + "/version_link.txt"):
