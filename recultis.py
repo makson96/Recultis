@@ -404,9 +404,6 @@ class SecondThread(QThread):
 		self.install_button.setEnabled(True)
 		self.uninstall_button.setEnabled(True)
 
-def tick():
-    print('tick')
-
 class AskWindow(QMainWindow):
 	#Available reasons: 1 - Steam Guard, ...
 	
