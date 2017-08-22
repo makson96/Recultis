@@ -14,7 +14,7 @@ It works on any 64 bit Linux distribution. It does not require any installation 
 
 ![](https://github.com/makson96/Recultis/raw/1.0/assets/html/rbdoom3-screen.png)
 
-Doom 3: BFG is the remaster of classic Doom 3 with all expansions. It features enhanced graphic and audio to original game. Doom 3 is one of the best FPS games of all time. Unfortunately, it was never released on Linux, but game engine was release open source. With many enhancements and new features, game is now available on Linux and it is better than ever before. Recultis uses [RBDOOM-3-BFG](https://github.com/RobertBeckebans/RBDOOM-3-BFG) flavor of the engine and requires [game](http://store.steampowered.com/agecheck/app/208200/) to be present in your Steam Library.
+Doom 3: BFG is the remaster of classic Doom 3 with all expansions. It features enhanced graphic and audio to original game. Doom 3 is one of the best FPS games of all time. Unfortunately, it was never released on Linux, but game engine was release open source. With many enhancements and new features, game is now available on Linux and it is better than ever before. Recultis uses [RBDOOM-3-BFG](https://github.com/RobertBeckebans/RBDOOM-3-BFG) flavor of the engine and requires [game](http://store.steampowered.com/app/208200/) to be present in your Steam Library.
 
 ## [](#header-2)Star Wars Jedi Knight: Jedi Academy
 
