@@ -32,6 +32,8 @@ r4_name = name
 
 class Window(QWidget):
 	
+	radio_list = []
+	
 	def __init__(self, parent=None):
 		super(Window, self).__init__(parent)
 		
@@ -130,8 +132,8 @@ class Window(QWidget):
 		self.setWindowTitle("Recultis " + recultis_version)
 		
 		#After Windows is drawn, lets check status of the games
-		radio_list = [self.r0, self.r1, self.r2, self.r3, self.r4]
-		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.installButton, self.uninstallButton, radio_list, self.r0a]
+		self.radio_list = [self.r0, self.r1, self.r2, self.r3, self.r4]
+		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.installButton, self.uninstallButton, self.radio_list, self.r0a]
 		self.update_game_app = SecondThread(1, self.second_thread_list)
 		self.update_game_app.start()
 		self.update_game_thread = SecondThread(2, self.second_thread_list)
@@ -258,17 +260,29 @@ Terminal=false"""
 		self.description_image.setPixmap(description_pixmap)
 		self.description_label.setText(description)
 		self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
-		if "Update" in rbutton.text():
+		if "Update available" in rbutton.text():
 			self.r0a.setEnabled(True)
+			self.installButton.setEnabled(True)
+			self.uninstallButton.setEnabled(True)
 		elif self.r0a.isChecked() == True:
 			self.r1a.setChecked(True)
 			self.r0a.setEnabled(False)
+			self.installButton.setEnabled(True)
+			self.uninstallButton.setEnabled(True)
 		else:
 			self.r0a.setEnabled(False)
+			self.installButton.setEnabled(True)
+			self.uninstallButton.setEnabled(True)
 		if "Not installed" in rbutton.text() or "Checking for update" in rbutton.text():
 			self.uninstallButton.setEnabled(False)
-		else:
+			self.installButton.setEnabled(True)
+		if "Installed" in rbutton.text():
+			self.installButton.setEnabled(True)
 			self.uninstallButton.setEnabled(True)
+		for game_button in self.radio_list:
+			if "Installing..." in game_button.text():
+				self.uninstallButton.setEnabled(False)
+				self.installButton.setEnabled(False)
 	
 	def r0a_clicked(self, enabled):
 		if enabled:
@@ -367,20 +381,27 @@ class SecondThread(QThread):
 			game_nr += 1
 			if radio_button.isChecked() == True:
 				if "Installed" in radio_button.text():
+					self.install_button.setEnabled(True)
 					self.uninstall_button.setEnabled(True)
+					self.only_engine_radio.setEnabled(False)
 				elif "Update available" in radio_button.text():
+					self.install_button.setEnabled(True)
 					self.uninstall_button.setEnabled(True)
 					self.only_engine_radio.setEnabled(True)
 				elif "Not installed" in radio_button.text():
+					self.install_button.setEnabled(True)
 					self.uninstall_button.setEnabled(False)
+					self.only_engine_radio.setEnabled(False)
 	
 	def update_progress_bar(self):
 		#Temporary solution
 		game_nr = 0
 		game_list = ["jediacademy", "morrowind", "doom3", "aliensvspredator", "xcomufodefense"]
+		game_r0_name_list = [r0_name, r1_name, r2_name, r3_name, r4_name]  # Temporary solution
 		for radio_button in self.radio_list:
 			if radio_button.isChecked() == True:
 				game = game_list[game_nr]
+				radio_button.setText(game_r0_name_list[game_nr] + " (Installing...)")
 			else:
 				game_nr += 1
 		#End of Temporary solution
@@ -401,8 +422,6 @@ class SecondThread(QThread):
 		elif "Error" in result:
 			print(result)
 			return 0
-		self.install_button.setEnabled(True)
-		self.uninstall_button.setEnabled(True)
 
 class AskWindow(QMainWindow):
 	#Available reasons: 1 - Steam Guard, ...
