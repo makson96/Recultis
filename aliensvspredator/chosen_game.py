@@ -33,10 +33,10 @@ def prepare_engine():
 		if os.path.isdir(game_dir + avp_file_or_dir) == True:
 			print("entering dir " + avp_file_or_dir)
 			for avp_file in os.listdir(game_dir + avp_file_or_dir):
-				os.rename(game_dir + avp_file_or_dir + "/" + avp_file, game_dir + avp_file_or_dir + "/" + avp_file.lower())
-		if os.path.isdir(game_dir + avp_file_or_dir.lower()):
-			shutil.rmtree(game_dir + avp_file_or_dir.lower())
-		os.rename(game_dir + avp_file_or_dir, game_dir + avp_file_or_dir.lower())
+				if avp_file != avp_file.lower():
+					os.rename(game_dir + avp_file_or_dir + "/" + avp_file, game_dir + avp_file_or_dir + "/" + avp_file.lower())
+		if avp_file_or_dir != avp_file_or_dir.lower():
+			os.rename(game_dir + avp_file_or_dir, game_dir + avp_file_or_dir.lower())
 	#Copy game engine and libs
 	shutil.copy(recultis_dir + "tmp/avp/avp", game_dir + "avp")
 	if os.path.isdir(game_dir + "lib/") == True:
