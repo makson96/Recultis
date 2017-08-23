@@ -10,9 +10,16 @@ from subprocess import Popen, PIPE
 
 def start(login, password, recultis_dir, s_appid, game_dir):
 	os.chdir(recultis_dir)
-	steamcmd_install(recultis_dir)
-	steam_error = 2
-	retry_nr = 0
+	if login == "" or password == "":
+		steam_log_file = open("steam_log.txt", "w")
+		steam_log_file.write("Steamcmd error. Login or password not provided.")
+		steam_log_file.close()
+		print("Steamcmd error. Login or password not provided. try again with correct one.")
+		steam_error = 0
+	else:
+		steamcmd_install(recultis_dir)
+		steam_error = 2
+		retry_nr = 0
 	while steam_error == 2:
 		steam_error = run(login, password, recultis_dir, s_appid, game_dir)
 		if steam_error == 2:
@@ -23,10 +30,11 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 				steamcmd_reinstall(recultis_dir)
 			elif retry_nr == 8:
 				steam_error = 0
-	steam_log_file = open("steam_log.txt", "a")
-	steam_log_file.write("\nSteamcmd Error. Terminate.")
-	steam_log_file.close()
-	print("Steamcmd Error. Terminate.")
+	if steam_error == 0:
+		steam_log_file = open("steam_log.txt", "a")
+		steam_log_file.write("\nSteamcmd Error. Terminate.")
+		steam_log_file.close()
+		print("Steamcmd Error. Terminate.")
 	return steam_error
 
 def steamcmd_install(recultis_dir):
@@ -66,11 +74,13 @@ def run(login, password, recultis_dir, s_appid, game_dir):
 		time.sleep(2)
 		steam_last_line = get_last_log_line()
 		#Terminate the process if bad login or password
-		if "Login Failure" in steam_last_line:
+		if "FAILED with result code" in steam_last_line:
 			steam_download.terminate()
+			return 0
 		#Terminate the process if not owning the game
 		elif "Failed to install app" in steam_last_line:
 			steam_download.terminate()
+			return 0
 		#Retry 5 times if steamcmd has memory access error
 		elif '$DEBUGGER "$STEAMEXE" "$@"' in steam_last_line:
 			return 2
