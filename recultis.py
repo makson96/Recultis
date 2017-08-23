@@ -193,6 +193,8 @@ class Window(QWidget):
 			game = "xcomufodefense"
 		print("Uninstalling game")
 		chosen_game.uninstall()
+		self.update_game_thread = SecondThread(2, self.second_thread_list)
+		self.update_game_thread.start()
 		QMessageBox.information(self, "Message", "Game uninstallation complete.")
 
 	def autoupdate(self):
