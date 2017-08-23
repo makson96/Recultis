@@ -67,8 +67,8 @@ if dep_pyqt == False:
 	dep_error = dep_error + "Error: Python3 PyQt5 is missing. Please install it from the repository and start the program again.\n"
 if dep_dpkg == False and dep_ar == False:
 	dep_error = dep_error + "Error: both 'ar' and 'dpkg' are missing in the system. Please install one of them and start the program again.\n"
-if dep_32bit_libc == False or dep_32bit_libstd == False or dep_32bit_libgcc == False::
-	dep_error = dep_error + "Error: 32 bit libc required for steam is missing. Try to install lib32gcc1 on Ubuntu/Debian or glibc.i686 and libstdc++.i686 on Fedora.\n"
+if dep_32bit_libc == False or dep_32bit_libstd == False or dep_32bit_libgcc == False:
+	dep_error = dep_error + "Error: 32 bit libc required for steam is missing. Try to install lib32gcc1 and lib32stdc++6 on Ubuntu/Debian or glibc.i686 and libstdc++.i686 on Fedora.\n"
 if dep_error != "":
 	print(dep_error)
 	error_file = open("error_file.txt", "w")
