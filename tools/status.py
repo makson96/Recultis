@@ -28,22 +28,8 @@ def steam_status():
 		steam_log_file.close()
 	except:
 		steam_last_line = "downloading, progress: 0,0 ("
-	if "Login Failure" in steam_last_line:
-		status = "Error: Steam - bad login or password. Please correct and start again."
-		percent = 0
-	elif "Failed to install app" in steam_last_line:
-		status = "Error: Steam - you are not game owner. Please correct and start again."
-		percent = 0
-	elif "Steam Guard" in steam_last_line:
-		status = "Warning: Waiting for Steam Guard authentication."
-		percent = 0
-	elif "FAILED with result code" in steam_last_line:
-		status = "Error: Could not perform Steam Guard authentication. Please try again."
-		percent = 0
-	elif "Steamcmd Error." in steam_last_line:
-		status = "Error: Steamcmd internal error. Please contact Recultis project for support."
-		percent = 0
-	elif ("downloading, progress: " in steam_last_line) or ("validating, progress: " in steam_last_line):
+	#This code handle steamcmd status if everything is ok
+	if ("downloading, progress: " in steam_last_line) or ("validating, progress: " in steam_last_line):
 		steam_value = steam_last_line.split("progress: ")[1]
 		steam_value = steam_value.split(" (")[0]
 		steam_value = steam_value.split(",")[0]
@@ -54,6 +40,34 @@ def steam_status():
 	elif "Success!" in steam_last_line:
 		status = "Download of game data completed"
 		percent = 75
+	#this code handle steamcmd status if warning is present.
+	elif "Steam Guard" in steam_last_line:
+		status = "Warning: Waiting for Steam Guard authentication."
+		percent = 0
+	#this code handle steamcmd status if steam tool marked steam_log.txt file with error.
+	if "Steamcmd Error." in steam_last_line:
+		try:
+			steam_log_file = open("steam_log.txt", "r")
+			steam_log_lines = steam_log_file.readlines()
+			steam_error_line = steam_log_lines[-3]
+			steam_log_file.close()
+		except:
+			steam_error_line = "Steamcmd Error. Terminate."
+		if "FAILED with result code 5" in steam_error_line:
+			status = "Error: Steam - bad login or password. Please correct and start again."
+			percent = 0
+		elif "Login or password not provided." in steam_error_line:
+			status = "Error: Steam - Login or password not provided. Try again with correct one."
+			percent = 0
+		elif "Failed to install app" in steam_error_line:
+			status = "Error: Steam - you are not game owner. Please correct and start again."
+			percent = 0
+		elif "FAILED with result code 65" in steam_error_line:
+			status = "Error: Could not perform Steam Guard authentication. Please try again."
+			percent = 0
+		elif "Steamcmd Error." in steam_error_line:
+			status = "Error: Steamcmd internal error. Please contact Recultis project for support."
+			percent = 0
 	return status, percent
 
 def engine_status(game):

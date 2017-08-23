@@ -23,7 +23,7 @@ is better than ever before. Recultis uses RBDOOM-3-BFG flavor of the
 engine and requires game to be present in your Steam Library.
 """
 steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
-screenshot_path = self_dir + "../assets/html/rdoom3-screen.png"
+screenshot_path = self_dir + "../assets/html/rbdoom3-screen.png"
 desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 
 def prepare_engine():

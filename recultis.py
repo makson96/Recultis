@@ -33,6 +33,8 @@ r4_name = name
 class Window(QWidget):
 	
 	radio_list = []
+	installing_game = "" #This will track which game name is currently installed
+	clicked_game = "" #This will track which game name is currently clicked
 	
 	def __init__(self, parent=None):
 		super(Window, self).__init__(parent)
@@ -133,7 +135,7 @@ class Window(QWidget):
 		
 		#After Windows is drawn, lets check status of the games
 		self.radio_list = [self.r0, self.r1, self.r2, self.r3, self.r4]
-		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.installButton, self.uninstallButton, self.radio_list, self.r0a]
+		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.installButton, self.uninstallButton, self.radio_list, self.r0a, self.installing_game]
 		self.update_game_app = SecondThread(1, self.second_thread_list)
 		self.update_game_app.start()
 		self.update_game_thread = SecondThread(2, self.second_thread_list)
@@ -155,6 +157,7 @@ class Window(QWidget):
 		elif self.r4.isChecked():
 			from xcomufodefense import chosen_game
 			game = "xcomufodefense"
+		self.installing_game = game
 		if os.path.isdir(recultis_dir) == False:
 			os.makedirs(recultis_dir)
 		print("starting new thread, which will install: " + game)
@@ -168,6 +171,7 @@ class Window(QWidget):
 		self.update_status_bar_thread = SecondThread(3, self.second_thread_list)
 		self.update_status_bar_thread.result_text.connect(self.statusLabel2.setText)
 		self.update_status_bar_thread.percent_num.connect(self.progress.setValue)
+		self.update_status_bar_thread.steam_warning.connect(self.ask_window_start)
 		self.update_status_bar_thread.start()
 	
 	def uninstall_game(self):
@@ -244,18 +248,24 @@ Terminal=false"""
 		if which_one == 0:
 			rbutton = self.r0
 			from jediacademy.chosen_game import description, screenshot_path, steam_link
+			game = "jediacademy"
 		elif which_one == 1:
 			rbutton = self.r1
 			from morrowind.chosen_game import description, screenshot_path, steam_link
+			game = "morrowind"
 		elif which_one == 2:
 			from doom3.chosen_game import description, screenshot_path, steam_link
 			rbutton = self.r2
+			game = "doom3"
 		elif which_one == 3:
 			from aliensvspredator.chosen_game import description, screenshot_path, steam_link
 			rbutton = self.r3
+			game = "aliensvspredator"
 		elif which_one == 4:
 			from xcomufodefense.chosen_game import description, screenshot_path, steam_link
 			rbutton = self.r4
+			game = "xcomufodefense"
+		self.clicked_game = ""
 		description_pixmap = QPixmap(screenshot_path)
 		self.description_image.setPixmap(description_pixmap)
 		self.description_label.setText(description)
@@ -294,14 +304,19 @@ Terminal=false"""
 			self.loginText.setEnabled(True)
 			self.passwordText.setEnabled(True)
 
+	def ask_window_start(self, wr_nr):
+		nw = AskWindow(wr_nr, self)
+		nw.show()
+
 class SecondThread(QThread):
 	
 	result_text = pyqtSignal(str)
 	percent_num = pyqtSignal(int)
+	steam_warning = pyqtSignal(int)
 
 	def __init__(self, task_nr, widget_list):
 		QThread.__init__(self)
-		len_widget_list = 6
+		len_widget_list = 7
 		if len(widget_list) != len_widget_list:
 			print("SecondThread error: widget list for has wrong size. Should be: " + str(len_widget_list) + " ,but is: " + str(len(widget_list)))
 			return 0
@@ -311,6 +326,7 @@ class SecondThread(QThread):
 		self.uninstall_button = widget_list[3]
 		self.radio_list = widget_list[4]
 		self.only_engine_radio = widget_list[5]
+		self.installing_game = widget_list[6]
 		self.connection = 1
 		self.task_nr = task_nr
 
@@ -414,28 +430,37 @@ class SecondThread(QThread):
 			self.result_text.emit(result)
 			self.percent_num.emit(percent)
 			time.sleep(1)
-		if "Warning" in result:
-			print(result)
-			nw = AskWindow(1, game, screen) #This should not allways be 1
-			nw.show()
-			return 0
-		elif "Error" in result:
-			print(result)
-			return 0
+			if "Warning" in result:
+				print(result)
+				self.steam_warning.emit(1) #This should not allways be 1. 1 Represent Steam Guard.
+				while "Warning" in result:
+					result, percent = status.check(game)
+					time.sleep(1)
+			elif "Error" in result:
+				print(result)
+				#Clear currently installing game value after installation finished
+				self.installing_game = ""
+				return 0
+		#Clear currently installing game value after installation finished
+		self.installing_game = ""
 
 class AskWindow(QMainWindow):
 	#Available reasons: 1 - Steam Guard, ...
 	
 	reason = 0
-	game = "No title"
+	game = ""
 	
-	def __init__(self, reason, game, parent=None):
+	def __init__(self, reason, parent=None):
 		super(AskWindow, self).__init__(parent)
 		self.reason = reason
-		self.game = game
+		self.game = parent.installing_game
 		if self.reason == 1:
 			self.title = 'Steam Guard authentication.'
 			self.MessageLabel = QLabel("Please provide Steam Guard code, which was just send via email.", self)
+		else:
+			print("Error, wrong reason nr: " + str(self.reason))
+			return 0
+		print("Warning reason nr: " + str(self.reason))
 		self.setWindowTitle(self.title)
 		self.textbox = QLineEdit(self)
 		self.button = QPushButton('OK', self)
@@ -453,11 +478,6 @@ class AskWindow(QMainWindow):
 		steam_guard_key_file.write(steam_guard_key)
 		steam_guard_key_file.close()
 		self.close()
-		time.sleep(1)
-		self.update_status_bar_thread = SecondThread(3, screen.second_thread_list)
-		self.update_status_bar_thread.result_text.connect(screen.statusLabel2.setText)
-		self.update_status_bar_thread.percent_num.connect(screen.progress.setValue)
-		self.update_status_bar_thread.start()
 
 app = QApplication(sys.argv)
 screen = Window()
