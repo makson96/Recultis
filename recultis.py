@@ -14,7 +14,7 @@ from PyQt5.QtGui import *
 
 from tools import update_check, status
 
-recultis_version = "1.1.0pre"
+recultis_version = "1.1.0"
 
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 recultis_dir = os.getenv("HOME") + "/.recultis/"
@@ -193,6 +193,8 @@ class Window(QWidget):
 			game = "xcomufodefense"
 		print("Uninstalling game")
 		chosen_game.uninstall()
+		self.update_game_thread = SecondThread(2, self.second_thread_list)
+		self.update_game_thread.start()
 		QMessageBox.information(self, "Message", "Game uninstallation complete.")
 
 	def autoupdate(self):
