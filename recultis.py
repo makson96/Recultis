@@ -310,25 +310,22 @@ Terminal=false"""
 			self.r0a.setEnabled(True)
 			self.playButton.setEnabled(True)
 			self.installButton.setEnabled(True)
+			self.installButton.setText("Update")
 			self.uninstallButton.setEnabled(True)
 		elif self.r0a.isChecked() == True:
 			self.r1a.setChecked(True)
 			self.r0a.setEnabled(False)
-			self.playButton.setEnabled(True)
-			self.installButton.setEnabled(True)
-			self.uninstallButton.setEnabled(True)
 		else:
 			self.r0a.setEnabled(False)
-			self.playButton.setEnabled(True)
-			self.installButton.setEnabled(True)
-			self.uninstallButton.setEnabled(True)
 		if "Not installed" in rbutton.text() or "Checking for update" in rbutton.text():
 			self.playButton.setEnabled(False)
 			self.installButton.setEnabled(True)
+			self.installButton.setText("Install")
 			self.uninstallButton.setEnabled(False)
 		if "Installed" in rbutton.text():
 			self.playButton.setEnabled(True)
 			self.installButton.setEnabled(True)
+			self.installButton.setText("Install")
 			self.uninstallButton.setEnabled(True)
 		for game_button in self.radio_list:
 			if "Installing..." in game_button.text():
@@ -445,16 +442,19 @@ class SecondThread(QThread):
 				if "Installed" in radio_button.text():
 					self.play_button.setEnabled(True)
 					self.install_button.setEnabled(True)
+					self.install_button.setText("Install")
 					self.uninstall_button.setEnabled(True)
 					self.only_engine_radio.setEnabled(False)
 				elif "Update available" in radio_button.text():
 					self.play_button.setEnabled(True)
 					self.install_button.setEnabled(True)
+					self.install_button.setText("Update")
 					self.uninstall_button.setEnabled(True)
 					self.only_engine_radio.setEnabled(True)
 				elif "Not installed" in radio_button.text():
 					self.play_button.setEnabled(False)
 					self.install_button.setEnabled(True)
+					self.install_button.setText("Install")
 					self.uninstall_button.setEnabled(False)
 					self.only_engine_radio.setEnabled(False)
 	
