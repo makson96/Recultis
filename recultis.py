@@ -6,7 +6,7 @@
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
 import sys, os, _thread, time, urllib
-from subprocess import check_output
+from subprocess import check_output, call
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -35,6 +35,7 @@ class Window(QWidget):
 	radio_list = []
 	installing_game = "" #This will track which game name is currently installed
 	clicked_game = "" #This will track which game name is currently clicked
+	playing_game = "" #This will track which game name is currently playing
 	
 	def __init__(self, parent=None):
 		super(Window, self).__init__(parent)
@@ -70,6 +71,7 @@ class Window(QWidget):
 		self.statusLabel2 = QLabel("Waiting for user action")
 		self.statusLabel2.setAlignment(Qt.AlignCenter)
 		self.progress = QProgressBar(self)
+		self.playButton = QPushButton("Play")
 		self.installButton = QPushButton("Install")
 		self.uninstallButton = QPushButton("Uninstall")
 		self.exitButton = QPushButton("Exit")
@@ -114,6 +116,7 @@ class Window(QWidget):
 		grid1.addWidget(self.statusLabel2, 2, 1)
 		vbox1.addLayout(grid1)
 		vbox1.addWidget(self.progress)
+		hbox2.addWidget(self.playButton)
 		hbox2.addWidget(self.installButton)
 		hbox2.addWidget(self.uninstallButton)
 		hbox2.addWidget(self.exitButton)
@@ -126,7 +129,8 @@ class Window(QWidget):
 		
 		self.app_updateButton.clicked.connect(self.autoupdate)
 		self.app_create_launcher.clicked.connect(self.add_launcher)
-		self.installButton.clicked.connect(self.choose)
+		self.playButton.clicked.connect(self.play_game)
+		self.installButton.clicked.connect(self.install_game)
 		self.uninstallButton.clicked.connect(self.uninstall_game)
 		self.exitButton.clicked.connect(self.close)
  
@@ -141,7 +145,37 @@ class Window(QWidget):
 		self.update_game_thread = SecondThread(2, self.second_thread_list)
 		self.update_game_thread.start()
 	
-	def choose(self):
+	def play_game(self):
+		if self.r0.isChecked():
+			from jediacademy.chosen_game import launcher_cmd_list
+			game = "jediacademy"
+		elif self.r1.isChecked():
+			from morrowind.chosen_game import launcher_cmd_list
+			game = "morrowind"
+		elif self.r2.isChecked():
+			from doom3.chosen_game import launcher_cmd_list
+			game = "doom3"
+		elif self.r3.isChecked():
+			from aliensvspredator.chosen_game import launcher_cmd_list
+			game = "aliensvspredator"
+		elif self.r4.isChecked():
+			from xcomufodefense.chosen_game import launcher_cmd_list
+			game = "xcomufodefense"
+		self.playing_game = game
+		if len(launcher_cmd_list) > 1:
+			print("Starting Ask Window to choose launcher")
+			l_nr = self.ask_window_start(2)
+			if l_nr == "no":
+				print("Choose launcher windows closed without decision")
+				return 0
+		else:
+			l_nr = 0
+		print("Starting game")
+		call(launcher_cmd_list[l_nr], shell=True)
+		self.playing_game = ""
+		print("Finished Playing game")
+	
+	def install_game(self):
 		if self.r0.isChecked():
 			from jediacademy import chosen_game
 			game = "jediacademy"
@@ -309,6 +343,9 @@ Terminal=false"""
 	def ask_window_start(self, wr_nr):
 		nw = AskWindow(wr_nr, self)
 		nw.show()
+		while nw.isVisible() == True:
+			app.processEvents()
+		return nw.result
 
 class SecondThread(QThread):
 	
@@ -447,38 +484,69 @@ class SecondThread(QThread):
 		self.installing_game = ""
 
 class AskWindow(QMainWindow):
-	#Available reasons: 1 - Steam Guard, ...
+	#Available reasons: 1 - Steam Guard, 2 - Choose game launcher
 	
 	reason = 0
 	game = ""
+	result = "no"
 	
 	def __init__(self, reason, parent=None):
 		super(AskWindow, self).__init__(parent)
 		self.reason = reason
-		self.game = parent.installing_game
+		move_offset = 27
 		if self.reason == 1:
+			self.game = parent.installing_game
 			self.title = 'Steam Guard authentication.'
 			self.MessageLabel = QLabel("Please provide Steam Guard code, which was just send via email.", self)
+			self.textbox = QLineEdit(self)
+			self.button = QPushButton('OK', self)
+			self.button.clicked.connect(self.on_click_steam_guard)
+			self.textbox.move(0,move_offset)
+			self.textbox.resize(400, 30)
+		elif self.reason == 2:
+			self.game = parent.playing_game
+			self.title = 'Choose game launcher.'
+			self.MessageLabel = QLabel("Please choose game launcher.", self)
+			if self.game == "jediacademy":
+				from jediacademy.chosen_game import launcher_cmd_list
+			self.r_button_list = []
+			for launcher in launcher_cmd_list:
+				self.r_button_list.append(QRadioButton(launcher, self))
+			self.button = QPushButton('OK', self)
+			self.button.clicked.connect(self.on_click_launcher)
+			for r_button in self.r_button_list:
+				r_button.move(0, move_offset)
+				move_offset = move_offset + 27
+				r_button.resize(400, 30)
+			self.r_button_list[0].setChecked(True)
 		else:
 			print("Error, wrong reason nr: " + str(self.reason))
 			return 0
 		print("Warning reason nr: " + str(self.reason))
 		self.setWindowTitle(self.title)
-		self.textbox = QLineEdit(self)
-		self.button = QPushButton('OK', self)
-		self.button.clicked.connect(self.on_click)
 		self.MessageLabel.move(0,0)
 		self.MessageLabel.resize(self.MessageLabel.minimumSizeHint())
-		self.textbox.move(0,27)
-		self.textbox.resize(400, 30)
-		self.button.move(150,60)
-		self.setGeometry(250, 250, 400, 90)
+		self.button.move(150,move_offset + 40)
+		self.setGeometry(250, 250, 400, move_offset + 90)
 		
-	def on_click(self):
+	def on_click_steam_guard(self):
+		print("Steam Guard Ley provided")
 		steam_guard_key = self.textbox.text()
 		steam_guard_key_file = open(recultis_dir + "steam_guard_key.txt", "w")
 		steam_guard_key_file.write(steam_guard_key)
 		steam_guard_key_file.close()
+		self.result = "ok"
+		self.close()
+	
+	def on_click_launcher(self):
+		result = 0
+		for r_button in self.r_button_list:
+			if r_button.isChecked() == False:
+				result += 1
+			else:
+				break
+		print("Launcher choosen")
+		self.result = result
 		self.close()
 
 app = QApplication(sys.argv)

@@ -26,6 +26,27 @@ steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
 screenshot_path = self_dir + "../assets/html/openjk-screen.png"
 desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 
+launcher1_cmd = "bash -c 'cd $HOME/.recultis/JediAcademy/GameData/; ./openjk_sp.x86_64'"
+launcher2_cmd = "bash -c 'cd $HOME/.recultis/JediAcademy/GameData/; ./openjk.x86_64'"
+launcher_cmd_list = [launcher1_cmd, launcher2_cmd]
+launcher1_text = """[Desktop Entry]
+Type=Application
+Name=Jedi Knight: Jedi Academy - SinglePlayer
+Comment=Play Jedi Knights Academy
+Exec=""" + launcher1_cmd + """
+Icon=openjk.png
+Categories=Game;
+Terminal=false"""
+launcher2_text = """[Desktop Entry]
+Type=Application
+Name=Jedi Knight: Jedi Academy - MultiPlayer
+Comment=Play Jedi Knights Academy
+Exec=""" + launcher1_cmd + """
+Icon=openjk.png
+Categories=Game;
+Terminal=false"""
+launcher_text_list = [launcher1_text, launcher2_text]
+
 def prepare_engine():
 	print("prepare engine")
 	for binary in next(os.walk(recultis_dir + "tmp/JediAcademy/"))[2]:
