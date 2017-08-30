@@ -28,7 +28,7 @@ desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3]
 
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/JediAcademy/GameData/; ./openjk_sp.x86_64'"
 launcher2_cmd = "bash -c 'cd $HOME/.recultis/JediAcademy/GameData/; ./openjk.x86_64'"
-launcher_cmd_list = [launcher1_cmd, launcher2_cmd]
+launcher_cmd_list = [["Jedi Knight Single Player", launcher1_cmd], ["Jedi Knight Multi Player", launcher2_cmd]]
 launcher1_text = """[Desktop Entry]
 Type=Application
 Name=Jedi Knight: Jedi Academy - SinglePlayer
@@ -41,7 +41,7 @@ launcher2_text = """[Desktop Entry]
 Type=Application
 Name=Jedi Knight: Jedi Academy - MultiPlayer
 Comment=Play Jedi Knights Academy
-Exec=""" + launcher1_cmd + """
+Exec=""" + launcher2_cmd + """
 Icon=openjk.png
 Categories=Game;
 Terminal=false"""
@@ -70,10 +70,17 @@ def launchers():
 		os.makedirs(os.getenv("HOME") + "/.local/share/applications/")
 	shutil.copy(self_dir + "openjk.png", os.getenv("HOME") + "/.local/share/icons/openjk.png")
 	print("make_launchers")
-	shutil.copy(self_dir + "openjk_amd64_sp.desktop", desk_dir + "/openjk_amd64_sp.desktop")
-	shutil.copy(self_dir + "openjk_amd64_sp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_amd64_sp.desktop")
-	shutil.copy(self_dir + "openjk_amd64_mp.desktop", desk_dir + "/openjk_amd64_mp.desktop")
-	shutil.copy(self_dir + "openjk_amd64_mp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_amd64_mp.desktop")
+	launcher_nr = 1
+	for launcher_text in launcher_text_list:
+		desktop_file = open(desk_dir + "/openjk" + str(launcher_nr) + ".desktop", "w")
+		desktop_file.write(launcher_text)
+		desktop_file.close()
+		os.chmod(desk_dir + "/openjk" + str(launcher_nr) + ".desktop", 0o755)
+		menu_file = open(os.getenv("HOME") + "/.local/share/applications/openjk" + str(launcher_nr) + ".desktop", "w")
+		menu_file.write(launcher_text)
+		menu_file.close()
+		os.chmod(os.getenv("HOME") + "/.local/share/applications/openjk" + str(launcher_nr) + ".desktop", 0o755)
+		launcher_nr += 1
 
 def start(shop, shop_login, shop_password):
 	print("start install openjk")
@@ -106,6 +113,7 @@ def start(shop, shop_login, shop_password):
 		shutil.rmtree(recultis_dir + "tmp")
 
 def uninstall():
+	#Legacy launcher removal
 	if os.path.isfile(desk_dir + "/openjk_amd64_sp.desktop"):
 		os.remove(desk_dir + "/openjk_amd64_sp.desktop")
 	if os.path.isfile(desk_dir + "/openjk_amd64_mp.desktop"):
@@ -114,6 +122,14 @@ def uninstall():
 		os.remove(os.getenv("HOME") + "/.local/share/applications/openjk_amd64_sp.desktop")
 	if os.path.isfile(os.getenv("HOME") + "/.local/share/applications/openjk_amd64_mp.desktop"):
 		os.remove(os.getenv("HOME") + "/.local/share/applications/openjk_amd64_mp.desktop")
+	#End of legacy launcher removal
+	launcher_nr = 1
+	while launcher_nr != len(launcher_text_list):
+		if os.path.isfile(desk_dir + "/openjk" + str(launcher_nr) + ".desktop"):
+			os.remove(desk_dir + "/openjk" + str(launcher_nr) + ".desktop")
+		if os.path.isfile(os.getenv("HOME") + "/.local/share/applications/openjk" + str(launcher_nr) + ".desktop"):
+			os.remove(os.getenv("HOME") + "/.local/share/applications/openjk" + str(launcher_nr) + ".desktop")
+		launcher_nr += 1
 	if os.path.isfile(os.getenv("HOME") + "/.local/share/icons/openjk.png"):
 		os.remove(os.getenv("HOME") + "/.local/share/icons/openjk.png")
 	if os.path.isdir(game_dir):

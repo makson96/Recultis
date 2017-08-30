@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Jedi Knight: Jedi Academy - MultiPlayer
-Comment=Play Jedi Knights Academy
-Exec=bash -c 'cd $HOME/.recultis/JediAcademy/GameData/; ./openjk.x86_64'
-Icon=openjk.png
-Categories=Game;
-Terminal=false

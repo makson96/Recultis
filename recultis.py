@@ -171,7 +171,7 @@ class Window(QWidget):
 		else:
 			l_nr = 0
 		print("Starting game")
-		call(launcher_cmd_list[l_nr], shell=True)
+		call(launcher_cmd_list[l_nr][1], shell=True)
 		self.playing_game = ""
 		print("Finished Playing game")
 	
@@ -522,7 +522,7 @@ class AskWindow(QMainWindow):
 				from jediacademy.chosen_game import launcher_cmd_list
 			self.r_button_list = []
 			for launcher in launcher_cmd_list:
-				self.r_button_list.append(QRadioButton(launcher, self))
+				self.r_button_list.append(QRadioButton(launcher[0], self))
 			self.button = QPushButton('OK', self)
 			self.button.clicked.connect(self.on_click_launcher)
 			for r_button in self.r_button_list:
