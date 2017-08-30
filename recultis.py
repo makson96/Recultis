@@ -19,8 +19,9 @@ recultis_version = "1.2.0pre"
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 recultis_dir = os.getenv("HOME") + "/.recultis/"
 
-from jediacademy.chosen_game import name
-r0_name = name
+from games import installer
+game_list = installer.get_game_list()
+#r0_name = installer.get_game_list[0]
 from morrowind.chosen_game import name
 r1_name = name
 from doom3.chosen_game import name
