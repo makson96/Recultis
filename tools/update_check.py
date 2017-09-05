@@ -11,8 +11,8 @@ def start(game, self_dir):
 	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games" + game+ "/link.txt"
 	#this is legacy link to be removed in recultis 1.2
 	target_url_legacy = "https://raw.githubusercontent.com/makson96/Recultis/master/" + game+ "/link.txt"
-	chosen_game = importlib.import_module(game+".chosen_game")
-	game_info = chosen_game.info(["version"])
+	from games import installer
+	game_info = installer.game_info(game, ["version"])
 	version = game_info[0]
 	
 	try:
@@ -37,7 +37,15 @@ def start(game, self_dir):
 	if version != download_link_new:
 		update_link(game, self_dir, download_link_new)
 	print(game + " status is " + status)
-	return status
+	if status == "Checking for update...":
+		status_nr = -1
+	elif status == "Not installed":
+		status_nr = 0
+	elif status == "Installed":
+		status_nr = 1
+	elif status == "Update available":
+		status_nr = 2
+	return status_nr
 
 def update_link(game, self_dir, download_link_new):
 	target_file_path = self_dir + game + "/link.txt"

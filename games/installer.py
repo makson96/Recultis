@@ -20,7 +20,8 @@ def get_game_list():
 	for file_or_dir in all_dirs_and_files_list:
 		if os.path.isdir(self_dir + file_or_dir):
 			if file_or_dir not in forbidden_dir:
-				game_list.append(file_or_dir)
+				#Status -1 Checking for update...
+				game_list.append([file_or_dir, -1])
 	game_list = sorted(game_list)
 	print("list of all supported games:")
 	print(game_list)
@@ -104,10 +105,11 @@ def make_launchers(game_name):
 		menu_file.close()
 		os.chmod(os.getenv("HOME") + "/.local/share/applications/" + launcher[0], 0o755)
 
-def game_info(game_name):
+def game_info(game_name, info_list):
 	#Import game specific data
 	previous_dir = os.getcwd()
 	os.chdir(self_dir + game_name)
 	import game
 	os.chdir(previous_dir)
 	#Game info still needs to be done
+	return game.info(info_list)

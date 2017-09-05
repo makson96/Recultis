@@ -21,15 +21,6 @@ recultis_dir = os.getenv("HOME") + "/.recultis/"
 
 from games import installer
 game_list = installer.get_game_list()
-#r0_name = installer.get_game_list[0]
-from morrowind.chosen_game import name
-r1_name = name
-from doom3.chosen_game import name
-r2_name = name
-from aliensvspredator.chosen_game import name
-r3_name = name
-from xcomufodefense.chosen_game import name
-r4_name = name
 
 class Window(QWidget):
 	
@@ -46,16 +37,10 @@ class Window(QWidget):
 		self.app_updateButton.setEnabled(False)
 		self.app_create_launcher = QPushButton("Add Desktop Launcher")
 		choose_game_box = QGroupBox("Choose the game to install:")
-		self.r0 = QRadioButton(r0_name + " (Checking for update...)")
-		self.r0.toggled.connect(self.r0_clicked)
-		self.r1 = QRadioButton(r1_name + " (Checking for update...)")
-		self.r1.toggled.connect(self.r1_clicked)
-		self.r2 = QRadioButton(r2_name + " (Checking for update...)")
-		self.r2.toggled.connect(self.r2_clicked)
-		self.r3 = QRadioButton(r3_name + " (Checking for update...)")
-		self.r3.toggled.connect(self.r3_clicked)
-		self.r4 = QRadioButton(r4_name + " (Checking for update...)")
-		self.r4.toggled.connect(self.r4_clicked)
+		self.game_r_list = []
+		for game_position in game_list:
+			self.game_r_list.append(QRadioButton(get_game_desc(game_position)))
+			self.game_r_list[0].toggled.connect(self.game_radiobutton_effect)
 		choose_data_box = QGroupBox("Choose digital distribution platform to download game data:")
 		self.r0a = QRadioButton("Only engine update")
 		self.r0a.setEnabled(False)
@@ -83,7 +68,7 @@ class Window(QWidget):
 		self.description_label = QLabel()
 		self.description_steam_link = QLabel()
 		self.description_steam_link.setOpenExternalLinks(True)
-		self.r0.setChecked(True)
+		self.game_r_list[0].setChecked(True)
 		
 		vbox1 = QVBoxLayout()
 		vbox1_1 = QVBoxLayout()
@@ -101,11 +86,8 @@ class Window(QWidget):
 		hbox1.addWidget(self.app_create_launcher)
 		vbox1.addLayout(hbox1)
 		vbox1.addWidget(choose_game_box)
-		vbox1_1.addWidget(self.r0)
-		vbox1_1.addWidget(self.r1)
-		vbox1_1.addWidget(self.r2)
-		vbox1_1.addWidget(self.r3)
-		vbox1_1.addWidget(self.r4)
+		for r_button in self.game_r_list:
+			vbox1_1.addWidget(r_button)
 		vbox1.addWidget(choose_data_box)
 		vbox1_2.addWidget(self.r0a)
 		vbox1_2.addWidget(self.r1a)
@@ -139,8 +121,7 @@ class Window(QWidget):
 		self.setWindowTitle("Recultis " + recultis_version)
 		
 		#After Windows is drawn, lets check status of the games
-		self.radio_list = [self.r0, self.r1, self.r2, self.r3, self.r4]
-		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.playButton, self.installButton, self.uninstallButton, self.radio_list, self.r0a, self.installing_game]
+		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.playButton, self.installButton, self.uninstallButton, self.game_r_list, self.r0a, self.installing_game]
 		self.update_game_app = SecondThread(1, self.second_thread_list)
 		self.update_game_app.start()
 		self.update_game_thread = SecondThread(2, self.second_thread_list)
@@ -261,48 +242,17 @@ Terminal=false"""
 		os.chmod(os.getenv("HOME") + "/.local/share/applications/recultis.desktop", 0o755)
 		QMessageBox.information(self, "Message", "Desktop and Menu launchers for Recultis are now successfully created.")
 	
-	def r0_clicked(self, enabled):
-		if enabled:
-			self.game_radiobutton_effect(0)
-	
-	def r1_clicked(self, enabled):
-		if enabled:
-			self.game_radiobutton_effect(1)
-	
-	def r2_clicked(self, enabled):
-		if enabled:
-			self.game_radiobutton_effect(2)
-	
-	def r3_clicked(self, enabled):
-		if enabled:
-			self.game_radiobutton_effect(3)
-	
-	def r4_clicked(self, enabled):
-		if enabled:
-			self.game_radiobutton_effect(4)
-	
-	def game_radiobutton_effect(self, which_one):
-		if which_one == 0:
-			rbutton = self.r0
-			from jediacademy.chosen_game import description, screenshot_path, steam_link
-			game = "jediacademy"
-		elif which_one == 1:
-			rbutton = self.r1
-			from morrowind.chosen_game import description, screenshot_path, steam_link
-			game = "morrowind"
-		elif which_one == 2:
-			from doom3.chosen_game import description, screenshot_path, steam_link
-			rbutton = self.r2
-			game = "doom3"
-		elif which_one == 3:
-			from aliensvspredator.chosen_game import description, screenshot_path, steam_link
-			rbutton = self.r3
-			game = "aliensvspredator"
-		elif which_one == 4:
-			from xcomufodefense.chosen_game import description, screenshot_path, steam_link
-			rbutton = self.r4
-			game = "xcomufodefense"
-		self.clicked_game = ""
+	def game_radiobutton_effect(self):
+		print("Game selected:")
+		r_list_nr = 0
+		for game_fname in self.game_r_list:
+			if game_fname.isChecked() == True:
+				self.clicked_game = game_list[r_list_nr][0]
+				rbutton = game_fname
+			r_list_nr += 1
+		sys.path.insert(0, self_dir + "games/" + self.clicked_game)
+		from game import description, screenshot_path, steam_link
+		sys.path.remove(self_dir + "games/" + self.clicked_game)
 		description_pixmap = QPixmap(screenshot_path)
 		self.description_image.setPixmap(description_pixmap)
 		self.description_label.setText(description)
@@ -432,12 +382,14 @@ class SecondThread(QThread):
 			self.status_label.setText("Recultis status is: Up to date")
 			
 	def check_games_update(self):
+		global game_list
 		game_nr = 0
-		game_list = ["jediacademy", "morrowind", "doom3", "aliensvspredator", "xcomufodefense"] # Temporary solution
-		game_r0_name_list = [r0_name, r1_name, r2_name, r3_name, r4_name]  # Temporary solution
 		for radio_button in self.radio_list:
-			game_status_description = update_check.start(game_list[game_nr], self_dir)
-			radio_button.setText(game_r0_name_list[game_nr] + " (" + game_status_description + ")")
+			game_status_description = update_check.start(game_list[game_nr][0], self_dir)
+			game_list[game_nr] = [game_list[game_nr][0], game_status_description]
+			print("Game list looks like:")
+			print(game_list)
+			radio_button.setText(get_game_desc(game_list[game_nr]))
 			game_nr += 1
 			if radio_button.isChecked() == True:
 				if "Installed" in radio_button.text():
@@ -560,6 +512,24 @@ class AskWindow(QMainWindow):
 		print("Launcher choosen")
 		self.result = result
 		self.close()
+
+#Status: -1 - Checking for update...; 0 - Not installed; 1 - Installed; 2 - Update available		
+def get_game_desc(info_list):
+	game_fname = info_list[0]
+	status = info_list[1]
+	sys.path.insert(0, self_dir + "games/" + game_fname)
+	from game import full_name
+	sys.path.remove(self_dir + "games/" + game_fname)
+	rest_name = ""
+	if status == -1:
+		rest_name = " (Checking for update...)"
+	elif status == 0:
+		rest_name = " (Not installed)"
+	elif status == 1:
+		rest_name = " (Installed)"
+	elif status == 2:
+		rest_name = " (Update available)"
+	return full_name + rest_name
 
 app = QApplication(sys.argv)
 screen = Window()

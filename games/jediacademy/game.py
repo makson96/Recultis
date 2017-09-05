@@ -77,8 +77,8 @@ def prepare_engine():
 				shutil.copy(os.path.join(recultis_dir, "tmp/JediAcademy/", directory, binary), os.path.join(install_dir, "GameData/", directory, binary))
 
 def info(requested_list):
-	if os.path.isfile(game_dir + "/version_link.txt"):
-		version_file = open(game_dir + "/version_link.txt")
+	if os.path.isfile(install_dir + "/version_link.txt"):
+		version_file = open(install_dir + "/version_link.txt")
 		version = version_file.read()
 	else:
 		version = "No proper install"
