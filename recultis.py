@@ -169,14 +169,15 @@ class Window(QWidget):
 		QMessageBox.information(self, "Message", "Desktop and Menu launchers for selected game are now successfully created.")
 	
 	def install_game(self):
+		global game_list
 		print("Game to be installed:")
 		r_list_nr = 0
 		for game_fname in self.game_r_list:
 			if game_fname.isChecked() == True:
 				self.installing_game = game_list[r_list_nr][0]
 				print(self.installing_game)
-				rbutton = game_fname
-			r_list_nr += 1
+			else:
+				r_list_nr += 1
 		if os.path.isdir(recultis_dir) == False:
 			os.makedirs(recultis_dir)
 		print("starting new thread, which will install: " + self.installing_game)
@@ -242,8 +243,8 @@ Terminal=false"""
 		for game_fname in self.game_r_list:
 			if game_fname.isChecked() == True:
 				self.clicked_game = game_list[r_list_nr][0]
+				clicked_game_status = game_list[r_list_nr][1]
 				print(self.clicked_game)
-				rbutton = game_fname
 			r_list_nr += 1
 		sys.path.insert(0, self_dir + "games/" + self.clicked_game)
 		from game import description, screenshot_path, steam_link
@@ -252,7 +253,7 @@ Terminal=false"""
 		self.description_image.setPixmap(description_pixmap)
 		self.description_label.setText(description)
 		self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
-		if "Update available" in rbutton.text():
+		if clicked_game_status == 2:
 			self.r0a.setEnabled(True)
 			self.playButton.setEnabled(True)
 			self.launcherButton.setEnabled(True)
@@ -264,20 +265,20 @@ Terminal=false"""
 			self.r0a.setEnabled(False)
 		else:
 			self.r0a.setEnabled(False)
-		if "Not installed" in rbutton.text() or "Checking for update" in rbutton.text():
+		if clicked_game_status == 0 or clicked_game_status == -1:
 			self.playButton.setEnabled(False)
 			self.launcherButton.setEnabled(False)
 			self.installButton.setEnabled(True)
 			self.installButton.setText("Install")
 			self.uninstallButton.setEnabled(False)
-		if "Installed" in rbutton.text():
+		elif clicked_game_status == 1:
 			self.playButton.setEnabled(True)
 			self.launcherButton.setEnabled(True)
 			self.installButton.setEnabled(True)
 			self.installButton.setText("Install")
 			self.uninstallButton.setEnabled(True)
 		for game_button in self.radio_list:
-			if "Installing..." in game_button.text():
+			if clicked_game_status == 3:
 				self.playButton.setEnabled(False)
 				self.launcherButton.setEnabled(False)
 				self.uninstallButton.setEnabled(False)
@@ -390,29 +391,29 @@ class SecondThread(QThread):
 			print("Game list looks like:")
 			print(game_list)
 			radio_button.setText(get_game_desc(game_list[game_nr]))
-			game_nr += 1
 			if radio_button.isChecked() == True:
-				if "Installed" in radio_button.text():
+				if game_list[game_nr][1] == 1:
 					self.play_button.setEnabled(True)
 					self.launcher_button.setEnabled(True)
 					self.install_button.setEnabled(True)
 					self.install_button.setText("Install")
 					self.uninstall_button.setEnabled(True)
 					self.only_engine_radio.setEnabled(False)
-				elif "Update available" in radio_button.text():
+				elif game_list[game_nr][1] == 2:
 					self.play_button.setEnabled(True)
 					self.launcher_button.setEnabled(True)
 					self.install_button.setEnabled(True)
 					self.install_button.setText("Update")
 					self.uninstall_button.setEnabled(True)
 					self.only_engine_radio.setEnabled(True)
-				elif "Not installed" in radio_button.text():
+				elif game_list[game_nr][1] == 2:
 					self.play_button.setEnabled(False)
 					self.launcher_button.setEnabled(False)
 					self.install_button.setEnabled(True)
 					self.install_button.setText("Install")
 					self.uninstall_button.setEnabled(False)
 					self.only_engine_radio.setEnabled(False)
+			game_nr += 1
 	
 	def update_progress_bar(self):
 		global game_list
@@ -422,7 +423,8 @@ class SecondThread(QThread):
 				game_list[game_nr] = [game_list[game_nr][0], 3]
 				game = game_list[game_nr][0]				
 				radio_button.setText(get_game_desc(game_list[game_nr]))
-			game_nr += 1
+			else:
+				game_nr += 1
 		print("Game list looks like:")
 		print(game_list)
 		self.play_button.setEnabled(False)
@@ -448,6 +450,7 @@ class SecondThread(QThread):
 				return 0
 		#Clear currently installing game value after installation finished
 		self.installing_game = ""
+		game_list[game_nr] = [game_list[game_nr][0], 1]
 
 class AskWindow(QMainWindow):
 	#Available reasons: 1 - Steam Guard, 2 - Choose game launcher
