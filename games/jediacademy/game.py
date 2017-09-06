@@ -25,7 +25,7 @@ Library.
 
 s_appid = "6020"
 steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
-screenshot_path = self_dir + "../assets/html/openjk-screen.png"
+screenshot_path = self_dir + "../../assets/html/openjk-screen.png"
 icon_name = "openjk.png"
 
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/JediAcademy/GameData/; ./openjk_sp.x86_64'"
