@@ -59,6 +59,7 @@ class Window(QWidget):
 		self.statusLabel2.setAlignment(Qt.AlignCenter)
 		self.progress = QProgressBar(self)
 		self.playButton = QPushButton("Play")
+		self.launcherButton = QPushButton("Add Launcher")
 		self.installButton = QPushButton("Install")
 		self.uninstallButton = QPushButton("Uninstall")
 		self.exitButton = QPushButton("Exit")
@@ -101,6 +102,7 @@ class Window(QWidget):
 		vbox1.addLayout(grid1)
 		vbox1.addWidget(self.progress)
 		hbox2.addWidget(self.playButton)
+		hbox2.addWidget(self.launcherButton)
 		hbox2.addWidget(self.installButton)
 		hbox2.addWidget(self.uninstallButton)
 		hbox2.addWidget(self.exitButton)
@@ -114,6 +116,7 @@ class Window(QWidget):
 		self.app_updateButton.clicked.connect(self.autoupdate)
 		self.app_create_launcher.clicked.connect(self.add_launcher)
 		self.playButton.clicked.connect(self.play_game)
+		self.launcherButton.clicked.connect(self.add_game_launcher)
 		self.installButton.clicked.connect(self.install_game)
 		self.uninstallButton.clicked.connect(self.uninstall_game)
 		self.exitButton.clicked.connect(self.close)
@@ -122,7 +125,7 @@ class Window(QWidget):
 		self.setWindowTitle("Recultis " + recultis_version)
 		
 		#After Windows is drawn, lets check status of the games
-		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.playButton, self.installButton, self.uninstallButton, self.game_r_list, self.r0a, self.installing_game]
+		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.playButton, self.launcherButton, self.installButton, self.uninstallButton, self.game_r_list, self.r0a, self.installing_game]
 		self.update_game_app = SecondThread(1, self.second_thread_list)
 		self.update_game_app.start()
 		self.update_game_thread = SecondThread(2, self.second_thread_list)
@@ -152,6 +155,18 @@ class Window(QWidget):
 		call(launcher_cmd_list[l_nr][1], shell=True)
 		self.playing_game = ""
 		print("Finished Playing game")
+
+	def add_game_launcher(self):
+		print("Game for which launcher will be created:")
+		r_list_nr = 0
+		for game_fname in self.game_r_list:
+			if game_fname.isChecked() == True:
+				game = game_list[r_list_nr][0]
+				print(game)
+				rbutton = game_fname
+			r_list_nr += 1
+		installer.make_launchers(game)
+		QMessageBox.information(self, "Message", "Desktop and Menu launchers for selected game are now successfully created.")
 	
 	def install_game(self):
 		print("Game to be installed:")
@@ -240,6 +255,7 @@ Terminal=false"""
 		if "Update available" in rbutton.text():
 			self.r0a.setEnabled(True)
 			self.playButton.setEnabled(True)
+			self.launcherButton.setEnabled(True)
 			self.installButton.setEnabled(True)
 			self.installButton.setText("Update")
 			self.uninstallButton.setEnabled(True)
@@ -250,17 +266,20 @@ Terminal=false"""
 			self.r0a.setEnabled(False)
 		if "Not installed" in rbutton.text() or "Checking for update" in rbutton.text():
 			self.playButton.setEnabled(False)
+			self.launcherButton.setEnabled(False)
 			self.installButton.setEnabled(True)
 			self.installButton.setText("Install")
 			self.uninstallButton.setEnabled(False)
 		if "Installed" in rbutton.text():
 			self.playButton.setEnabled(True)
+			self.launcherButton.setEnabled(True)
 			self.installButton.setEnabled(True)
 			self.installButton.setText("Install")
 			self.uninstallButton.setEnabled(True)
 		for game_button in self.radio_list:
 			if "Installing..." in game_button.text():
 				self.playButton.setEnabled(False)
+				self.launcherButton.setEnabled(False)
 				self.uninstallButton.setEnabled(False)
 				self.installButton.setEnabled(False)
 	
@@ -289,18 +308,19 @@ class SecondThread(QThread):
 
 	def __init__(self, task_nr, widget_list):
 		QThread.__init__(self)
-		len_widget_list = 8
+		len_widget_list = 9
 		if len(widget_list) != len_widget_list:
 			print("SecondThread error: widget list for has wrong size. Should be: " + str(len_widget_list) + " ,but is: " + str(len(widget_list)))
 			return 0
 		self.status_label = widget_list[0]
 		self.update_button = widget_list[1]
 		self.play_button = widget_list[2]
-		self.install_button = widget_list[3]
-		self.uninstall_button = widget_list[4]
-		self.radio_list = widget_list[5]
-		self.only_engine_radio = widget_list[6]
-		self.installing_game = widget_list[7]
+		self.launcher_button = widget_list[3]
+		self.install_button = widget_list[4]
+		self.uninstall_button = widget_list[5]
+		self.radio_list = widget_list[6]
+		self.only_engine_radio = widget_list[7]
+		self.installing_game = widget_list[8]
 		self.connection = 1
 		self.task_nr = task_nr
 
@@ -374,18 +394,21 @@ class SecondThread(QThread):
 			if radio_button.isChecked() == True:
 				if "Installed" in radio_button.text():
 					self.play_button.setEnabled(True)
+					self.launcher_button.setEnabled(True)
 					self.install_button.setEnabled(True)
 					self.install_button.setText("Install")
 					self.uninstall_button.setEnabled(True)
 					self.only_engine_radio.setEnabled(False)
 				elif "Update available" in radio_button.text():
 					self.play_button.setEnabled(True)
+					self.launcher_button.setEnabled(True)
 					self.install_button.setEnabled(True)
 					self.install_button.setText("Update")
 					self.uninstall_button.setEnabled(True)
 					self.only_engine_radio.setEnabled(True)
 				elif "Not installed" in radio_button.text():
 					self.play_button.setEnabled(False)
+					self.launcher_button.setEnabled(False)
 					self.install_button.setEnabled(True)
 					self.install_button.setText("Install")
 					self.uninstall_button.setEnabled(False)
