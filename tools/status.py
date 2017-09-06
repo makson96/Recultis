@@ -65,7 +65,7 @@ def steam_status():
 		elif "FAILED with result code 65" in steam_error_line:
 			status = "Error: Could not perform Steam Guard authentication. Please try again."
 			percent = 0
-		elif "Steamcmd Error." in steam_error_line:
+		else:
 			status = "Error: Steamcmd internal error. Please contact Recultis project for support."
 			percent = 0
 	return status, percent
