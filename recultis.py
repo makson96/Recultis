@@ -20,6 +20,7 @@ self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 recultis_dir = os.getenv("HOME") + "/.recultis/"
 
 from games import installer
+#This is the list of lists. It is sorted in alphabetic order. Every position is list wich contains game name (as game directory name) and game status.
 game_list = installer.get_game_list()
 
 class Window(QWidget):
@@ -128,22 +129,17 @@ class Window(QWidget):
 		self.update_game_thread.start()
 	
 	def play_game(self):
-		if self.r0.isChecked():
-			from jediacademy.chosen_game import launcher_cmd_list
-			game = "jediacademy"
-		elif self.r1.isChecked():
-			from morrowind.chosen_game import launcher_cmd_list
-			game = "morrowind"
-		elif self.r2.isChecked():
-			from doom3.chosen_game import launcher_cmd_list
-			game = "doom3"
-		elif self.r3.isChecked():
-			from aliensvspredator.chosen_game import launcher_cmd_list
-			game = "aliensvspredator"
-		elif self.r4.isChecked():
-			from xcomufodefense.chosen_game import launcher_cmd_list
-			game = "xcomufodefense"
-		self.playing_game = game
+		print("Game to be played:")
+		r_list_nr = 0
+		for game_fname in self.game_r_list:
+			if game_fname.isChecked() == True:
+				self.playing_game = game_list[r_list_nr][0]
+				print(self.playing_game)
+				rbutton = game_fname
+			r_list_nr += 1
+		sys.path.insert(0, self_dir + "games/" + self.playing_game)
+		from game import launcher_cmd_list
+		sys.path.remove(self_dir + "games/" + self.clicked_game)
 		if len(launcher_cmd_list) > 1:
 			print("Starting Ask Window to choose launcher")
 			l_nr = self.ask_window_start(2)
@@ -158,31 +154,23 @@ class Window(QWidget):
 		print("Finished Playing game")
 	
 	def install_game(self):
-		if self.r0.isChecked():
-			from jediacademy import chosen_game
-			game = "jediacademy"
-		elif self.r1.isChecked():
-			from morrowind import chosen_game
-			game = "morrowind"
-		elif self.r2.isChecked():
-			from doom3 import chosen_game
-			game = "doom3"
-		elif self.r3.isChecked():
-			from aliensvspredator import chosen_game
-			game = "aliensvspredator"
-		elif self.r4.isChecked():
-			from xcomufodefense import chosen_game
-			game = "xcomufodefense"
-		self.installing_game = game
+		print("Game to be installed:")
+		r_list_nr = 0
+		for game_fname in self.game_r_list:
+			if game_fname.isChecked() == True:
+				self.installing_game = game_list[r_list_nr][0]
+				print(self.installing_game)
+				rbutton = game_fname
+			r_list_nr += 1
 		if os.path.isdir(recultis_dir) == False:
 			os.makedirs(recultis_dir)
-		print("starting new thread, which will install: " + game)
+		print("starting new thread, which will install: " + self.installing_game)
 		if self.r0a.isChecked():
 			game_shop = "none"
 		else:
 			game_shop = "steam"
 		#This is game install/update thread
-		_thread.start_new_thread(chosen_game.start, (game_shop, str(self.loginText.text()), str(self.passwordText.text())))
+		_thread.start_new_thread(installer.install, (self.installing_game, game_shop, str(self.loginText.text()), str(self.passwordText.text())))
 		#This is thread for GUI
 		self.update_status_bar_thread = SecondThread(3, self.second_thread_list)
 		self.update_status_bar_thread.result_text.connect(self.statusLabel2.setText)
@@ -192,23 +180,14 @@ class Window(QWidget):
 	
 	def uninstall_game(self):
 		self.installButton.setEnabled(False)
-		if self.r0.isChecked():
-			from jediacademy import chosen_game
-			game = "jediacademy"
-		elif self.r1.isChecked():
-			from morrowind import chosen_game
-			game = "morrowind"
-		elif self.r2.isChecked():
-			from doom3 import chosen_game
-			game = "doom3"
-		elif self.r3.isChecked():
-			from aliensvspredator import chosen_game
-			game = "aliensvspredator"
-		elif self.r4.isChecked():
-			from xcomufodefense import chosen_game
-			game = "xcomufodefense"
-		print("Uninstalling game")
-		chosen_game.uninstall()
+		print("Game to be uninstalled:")
+		r_list_nr = 0
+		for game_fname in self.game_r_list:
+			if game_fname.isChecked() == True:
+				uninstall_game = game_list[r_list_nr][0]
+				print(uninstall_game)
+			r_list_nr += 1
+		installer.uninstall(uninstall_game)
 		self.update_game_thread = SecondThread(2, self.second_thread_list)
 		self.update_game_thread.start()
 		QMessageBox.information(self, "Message", "Game uninstallation complete.")
@@ -248,6 +227,7 @@ Terminal=false"""
 		for game_fname in self.game_r_list:
 			if game_fname.isChecked() == True:
 				self.clicked_game = game_list[r_list_nr][0]
+				print(self.clicked_game)
 				rbutton = game_fname
 			r_list_nr += 1
 		sys.path.insert(0, self_dir + "games/" + self.clicked_game)
@@ -412,17 +392,16 @@ class SecondThread(QThread):
 					self.only_engine_radio.setEnabled(False)
 	
 	def update_progress_bar(self):
-		#Temporary solution
+		global game_list
 		game_nr = 0
-		game_list = ["jediacademy", "morrowind", "doom3", "aliensvspredator", "xcomufodefense"]
-		game_r0_name_list = [r0_name, r1_name, r2_name, r3_name, r4_name]  # Temporary solution
 		for radio_button in self.radio_list:
 			if radio_button.isChecked() == True:
-				game = game_list[game_nr]
-				radio_button.setText(game_r0_name_list[game_nr] + " (Installing...)")
-			else:
-				game_nr += 1
-		#End of Temporary solution
+				game_list[game_nr] = [game_list[game_nr][0], 3]
+				game = game_list[game_nr][0]				
+				radio_button.setText(get_game_desc(game_list[game_nr]))
+			game_nr += 1
+		print("Game list looks like:")
+		print(game_list)
 		self.play_button.setEnabled(False)
 		self.install_button.setEnabled(False)
 		self.uninstall_button.setEnabled(False)
@@ -471,8 +450,9 @@ class AskWindow(QMainWindow):
 			self.game = parent.playing_game
 			self.title = 'Choose game launcher.'
 			self.MessageLabel = QLabel("Please choose game launcher.", self)
-			if self.game == "jediacademy":
-				from jediacademy.chosen_game import launcher_cmd_list
+			sys.path.insert(0, self_dir + "games/" + self.game)
+			from game import launcher_cmd_list
+			sys.path.remove(self_dir + "games/" + self.game)
 			self.r_button_list = []
 			for launcher in launcher_cmd_list:
 				self.r_button_list.append(QRadioButton(launcher[0], self))
@@ -513,7 +493,7 @@ class AskWindow(QMainWindow):
 		self.result = result
 		self.close()
 
-#Status: -1 - Checking for update...; 0 - Not installed; 1 - Installed; 2 - Update available		
+#Status: -1 - Checking for update...; 0 - Not installed; 1 - Installed; 2 - Update available; 3 - Installing...	
 def get_game_desc(info_list):
 	game_fname = info_list[0]
 	status = info_list[1]
@@ -529,6 +509,8 @@ def get_game_desc(info_list):
 		rest_name = " (Installed)"
 	elif status == 2:
 		rest_name = " (Update available)"
+	elif status == 3:
+		rest_name = " (Installing...)"
 	return full_name + rest_name
 
 app = QApplication(sys.argv)

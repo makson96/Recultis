@@ -69,7 +69,7 @@ def run(login, password, recultis_dir, s_appid, game_dir):
 	print("Running following steamcmd command:")
 	print("./steamcmd.sh +@sSteamCmdForcePlatformType windows +login '" + login + "' '******' +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit")
 	print("Check " + recultis_dir + "steam_log.txt for more details.")
-	steam_download = Popen("script -q -c \"./steamcmd.sh +@sSteamCmdForcePlatformType windows +login '" + login + "' '" + password + "' +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit\" /dev/null", shell=True, bufsize=1, stdout=open("steam_log.txt", "wb"), stdin=PIPE)
+	steam_download = Popen("script -q -c \"./steamcmd.sh +@sSteamCmdForcePlatformType windows +login '" + login + "' '" + password + "' +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit\" /dev/null", shell=True, stdout=open("steam_log.txt", "wb"), stdin=PIPE)
 	while steam_download.poll() is None:
 		time.sleep(2)
 		steam_last_line = get_last_log_line()

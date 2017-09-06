@@ -63,7 +63,7 @@ def install(game_name, shop, shop_login, shop_password):
 		game.prepare_engine()
 		#launchers()
 		#Mark installed version by coping link file
-		shutil.copy(self_dir + "link.txt", game.install_dir + "/version_link.txt")
+		shutil.copy(self_dir + game_name + "/link.txt", game.install_dir + "/version_link.txt")
 		shutil.rmtree(recultis_dir + "tmp")
 
 def uninstall(game_name):

@@ -24,7 +24,11 @@ def steam_status():
 	try:
 		steam_log_file = open("steam_log.txt", "r")
 		steam_log_lines = steam_log_file.readlines()
-		steam_last_line = steam_log_lines[-1]
+		last_important_line_nr = -1
+		#Don't count any garbages as a last line
+		while "CWorkThreadPool" in steam_log_lines[last_important_line_nr]:
+			last_important_line_nr -= 1
+		steam_last_line = steam_log_lines[last_important_line_nr]
 		steam_log_file.close()
 	except:
 		steam_last_line = "downloading, progress: 0,0 ("
@@ -65,14 +69,14 @@ def steam_status():
 		elif "FAILED with result code 65" in steam_error_line:
 			status = "Error: Could not perform Steam Guard authentication. Please try again."
 			percent = 0
-		elif "Steamcmd Error." in steam_error_line:
+		else:
 			status = "Error: Steamcmd internal error. Please contact Recultis project for support."
 			percent = 0
 	return status, percent
 
 def engine_status(game):
-	chosen_game = importlib.import_module(game+".chosen_game")
-	game_info = chosen_game.info(["deb_url_path", "deb_file_path"])
+	from games import installer
+	game_info = installer.game_info(game, ["deb_url_path", "deb_file_path"])
 	link = game_info[0]
 	file_path = game_info[1]
 	status = "Downloading engine"

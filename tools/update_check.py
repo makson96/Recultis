@@ -45,10 +45,12 @@ def start(game, self_dir):
 		status_nr = 1
 	elif status == "Update available":
 		status_nr = 2
+	elif status == "Installing...":
+		status_nr = 3
 	return status_nr
 
 def update_link(game, self_dir, download_link_new):
-	target_file_path = self_dir + game + "/link.txt"
+	target_file_path = self_dir + "games/" +game + "/link.txt"
 	target_file = open(target_file_path, "w")
 	target_file.write(download_link_new)
 	target_file.close()

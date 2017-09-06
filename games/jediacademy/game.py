@@ -84,7 +84,7 @@ def info(requested_list):
 		version = "No proper install"
 	link_file = open(self_dir + "link.txt")
 	link = link_file.read()
-	deb_file_path = recultis_dir + "tmp/openjk.deb"
+	deb_file_path = recultis_dir + "tmp/jediacademy.deb"
 	return_list = []
 	for requested_item in requested_list:
 		if requested_item == "deb_file_path":
