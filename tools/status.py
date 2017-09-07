@@ -26,7 +26,9 @@ def steam_status():
 		steam_log_lines = steam_log_file.readlines()
 		last_important_line_nr = -1
 		#Don't count any garbages as a last line
-		while "CWorkThreadPool" in steam_log_lines[last_important_line_nr]:
+		garbage_line_list = ["CWorkThreadPool", "committing, progress"]
+		#This ca be done better...
+		while garbage_line_list[0] in steam_log_lines[last_important_line_nr] or garbage_line_list[1] in steam_log_lines[last_important_line_nr]:
 			last_important_line_nr -= 1
 		steam_last_line = steam_log_lines[last_important_line_nr]
 		steam_log_file.close()

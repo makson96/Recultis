@@ -45,6 +45,7 @@ uninstall_files_list = [os.getenv("HOME") + "/.local/share/icons/" + icon_name]
 for launch_file in launcher_list:
 	uninstall_files_list.append(desk_dir + launch_file[0])
 	uninstall_files_list.append(os.getenv("HOME") + "/.local/share/applications/" + launch_file[0])
+uninstall_files_list.extend([os.getenv("HOME") + "/.config/openmw/openmw.cfg"])
 uninstall_dir_list = [install_dir]
 
 def prepare_engine():

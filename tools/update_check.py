@@ -8,7 +8,7 @@
 import urllib.request
 
 def start(game, self_dir):
-	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games" + game+ "/link.txt"
+	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/" + game+ "/link.txt"
 	from games import installer
 	game_info = installer.game_info(game, ["version"])
 	version = game_info[0]
