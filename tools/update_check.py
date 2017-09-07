@@ -9,24 +9,15 @@ import urllib.request
 
 def start(game, self_dir):
 	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games" + game+ "/link.txt"
-	#this is legacy link to be removed in recultis 1.2
-	target_url_legacy = "https://raw.githubusercontent.com/makson96/Recultis/master/" + game+ "/link.txt"
 	from games import installer
 	game_info = installer.game_info(game, ["version"])
 	version = game_info[0]
-	
 	try:
 		data = urllib.request.urlopen(target_url)
 		download_link_new = data.read().decode("utf-8")
 	#If can't get link assume that local link is most recent.
 	except urllib.request.URLError:
-		#this is legacy code to be removed in recultis 1.2
-		try:
-			data = urllib.request.urlopen(target_url_legacy)
-			download_link_new = data.read().decode("utf-8")
-		except urllib.request.URLError:
-		#end of legacy code
-			download_link_new = version
+		download_link_new = version
 	if version != "No proper install":
 		status = "Installed"
 		if version != download_link_new:
