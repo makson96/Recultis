@@ -53,24 +53,3 @@ def prepare_engine():
 		pass
 	shutil.copy(recultis_dir + "tmp/rbdoom-3-bfg/RBDoom3BFG", install_dir + "RBDoom3BFG")
 	shutil.copytree(recultis_dir + "tmp/rbdoom-3-bfg/lib", install_dir + "lib", symlinks=True)
-
-def info(requested_list):
-	if os.path.isfile(install_dir + "/version_link.txt"):
-		version_file = open(install_dir + "/version_link.txt")
-		version = version_file.read()
-	else:
-		version = "No proper install"
-	link_file = open(self_dir + "link.txt")
-	link = link_file.read()
-	deb_file_path = recultis_dir + "tmp/doom3.deb"
-	return_list = []
-	for requested_item in requested_list:
-		if requested_item == "deb_file_path":
-			return_list.append(deb_file_path)
-		elif requested_item == "deb_url_path":
-			return_list.append(link)
-		elif requested_item == "install_dir":
-			return_list.append(install_dir)
-		elif requested_item == "version":
-			return_list.append(version)
-	return return_list

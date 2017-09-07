@@ -106,7 +106,26 @@ def make_launchers(game_name):
 		menu_file.close()
 		os.chmod(os.getenv("HOME") + "/.local/share/applications/" + launcher[0], 0o755)
 
-def game_info(game_name, info_list):
+def game_info(game_name, requested_list):
 	#Import game specific data
 	game_module = importlib.import_module("games." + game_name + ".game")
-	return game_module.info(info_list)
+	#Run info gathering
+	if os.path.isfile(game_module.install_dir + "/version_link.txt"):
+		version_file = open(game_module.install_dir + "/version_link.txt")
+		version = version_file.read()
+	else:
+		version = "No proper install"
+	link_file = open(self_dir + game_name + "/link.txt")
+	link = link_file.read()
+	deb_file_path = recultis_dir + "tmp/" + game_name + ".deb"
+	return_list = []
+	for requested_item in requested_list:
+		if requested_item == "deb_file_path":
+			return_list.append(deb_file_path)
+		elif requested_item == "deb_url_path":
+			return_list.append(link)
+		elif requested_item == "install_dir":
+			return_list.append(game.install_dir)
+		elif requested_item == "version":
+			return_list.append(version)
+	return return_list

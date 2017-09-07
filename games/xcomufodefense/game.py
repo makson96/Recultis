@@ -44,7 +44,6 @@ launcher_list = [["openxcom.desktop", launcher1_text]]
 uninstall_files_list = []
 uninstall_dir_list = [os.getenv("HOME") + "/.local/share/openxcom/UFO"]
 
-
 def prepare_engine():
 	print("prepare engine")
 	if os.path.isdir(install_dir + "bin") == True:
@@ -69,24 +68,3 @@ def prepare_engine():
 		elif os.path.isdir(local_data_dir + xdir):
 			shutil.rmtree(local_data_dir + xdir)
 		os.symlink(install_dir + "XCOM/" + xdir, local_data_dir + xdir)
-
-def info(requested_list):
-	if os.path.isfile(install_dir + "/version_link.txt"):
-		version_file = open(install_dir + "/version_link.txt")
-		version = version_file.read()
-	else:
-		version = "No proper install"
-	link_file = open(self_dir + "link.txt")
-	link = link_file.read()
-	deb_file_path = recultis_dir + "tmp/xcomufodefense.deb"
-	return_list = []
-	for requested_item in requested_list:
-		if requested_item == "deb_file_path":
-			return_list.append(deb_file_path)
-		elif requested_item == "deb_url_path":
-			return_list.append(link)
-		elif requested_item == "install_dir":
-			return_list.append(install_dir)
-		elif requested_item == "version":
-			return_list.append(version)
-	return return_list

@@ -60,24 +60,3 @@ def prepare_engine():
 		openmw_cfg=open(os.getenv("HOME") + "/.config/openmw/openmw.cfg", "a")
 		openmw_cfg.write('\ndata="' + install_dir + 'Data Files"')
 		openmw_cfg.close()
-
-def info(requested_list):
-	if os.path.isfile(install_dir + "/version_link.txt"):
-		version_file = open(install_dir + "/version_link.txt")
-		version = version_file.read()
-	else:
-		version = "No proper install"
-	link_file = open(self_dir + "link.txt")
-	link = link_file.read()
-	deb_file_path = recultis_dir + "tmp/morrowind.deb"
-	return_list = []
-	for requested_item in requested_list:
-		if requested_item == "deb_file_path":
-			return_list.append(deb_file_path)
-		elif requested_item == "deb_url_path":
-			return_list.append(link)
-		elif requested_item == "install_dir":
-			return_list.append(install_dir)
-		elif requested_item == "version":
-			return_list.append(version)
-	return return_list
