@@ -12,7 +12,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-from tools import update_check, status
+from tools import update_do, status
 
 recultis_version = "1.2.0pre"
 
@@ -40,7 +40,7 @@ class Window(QWidget):
 		choose_game_box = QGroupBox("Choose the game to install:")
 		self.game_r_list = []
 		for game_position in game_list:
-			self.game_r_list.append(QRadioButton(get_game_desc(game_position)))
+			self.game_r_list.append(QRadioButton(update_do.game_update_desc(game_position)))
 			self.game_r_list[-1].toggled.connect(self.game_radiobutton_effect)
 		choose_data_box = QGroupBox("Choose digital distribution platform to download game data:")
 		self.r0a = QRadioButton("Only engine update")
@@ -211,8 +211,7 @@ class Window(QWidget):
 		self.app_staus_label.setText("Recultis status is: Updating. Please wait.")
 		patch_link_file = open(self_dir + "patch_link.txt", "r")
 		patch_link = patch_link_file.read()
-		from tools import update_tool
-		update_tool.autoupdate(self_dir, patch_link)
+		update_do.recultis_update_do(self_dir, patch_link)
 		QMessageBox.information(self, "Message", "Update complete. Recultis will now turn off. Please start it again to apply patch.")
 		self.close()
 	
@@ -368,29 +367,20 @@ class SecondThread(QThread):
 		v_minor = recultis_version[0:2] + str(int(recultis_version[2]) + 1) + ".0"
 		v_patch = recultis_version[0:4] + str(int(recultis_version[4]) + 1)
 		update_list = [v_major, v_minor, v_patch]
-		patch_url = ""
-		for potential_patch in update_list:
-			try:
-				patch_url = "https://github.com/makson96/Recultis/archive/v" + potential_patch + ".tar.gz"
-				urllib.request.urlopen(patch_url, timeout=1)
-				patch_link_file = open(self_dir + "patch_link.txt", "w")
-				patch_link_file.write(patch_url)
-				patch_link_file.close()
-				self.update_button.setEnabled(True)
-				self.status_label.setText("Recultis status is: Updata available")
-				break					
-			except urllib.request.URLError:
-				patch_url = ""
-		if patch_url == "":
+		status = update_do.recultis_update_check(update_list)
+		if status == 2:
+			self.update_button.setEnabled(True)
+			self.status_label.setText("Recultis status is: Updata available")
+		elif status == 1:
 			self.status_label.setText("Recultis status is: Up to date")
 			
 	def check_games_update(self):
 		global game_list
 		game_nr = 0
 		for radio_button in self.radio_list:
-			game_status_description = update_check.start(game_list[game_nr][0], self_dir)
+			game_status_description = update_do.game_update_status(game_list[game_nr][0], self_dir)
 			game_list[game_nr] = [game_list[game_nr][0], game_status_description]
-			radio_button.setText(get_game_desc(game_list[game_nr]))
+			radio_button.setText(update_do.game_update_desc(game_list[game_nr]))
 			if radio_button.isChecked() == True:
 				if game_list[game_nr][1] == 1:
 					self.play_button.setEnabled(True)
@@ -424,7 +414,7 @@ class SecondThread(QThread):
 			if radio_button.isChecked() == True:
 				game_list[game_nr] = [game_list[game_nr][0], 3]
 				game = game_list[game_nr][0]				
-				radio_button.setText(get_game_desc(game_list[game_nr]))
+				radio_button.setText(update_do.game_update_desc(game_list[game_nr]))
 			else:
 				game_nr += 1
 		print("Game list looks like:")
@@ -519,25 +509,6 @@ class AskWindow(QMainWindow):
 		print("Launcher choosen")
 		self.result = result
 		self.close()
-
-#Status: -1 - Checking for update...; 0 - Not installed; 1 - Installed; 2 - Update available; 3 - Installing...	
-def get_game_desc(info_list):
-	game_fname = info_list[0]
-	status = info_list[1]
-	game_module = importlib.import_module("games." + game_fname + ".game")
-	full_name = game_module.full_name
-	rest_name = ""
-	if status == -1:
-		rest_name = " (Checking for update...)"
-	elif status == 0:
-		rest_name = " (Not installed)"
-	elif status == 1:
-		rest_name = " (Installed)"
-	elif status == 2:
-		rest_name = " (Update available)"
-	elif status == 3:
-		rest_name = " (Installing...)"
-	return full_name + rest_name
 
 app = QApplication(sys.argv)
 screen = Window()
