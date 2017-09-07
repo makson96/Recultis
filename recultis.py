@@ -13,13 +13,13 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
 from tools import update_do, status
+from games import installer
 
 recultis_version = "1.2.0pre"
 
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 recultis_dir = os.getenv("HOME") + "/.recultis/"
 
-from games import installer
 #This is the list of lists. It is sorted in alphabetic order. Every position is list wich contains game name (as game directory name) and game status.
 game_list = installer.get_game_list()
 

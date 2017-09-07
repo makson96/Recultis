@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import os, importlib, urllib
+import os, urllib
 
 recultis_dir = os.getenv("HOME") + "/.recultis/"
 
