@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import os, urllib.request, importlib
+import urllib.request
 
 def start(game, self_dir):
 	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games" + game+ "/link.txt"

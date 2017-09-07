@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import os, shutil
+import os, shutil, importlib
 from subprocess import check_output
 
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
@@ -30,10 +30,8 @@ def get_game_list():
 #Install game
 def install(game_name, shop, shop_login, shop_password):
 	#Import game specific data
-	previous_dir = os.getcwd()
-	os.chdir(self_dir + game_name)
-	import game
-	os.chdir(previous_dir)
+	game = importlib.import_module("games." + game_name + ".game")
+	#Run install
 	print("Start installing " + game.full_name)
 	print("Preparing directory structure")
 	if os.path.isdir(game.install_dir) == False:
@@ -67,10 +65,8 @@ def install(game_name, shop, shop_login, shop_password):
 
 def uninstall(game_name):
 	#Import game specific data
-	previous_dir = os.getcwd()
-	os.chdir(self_dir + game_name)
-	import game
-	os.chdir(previous_dir)
+	game = importlib.import_module("games." + game_name + ".game")
+	#Run uninstall
 	#We need to add here some kind of sandbox
 	print("Uninstalling files")
 	for u_file in game.uninstall_files_list:
@@ -83,10 +79,8 @@ def uninstall(game_name):
 
 def make_launchers(game_name):
 	#Import game specific data
-	previous_dir = os.getcwd()
-	os.chdir(self_dir + game_name)
-	import game
-	os.chdir(previous_dir)
+	game = importlib.import_module("games." + game_name + ".game")
+	#Run creating launchers
 	if os.path.isdir(os.getenv("HOME") + "/.local/share/icons") == False:
 		os.makedirs(os.getenv("HOME") + "/.local/share/icons")
 	if os.path.isdir(os.getenv("HOME") + "/.local/share/applications/") == False:
@@ -106,9 +100,5 @@ def make_launchers(game_name):
 
 def game_info(game_name, info_list):
 	#Import game specific data
-	previous_dir = os.getcwd()
-	os.chdir(self_dir + game_name)
-	import game
-	os.chdir(previous_dir)
-	#Game info still needs to be done
-	return game.info(info_list)
+	game_module = importlib.import_module("games." + game_name + ".game")
+	return game_module.info(info_list)

@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import sys, os, _thread, time, urllib
+import sys, os, _thread, time, urllib, importlib
 from subprocess import check_output, call
 
 from PyQt5.QtCore import *
@@ -41,7 +41,7 @@ class Window(QWidget):
 		self.game_r_list = []
 		for game_position in game_list:
 			self.game_r_list.append(QRadioButton(get_game_desc(game_position)))
-			self.game_r_list[0].toggled.connect(self.game_radiobutton_effect)
+			self.game_r_list[-1].toggled.connect(self.game_radiobutton_effect)
 		choose_data_box = QGroupBox("Choose digital distribution platform to download game data:")
 		self.r0a = QRadioButton("Only engine update")
 		self.r0a.setEnabled(False)
@@ -140,9 +140,8 @@ class Window(QWidget):
 				print(self.playing_game)
 				rbutton = game_fname
 			r_list_nr += 1
-		sys.path.insert(0, self_dir + "games/" + self.playing_game)
-		from game import launcher_cmd_list
-		sys.path.remove(self_dir + "games/" + self.clicked_game)
+		game_module = importlib.import_module("games." + self.playing_game + ".game")
+		launcher_cmd_list = game_module.launcher_cmd_list
 		if len(launcher_cmd_list) > 1:
 			print("Starting Ask Window to choose launcher")
 			l_nr = self.ask_window_start(2)
@@ -237,7 +236,9 @@ Terminal=false"""
 		os.chmod(os.getenv("HOME") + "/.local/share/applications/recultis.desktop", 0o755)
 		QMessageBox.information(self, "Message", "Desktop and Menu launchers for Recultis are now successfully created.")
 	
-	def game_radiobutton_effect(self):
+	def game_radiobutton_effect(self, enabled):
+		if enabled == False:
+			return
 		print("Game selected:")
 		r_list_nr = 0
 		for game_fname in self.game_r_list:
@@ -246,9 +247,10 @@ Terminal=false"""
 				clicked_game_status = game_list[r_list_nr][1]
 				print(self.clicked_game)
 			r_list_nr += 1
-		sys.path.insert(0, self_dir + "games/" + self.clicked_game)
-		from game import description, screenshot_path, steam_link
-		sys.path.remove(self_dir + "games/" + self.clicked_game)
+		game_module = importlib.import_module("games." + self.clicked_game + ".game")
+		description = game_module.description
+		screenshot_path = game_module.screenshot_path
+		steam_link = game_module.steam_link
 		description_pixmap = QPixmap(screenshot_path)
 		self.description_image.setPixmap(description_pixmap)
 		self.description_label.setText(description)
@@ -388,8 +390,6 @@ class SecondThread(QThread):
 		for radio_button in self.radio_list:
 			game_status_description = update_check.start(game_list[game_nr][0], self_dir)
 			game_list[game_nr] = [game_list[game_nr][0], game_status_description]
-			print("Game list looks like:")
-			print(game_list)
 			radio_button.setText(get_game_desc(game_list[game_nr]))
 			if radio_button.isChecked() == True:
 				if game_list[game_nr][1] == 1:
@@ -406,7 +406,7 @@ class SecondThread(QThread):
 					self.install_button.setText("Update")
 					self.uninstall_button.setEnabled(True)
 					self.only_engine_radio.setEnabled(True)
-				elif game_list[game_nr][1] == 2:
+				elif game_list[game_nr][1] == 0:
 					self.play_button.setEnabled(False)
 					self.launcher_button.setEnabled(False)
 					self.install_button.setEnabled(True)
@@ -414,6 +414,8 @@ class SecondThread(QThread):
 					self.uninstall_button.setEnabled(False)
 					self.only_engine_radio.setEnabled(False)
 			game_nr += 1
+		print("Game list looks like:")
+		print(game_list)
 	
 	def update_progress_bar(self):
 		global game_list
@@ -476,9 +478,8 @@ class AskWindow(QMainWindow):
 			self.game = parent.playing_game
 			self.title = 'Choose game launcher.'
 			self.MessageLabel = QLabel("Please choose game launcher.", self)
-			sys.path.insert(0, self_dir + "games/" + self.game)
-			from game import launcher_cmd_list
-			sys.path.remove(self_dir + "games/" + self.game)
+			game_module = importlib.import_module("games." + game + ".game")
+			launcher_cmd_list = game_module.launcher_cmd_list
 			self.r_button_list = []
 			for launcher in launcher_cmd_list:
 				self.r_button_list.append(QRadioButton(launcher[0], self))
@@ -523,9 +524,8 @@ class AskWindow(QMainWindow):
 def get_game_desc(info_list):
 	game_fname = info_list[0]
 	status = info_list[1]
-	sys.path.insert(0, self_dir + "games/" + game_fname)
-	from game import full_name
-	sys.path.remove(self_dir + "games/" + game_fname)
+	game_module = importlib.import_module("games." + game_fname + ".game")
+	full_name = game_module.full_name
 	rest_name = ""
 	if status == -1:
 		rest_name = " (Checking for update...)"
