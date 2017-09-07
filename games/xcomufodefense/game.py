@@ -41,11 +41,8 @@ Terminal=false
 """
 launcher_list = [["openxcom.desktop", launcher1_text]]
 
-uninstall_files_list = [os.getenv("HOME") + "/.local/share/icons/" + icon_name]
-for launch_file in launcher_list:
-	uninstall_files_list.append(desk_dir + launch_file[0])
-	uninstall_files_list.append(os.getenv("HOME") + "/.local/share/applications/" + launch_file[0])
-uninstall_dir_list = [install_dir]
+uninstall_files_list = []
+uninstall_dir_list = [os.getenv("HOME") + "/.local/share/openxcom/UFO"]
 
 
 def prepare_engine():

@@ -67,13 +67,21 @@ def uninstall(game_name):
 	#Import game specific data
 	game = importlib.import_module("games." + game_name + ".game")
 	#Run uninstall
+	uninstall_files_list = [os.getenv("HOME") + "/.local/share/icons/" + game.icon_name]
+	for launch_file in game.launcher_list:
+		uninstall_files_list.append(desk_dir + launch_file[0])
+		uninstall_files_list.append(os.getenv("HOME") + "/.local/share/applications/" + launch_file[0])
+	uninstall_dir_list = [game.install_dir]
+	#Add game specific files to uninstall list
+	uninstall_files_list.extend(game.uninstall_files_list)
+	uninstall_dir_list.extend(game.uninstall_dir_list)
 	#We need to add here some kind of sandbox
 	print("Uninstalling files")
-	for u_file in game.uninstall_files_list:
+	for u_file in uninstall_files_list:
 		if os.path.isfile(u_file):
 			os.remove(u_file)
 	print("Uninstalling directories")
-	for u_dir in game.uninstall_dir_list:
+	for u_dir in uninstall_dir_list:
 		if os.path.isdir(u_dir):
 			shutil.rmtree(u_dir)
 
