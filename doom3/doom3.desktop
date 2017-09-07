@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Doom 3 BFG
-Comment=Play Doom 3 BFG
-Exec=bash -c 'cd $HOME/.recultis/doom3/; ./RBDoom3BFG'
-Icon=rbdoom-3-bfg.png
-Categories=Game;
-Terminal=false

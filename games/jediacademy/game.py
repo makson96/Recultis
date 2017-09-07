@@ -36,7 +36,7 @@ Type=Application
 Name=Jedi Knight: Jedi Academy - SinglePlayer
 Comment=Play Jedi Knights Academy
 Exec=""" + launcher1_cmd + """
-Icon=openjk.png
+Icon=""" + icon_name + """
 Categories=Game;
 Terminal=false"""
 launcher2_text = """[Desktop Entry]
@@ -44,12 +44,12 @@ Type=Application
 Name=Jedi Knight: Jedi Academy - MultiPlayer
 Comment=Play Jedi Knights Academy
 Exec=""" + launcher2_cmd + """
-Icon=openjk.png
+Icon=""" + icon_name + """
 Categories=Game;
 Terminal=false"""
 launcher_list = [["openjk_sp.desktop", launcher1_text], ["openjk_mp.desktop", launcher2_text]]
 
-uninstall_files_list = [os.getenv("HOME") + "/.local/share/icons/openjk.png"]
+uninstall_files_list = [os.getenv("HOME") + "/.local/share/icons/" + icon_name]
 for launch_file in launcher_list:
 	uninstall_files_list.append(desk_dir + launch_file[0])
 	uninstall_files_list.append(os.getenv("HOME") + "/.local/share/applications/" + launch_file[0])
