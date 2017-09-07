@@ -209,9 +209,10 @@ class Window(QWidget):
 
 	def autoupdate(self):
 		self.app_staus_label.setText("Recultis status is: Updating. Please wait.")
-		self.ask_window_start(3)
-		QMessageBox.information(self, "Message", "Update complete. Recultis will now turn off. Please start it again to apply patch.")
-		self.close()
+		result = self.ask_window_start(3)
+		if result == "ok":
+			QMessageBox.information(self, "Message", "Update complete. Recultis will now turn off. Please start it again to apply patch.")
+			self.close()
 	
 	def add_launcher(self):
 		launcher_text = """[Desktop Entry]
