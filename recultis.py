@@ -209,9 +209,7 @@ class Window(QWidget):
 
 	def autoupdate(self):
 		self.app_staus_label.setText("Recultis status is: Updating. Please wait.")
-		patch_link_file = open(self_dir + "patch_link.txt", "r")
-		patch_link = patch_link_file.read()
-		update_do.recultis_update_do(self_dir, patch_link)
+		self.ask_window_start(3)
 		QMessageBox.information(self, "Message", "Update complete. Recultis will now turn off. Please start it again to apply patch.")
 		self.close()
 	
@@ -367,7 +365,7 @@ class SecondThread(QThread):
 		v_minor = recultis_version[0:2] + str(int(recultis_version[2]) + 1) + ".0"
 		v_patch = recultis_version[0:4] + str(int(recultis_version[4]) + 1)
 		update_list = [v_major, v_minor, v_patch]
-		status = update_do.recultis_update_check(update_list)
+		status = update_do.recultis_update_check(self_dir, update_list)
 		if status == 2:
 			self.update_button.setEnabled(True)
 			self.status_label.setText("Recultis status is: Updata available")
@@ -445,7 +443,7 @@ class SecondThread(QThread):
 		game_list[game_nr] = [game_list[game_nr][0], 1]
 
 class AskWindow(QMainWindow):
-	#Available reasons: 1 - Steam Guard, 2 - Choose game launcher
+	#Available reasons: 1 - Steam Guard, 2 - Choose game launcher, 3 - Choose app update version
 	
 	reason = 0
 	game = ""
@@ -454,7 +452,7 @@ class AskWindow(QMainWindow):
 	def __init__(self, reason, parent=None):
 		super(AskWindow, self).__init__(parent)
 		self.reason = reason
-		move_offset = 27
+		move_offset = 50
 		if self.reason == 1:
 			self.game = parent.installing_game
 			self.title = 'Steam Guard authentication.'
@@ -475,6 +473,26 @@ class AskWindow(QMainWindow):
 				self.r_button_list.append(QRadioButton(launcher[0], self))
 			self.button = QPushButton('OK', self)
 			self.button.clicked.connect(self.on_click_launcher)
+			for r_button in self.r_button_list:
+				r_button.move(0, move_offset)
+				move_offset = move_offset + 27
+				r_button.resize(400, 30)
+			self.r_button_list[0].setChecked(True)
+		elif self.reason == 3:
+			self.title = 'Choose update version.'
+			self.MessageLabel = QLabel("Choose version of Recultis to which you want to update.\nPlease note that major version updates may break\ncompatibility for older systems.", self)
+			patch_link_file = open(self_dir + "patch_link.txt", "r")
+			self.patch_link_list = []
+			for line in patch_link_file:
+				if not line.strip():
+					pass
+				else:
+					self.patch_link_list.append(line.strip())
+			self.r_button_list = []
+			for link in self.patch_link_list:
+				self.r_button_list.append(QRadioButton("Recultis version " + link[-12:-7], self))
+			self.button = QPushButton('OK', self)
+			self.button.clicked.connect(self.on_click_autoupdate)
 			for r_button in self.r_button_list:
 				r_button.move(0, move_offset)
 				move_offset = move_offset + 27
@@ -508,6 +526,18 @@ class AskWindow(QMainWindow):
 				break
 		print("Launcher choosen")
 		self.result = result
+		self.close()
+		
+	def on_click_autoupdate(self):
+		result = 0
+		for r_button in self.r_button_list:
+			if r_button.isChecked() == False:
+				result += 1
+			else:
+				update_link = self.patch_link_list[result]
+		print("Recultis update version choosen")
+		update_do.recultis_update_do(self_dir, update_link)
+		self.result = "ok"
 		self.close()
 
 app = QApplication(sys.argv)

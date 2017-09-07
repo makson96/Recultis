@@ -79,18 +79,18 @@ def recultis_update_do(self_dir, patch_link):
 	shutil.rmtree(patch_dir)
 	print("Autoupdate complete.")
 
-def recultis_update_check(update_list):
+def recultis_update_check(self_dir, update_list):
+	if os.path.isfile(self_dir + "patch_link.txt"):
+		os.remove(self_dir + "patch_link.txt")
+	status = 1
 	for potential_patch in update_list:
 		try:
 			patch_url = "https://github.com/makson96/Recultis/archive/v" + potential_patch + ".tar.gz"
 			urllib.request.urlopen(patch_url, timeout=1)
-			patch_link_file = open(self_dir + "patch_link.txt", "w")
-			patch_link_file.write(patch_url)
+			patch_link_file = open(self_dir + "patch_link.txt", "a")
+			patch_link_file.write(patch_url + "\n")
 			patch_link_file.close()
-			status = 2
-			return status				
+			status = 2				
 		except urllib.request.URLError:
-				patch_url = ""
-	if patch_url == "":
-		status = 1
-		return status
+				pass
+	return status
