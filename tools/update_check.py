@@ -8,7 +8,7 @@
 import os, urllib.request, importlib
 
 def start(game, self_dir):
-	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games" + game+ "/link.txt"
+	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/" + game+ "/link.txt"
 	#this is legacy link to be removed in recultis 1.2
 	target_url_legacy = "https://raw.githubusercontent.com/makson96/Recultis/master/" + game+ "/link.txt"
 	chosen_game = importlib.import_module(game+".chosen_game")
