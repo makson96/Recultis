@@ -27,32 +27,31 @@ def game_update_desc(info_list):
 	return full_name + rest_name
 
 #This function will return game status and update link if possible.
-def game_update_status(game, self_dir):
-	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/" + game+ "/link.txt"
+def game_update_status(game, self_dir, recultis_dir):
+	link_string = get_link_string(game, self_dir + "games/")
 	from games import installer
 	game_info = installer.game_info(game, ["version"])
 	version = game_info[0]
-	try:
-		data = urllib.request.urlopen(target_url)
-		download_link_new = data.read().decode("utf-8")
-	#If can't get link assume that local link is most recent.
-	except urllib.request.URLError:
-		download_link_new = version
 	if version != "No proper install":
 		status = 1
-		if version != download_link_new:
+		if version != link_string:
 			status = 2
 	else:
 		status = 0
-	#Update link only if needed
-	if version != download_link_new:
-		target_file_path = self_dir + "games/" +game + "/link.txt"
-		target_file = open(target_file_path, "w")
-		target_file.write(download_link_new)
-		target_file.close()
-		print("Game engine link updated.")
 	print(game + " status is " + str(status))
 	return status
+
+def get_link_string(game, self_dir_games):
+	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/" + game+ "/link.txt"
+	try:
+		data = urllib.request.urlopen(target_url)
+		download_link = data.read().decode("utf-8")
+	#If can't get link assume that local link is most recent.
+	except urllib.request.URLError:
+		link_file = open(self_dir_games + game_name +"/link.txt")
+		download_link = link_file.read()
+		link_file.close()
+	return download_link
 
 def recultis_update_do(self_dir, patch_link):
 	print("Starting autoupdate.")
@@ -79,7 +78,11 @@ def recultis_update_do(self_dir, patch_link):
 	shutil.rmtree(patch_dir)
 	print("Autoupdate complete.")
 
-def recultis_update_check(self_dir, update_list):
+def recultis_update_check(self_dir, recultis_version):
+	v_major = str(int(recultis_version[0]) + 1) + ".0.0"
+	v_minor = recultis_version[0:2] + str(int(recultis_version[2]) + 1) + ".0"
+	v_patch = recultis_version[0:4] + str(int(recultis_version[4]) + 1)
+	update_list = [v_major, v_minor, v_patch]
 	if os.path.isfile(self_dir + "patch_link.txt"):
 		os.remove(self_dir + "patch_link.txt")
 	status = 1

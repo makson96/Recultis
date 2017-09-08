@@ -125,9 +125,12 @@ class Window(QWidget):
 		self.setWindowTitle("Recultis " + recultis_version)
 		
 		#After Windows is drawn, lets check status of the games
-		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.playButton, self.launcherButton, self.installButton, self.uninstallButton, self.game_r_list, self.r0a, self.installing_game]
-		self.update_game_app = SecondThread(1, self.second_thread_list)
-		self.update_game_app.start()
+		if os.access(self_dir, os.W_OK):
+			self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.playButton, self.launcherButton, self.installButton, self.uninstallButton, self.game_r_list, self.r0a, self.installing_game]
+			self.update_app_thread = SecondThread(1, self.second_thread_list)
+		else:
+			self.app_staus_label.setText("Recultis status is: Update disabled")
+		self.update_app_thread.start()
 		self.update_game_thread = SecondThread(2, self.second_thread_list)
 		self.update_game_thread.start()
 	
@@ -362,11 +365,7 @@ class SecondThread(QThread):
 			self.install_button.setEnabled(False)
 	
 	def check_app_update(self):
-		v_major = str(int(recultis_version[0]) + 1) + ".0.0"
-		v_minor = recultis_version[0:2] + str(int(recultis_version[2]) + 1) + ".0"
-		v_patch = recultis_version[0:4] + str(int(recultis_version[4]) + 1)
-		update_list = [v_major, v_minor, v_patch]
-		status = update_do.recultis_update_check(self_dir, update_list)
+		status = update_do.recultis_update_check(self_dir, recultis_version)
 		if status == 2:
 			self.update_button.setEnabled(True)
 			self.status_label.setText("Recultis status is: Updata available")
@@ -377,7 +376,7 @@ class SecondThread(QThread):
 		global game_list
 		game_nr = 0
 		for radio_button in self.radio_list:
-			game_status_description = update_do.game_update_status(game_list[game_nr][0], self_dir)
+			game_status_description = update_do.game_update_status(game_list[game_nr][0], self_dir, recultis_dir)
 			game_list[game_nr] = [game_list[game_nr][0], game_status_description]
 			radio_button.setText(update_do.game_update_desc(game_list[game_nr]))
 			if radio_button.isChecked() == True:
