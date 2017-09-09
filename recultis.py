@@ -466,7 +466,7 @@ class AskWindow(QMainWindow):
 			self.game = parent.playing_game
 			self.title = 'Choose game launcher.'
 			self.MessageLabel = QLabel("Please choose game launcher.", self)
-			game_module = importlib.import_module("games." + game + ".game")
+			game_module = importlib.import_module("games." + self.game + ".game")
 			launcher_cmd_list = game_module.launcher_cmd_list
 			self.r_button_list = []
 			for launcher in launcher_cmd_list:
@@ -505,7 +505,10 @@ class AskWindow(QMainWindow):
 		self.setWindowTitle(self.title)
 		self.MessageLabel.move(0,0)
 		self.MessageLabel.resize(self.MessageLabel.minimumSizeHint())
-		self.button.move(150,move_offset + 40)
+		self.button.move(50, move_offset + 40)
+		self.cancel_button = QPushButton('Cancel', self)
+		self.cancel_button.clicked.connect(self.close)
+		self.cancel_button.move(200, move_offset + 40)
 		self.setGeometry(250, 250, 400, move_offset + 90)
 		
 	def on_click_steam_guard(self):
