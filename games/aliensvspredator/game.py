@@ -45,7 +45,7 @@ uninstall_files_list = []
 uninstall_dir_list = []
 
 def prepare_engine():
-	print("prepare engine")
+	print("Preparing game engine")
 	#All content needs to be lowercase
 	for avp_file_or_dir in os.listdir(install_dir):
 		if os.path.isdir(install_dir + avp_file_or_dir) == True:
@@ -60,3 +60,4 @@ def prepare_engine():
 	if os.path.isdir(install_dir + "lib/") == True:
 		shutil.rmtree(install_dir + "lib/")
 	shutil.copytree(recultis_dir + "tmp/avp/lib/", install_dir + "lib/", symlinks=True)
+	print("Game engine ready")

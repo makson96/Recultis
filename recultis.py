@@ -211,6 +211,7 @@ class Window(QWidget):
 		QMessageBox.information(self, "Message", "Game uninstallation complete.")
 
 	def autoupdate(self):
+		print("Starting autopupdate window")
 		self.app_staus_label.setText("Recultis status is: Updating. Please wait.")
 		result = self.ask_window_start(3)
 		if result == "ok":
@@ -218,6 +219,7 @@ class Window(QWidget):
 			self.close()
 	
 	def add_launcher(self):
+		print("Creating Recultis launcher")
 		launcher_text = """[Desktop Entry]
 Type=Application
 Name=Recultis
@@ -289,19 +291,23 @@ Terminal=false"""
 	
 	def r0a_clicked(self, enabled):
 		if enabled:
+			print("No shop radiobutton clicked")
 			self.loginText.setEnabled(False)
 			self.passwordText.setEnabled(False)
 	
 	def r1a_clicked(self, enabled):
 		if enabled:
+			print("Steam shop radiobutton clicked")
 			self.loginText.setEnabled(True)
 			self.passwordText.setEnabled(True)
 
 	def ask_window_start(self, wr_nr):
+		print("Starting ask window with reason: " + str(wr_nr))
 		nw = AskWindow(wr_nr, self)
 		nw.show()
 		while nw.isVisible() == True:
 			app.processEvents()
+		print("ask window finished with the result: " + str(nw.result))
 		return nw.result
 
 class SecondThread(QThread):
@@ -311,6 +317,7 @@ class SecondThread(QThread):
 	steam_warning = pyqtSignal(int)
 
 	def __init__(self, task_nr, widget_list):
+		print("Initializing SecondThread for Qt")
 		QThread.__init__(self)
 		len_widget_list = 9
 		if len(widget_list) != len_widget_list:
@@ -353,7 +360,8 @@ class SecondThread(QThread):
 			print("SecondThread: Progress bar loop finished")
 		else:
 			print("SecondThread error: wrong task_nr.")
-			return 0		
+			return 0
+		print("SecondThread: Finished")		
 					
 	def check_net_connection(self):
 		try:
@@ -450,10 +458,12 @@ class AskWindow(QMainWindow):
 	result = "no"
 	
 	def __init__(self, reason, parent=None):
+		print("Initializing AskWindow")
 		super(AskWindow, self).__init__(parent)
 		self.reason = reason
 		move_offset = 50
 		if self.reason == 1:
+			print("Reason: " + str(self.reason) + " - Steam Guard authentication")
 			self.game = parent.installing_game
 			self.title = 'Steam Guard authentication.'
 			self.MessageLabel = QLabel("Please provide Steam Guard code, which was just send via email.", self)
@@ -463,6 +473,7 @@ class AskWindow(QMainWindow):
 			self.textbox.move(0,move_offset)
 			self.textbox.resize(400, 30)
 		elif self.reason == 2:
+			print("Reason: " + str(self.reason) + " - Choosing game launcher")
 			self.game = parent.playing_game
 			self.title = 'Choose game launcher.'
 			self.MessageLabel = QLabel("Please choose game launcher.", self)
@@ -479,6 +490,7 @@ class AskWindow(QMainWindow):
 				r_button.resize(400, 30)
 			self.r_button_list[0].setChecked(True)
 		elif self.reason == 3:
+			print("Reason: " + str(self.reason) + " - Choosing update version")
 			self.title = 'Choose update version.'
 			self.MessageLabel = QLabel("Choose version of Recultis to which you want to update.\nPlease note that major version updates may break\ncompatibility for older systems.", self)
 			patch_link_file = open(self_dir + "patch_link.txt", "r")
@@ -501,7 +513,6 @@ class AskWindow(QMainWindow):
 		else:
 			print("Error, wrong reason nr: " + str(self.reason))
 			return 0
-		print("Warning reason nr: " + str(self.reason))
 		self.setWindowTitle(self.title)
 		self.MessageLabel.move(0,0)
 		self.MessageLabel.resize(self.MessageLabel.minimumSizeHint())
@@ -512,7 +523,7 @@ class AskWindow(QMainWindow):
 		self.setGeometry(250, 250, 400, move_offset + 90)
 		
 	def on_click_steam_guard(self):
-		print("Steam Guard Ley provided")
+		print("Steam Guard Key provided")
 		steam_guard_key = self.textbox.text()
 		steam_guard_key_file = open(recultis_dir + "steam_guard_key.txt", "w")
 		steam_guard_key_file.write(steam_guard_key)

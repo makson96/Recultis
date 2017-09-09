@@ -45,7 +45,7 @@ uninstall_files_list = []
 uninstall_dir_list = [os.getenv("HOME") + "/.local/share/openxcom/UFO"]
 
 def prepare_engine():
-	print("prepare engine")
+	print("Preparing game engine")
 	if os.path.isdir(install_dir + "bin") == True:
 		shutil.rmtree(install_dir + "bin")
 	shutil.copytree(recultis_dir + "tmp/openxcom/bin", install_dir + "bin/", symlinks=True)
@@ -68,3 +68,4 @@ def prepare_engine():
 		elif os.path.isdir(local_data_dir + xdir):
 			shutil.rmtree(local_data_dir + xdir)
 		os.symlink(install_dir + "XCOM/" + xdir, local_data_dir + xdir)
+	print("Game engine ready")

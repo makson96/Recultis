@@ -42,15 +42,18 @@ def game_update_status(game, self_dir, recultis_dir):
 	return status
 
 def get_link_string(game, self_dir_games):
+	print("Getting game engine download link")
 	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/" + game+ "/link.txt"
 	try:
 		data = urllib.request.urlopen(target_url)
 		download_link = data.read().decode("utf-8")
-	#If can't get link assume that local link is most recent.
 	except urllib.request.URLError:
+		print("Can't get game engine link from the server. Using local copy.")
 		link_file = open(self_dir_games + game_name +"/link.txt")
 		download_link = link_file.read()
 		link_file.close()
+	print("Downalod game engine link is:")
+	print(download_link)
 	return download_link
 
 def recultis_update_do(self_dir, patch_link):
@@ -79,6 +82,7 @@ def recultis_update_do(self_dir, patch_link):
 	print("Autoupdate complete.")
 
 def recultis_update_check(self_dir, recultis_version):
+	print("Checking if Recultis update is available")
 	v_major = str(int(recultis_version[0]) + 1) + ".0.0"
 	v_minor = recultis_version[0:2] + str(int(recultis_version[2]) + 1) + ".0"
 	v_patch = recultis_version[0:4] + str(int(recultis_version[4]) + 1)
@@ -93,7 +97,10 @@ def recultis_update_check(self_dir, recultis_version):
 			patch_link_file = open(self_dir + "patch_link.txt", "a")
 			patch_link_file.write(patch_url + "\n")
 			patch_link_file.close()
-			status = 2				
+			status = 2		
+			print("Found following Recultis patch:")
+			print(patch_url)		
 		except urllib.request.URLError:
 				pass
+	print("Return Recultis update status: " + str(status))
 	return status

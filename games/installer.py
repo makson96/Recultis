@@ -14,6 +14,7 @@ desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3] + "/"
 
 #List available games
 def get_game_list():
+	print("Starting preparing game list")
 	forbidden_dir = ["__pycache__"]
 	all_dirs_and_files_list = os.listdir(self_dir)
 	game_list = []
@@ -23,7 +24,7 @@ def get_game_list():
 				#Status -1 Checking for update...
 				game_list.append([file_or_dir, -1])
 	game_list = sorted(game_list)
-	print("list of all supported games:")
+	print("List of all supported games:")
 	print(game_list)
 	return game_list
 
@@ -67,6 +68,7 @@ def uninstall(game_name):
 	#Import game specific data
 	game = importlib.import_module("games." + game_name + ".game")
 	#Run uninstall
+	print("Preparing list of files and directories to uninstall")
 	uninstall_files_list = [os.getenv("HOME") + "/.local/share/icons/" + game.icon_name]
 	for launch_file in game.launcher_list:
 		uninstall_files_list.append(desk_dir + launch_file[0])
@@ -76,11 +78,13 @@ def uninstall(game_name):
 	uninstall_files_list.extend(game.uninstall_files_list)
 	uninstall_dir_list.extend(game.uninstall_dir_list)
 	#We need to add here some kind of sandbox
-	print("Uninstalling files")
+	print("Uninstalling files:")
+	print(uninstall_files_list)
 	for u_file in uninstall_files_list:
 		if os.path.isfile(u_file):
 			os.remove(u_file)
-	print("Uninstalling directories")
+	print("Uninstalling directories:")
+	print(uninstall_dir_list)
 	for u_dir in uninstall_dir_list:
 		if os.path.isdir(u_dir):
 			shutil.rmtree(u_dir)
@@ -110,6 +114,8 @@ def game_info(game_name, requested_list):
 	#Import game specific data
 	game_module = importlib.import_module("games." + game_name + ".game")
 	#Run info gathering
+	print("Gathering " + game_name + " info about:")
+	print(requested_list)
 	if os.path.isfile(game_module.install_dir + "/version_link.txt"):
 		version_file = open(game_module.install_dir + "/version_link.txt")
 		version = version_file.read()
@@ -128,4 +134,6 @@ def game_info(game_name, requested_list):
 			return_list.append(game.install_dir)
 		elif requested_item == "version":
 			return_list.append(version)
+	print("Returning following game info:")
+	print(return_list)
 	return return_list

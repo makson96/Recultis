@@ -59,7 +59,7 @@ uninstall_files_list.extend(uninstall_files_legacy)
 
 def prepare_engine():
 	#Here is all game specific code
-	print("Prepare engine")
+	print("Preparing game engine")
 	for binary in next(os.walk(recultis_dir + "tmp/JediAcademy/"))[2]:
 		shutil.copy(recultis_dir + "tmp/JediAcademy/" + binary, install_dir + "GameData/" + binary)
 	for directory in next(os.walk(recultis_dir + "tmp/JediAcademy/"))[1]:
@@ -72,3 +72,4 @@ def prepare_engine():
 				os.makedirs(install_dir + "GameData/" + directory)
 			for binary in next(os.walk(recultis_dir + "tmp/JediAcademy/" + directory))[2]:
 				shutil.copy(os.path.join(recultis_dir, "tmp/JediAcademy/", directory, binary), os.path.join(install_dir, "GameData/", directory, binary))
+	print("Game engine ready")

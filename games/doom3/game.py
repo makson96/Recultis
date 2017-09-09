@@ -45,7 +45,7 @@ uninstall_files_list = []
 uninstall_dir_list = []
 
 def prepare_engine():
-	print("prepare engine")
+	print("Prepare game engine")
 	try:
 		os.remove(install_dir + "RBDoom3BFG")
 		shutil.rmtree(install_dir + "lib")
@@ -53,3 +53,4 @@ def prepare_engine():
 		pass
 	shutil.copy(recultis_dir + "tmp/rbdoom-3-bfg/RBDoom3BFG", install_dir + "RBDoom3BFG")
 	shutil.copytree(recultis_dir + "tmp/rbdoom-3-bfg/lib", install_dir + "lib", symlinks=True)
+	print("Game engine ready")

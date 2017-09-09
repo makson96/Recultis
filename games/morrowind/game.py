@@ -45,7 +45,7 @@ uninstall_files_list = [os.getenv("HOME") + "/.config/openmw/openmw.cfg"]
 uninstall_dir_list = []
 
 def prepare_engine():
-	print("prepare engine")
+	print("Preparing game engine")
 	for directory in next(os.walk(recultis_dir + "tmp/openmw-makson/"))[1]:
 		try:
 			shutil.rmtree(install_dir + directory)
@@ -60,3 +60,4 @@ def prepare_engine():
 		openmw_cfg=open(os.getenv("HOME") + "/.config/openmw/openmw.cfg", "a")
 		openmw_cfg.write('\ndata="' + install_dir + 'Data Files"')
 		openmw_cfg.close()
+	print("Game engine ready")

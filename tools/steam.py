@@ -9,6 +9,7 @@ import os, tarfile, urllib.request, time, shutil
 from subprocess import Popen, PIPE
 
 def start(login, password, recultis_dir, s_appid, game_dir):
+	print("Starting SteamCMD procedure")
 	os.chdir(recultis_dir)
 	if login == "" or password == "":
 		steam_log_file = open("steam_log.txt", "w")
@@ -38,6 +39,7 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 	return steam_error
 
 def steamcmd_install(recultis_dir):
+	print("Installing SteamCMD")
 	if os.path.isfile(recultis_dir+"steamcmd.sh") == False:
 		urllib.request.urlretrieve("http://media.steampowered.com/client/steamcmd_linux.tar.gz", recultis_dir + "steamcmd_linux.tar.gz")
 		tar = tarfile.open(recultis_dir + "steamcmd_linux.tar.gz")
@@ -52,9 +54,9 @@ def get_last_log_line():
 	return steam_last_line
 
 def steam_guard(recultis_dir):
-	print('Steam Guard')
 	while os.path.isfile(recultis_dir + "steam_guard_key.txt") == False:
 		time.sleep(2)
+	print('Steam Guard Key detected. Verifying...')
 	steam_guard_file = open(recultis_dir + "steam_guard_key.txt", "r")
 	steam_guard_code = steam_guard_file.readline()
 	steam_guard_file.close()
@@ -97,6 +99,8 @@ def run(login, password, recultis_dir, s_appid, game_dir):
 	return rc
 
 def steamcmd_reinstall(recultis_dir):
+	print("Reinstalling SteamCMD")
+	print("Removing SteamCMD")
 	if os.path.isfile(recultis_dir+"steam.sh") == True:
 		os.remove(recultis_dir+"steam.sh")
 	if os.path.isfile(recultis_dir+"steamcmd.sh") == True:
