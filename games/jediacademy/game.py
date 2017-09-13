@@ -23,6 +23,7 @@ project. To run the game by Recultis, you need to have it in your Steam
 Library.
 """
 
+shops = ["steam"]
 s_appid = "6020"
 steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
 screenshot_path = self_dir + "../../assets/html/openjk-screen.png"

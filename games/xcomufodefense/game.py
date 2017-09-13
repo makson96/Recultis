@@ -23,6 +23,7 @@ and multidimensional strategy.
 
 """
 
+shops = ["steam"]
 s_appid = "7760"
 steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
 screenshot_path = self_dir + "../../assets/html/openxcom-screen.png"

@@ -23,6 +23,7 @@ is better than ever before. Recultis uses RBDOOM-3-BFG flavor of the
 engine and requires game to be present in your Steam Library.
 """
 
+shops = ["steam"]
 s_appid = "208200"
 steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
 screenshot_path = self_dir + "../../assets/html/rbdoom3-screen.png"

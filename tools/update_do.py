@@ -49,7 +49,7 @@ def get_link_string(game, self_dir_games):
 		download_link = data.read().decode("utf-8")
 	except urllib.request.URLError:
 		print("Can't get game engine link from the server. Using local copy.")
-		link_file = open(self_dir_games + game_name +"/link.txt")
+		link_file = open(self_dir_games + game +"/link.txt")
 		download_link = link_file.read()
 		link_file.close()
 	print("Downalod game engine link is:")

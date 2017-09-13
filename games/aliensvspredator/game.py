@@ -23,6 +23,7 @@ Predator with, masking suit and hunting weapons.
 Important shortcuts: ALT-ENTER for fullscreen; CTRL-G for mouse grab.
 """
 
+shops = ["steam"]
 s_appid = "3730"
 steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
 screenshot_path = self_dir + "../../assets/html/avp-screen.png"

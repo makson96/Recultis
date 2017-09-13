@@ -254,10 +254,12 @@ Terminal=false"""
 		description = game_module.description
 		screenshot_path = game_module.screenshot_path
 		steam_link = game_module.steam_link
+		supported_shops = game_module.shops
 		description_pixmap = QPixmap(screenshot_path)
 		self.description_image.setPixmap(description_pixmap)
 		self.description_label.setText(description)
 		self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
+		#This should be refactored. Enabled radiobuttons should depend on supported shops
 		if clicked_game_status == 2:
 			self.r0a.setEnabled(True)
 			self.playButton.setEnabled(True)
@@ -265,6 +267,8 @@ Terminal=false"""
 			self.installButton.setEnabled(True)
 			self.installButton.setText("Update")
 			self.uninstallButton.setEnabled(True)
+		elif "none" in supported_shops:
+			self.r0a.setEnabled(True)
 		elif self.r0a.isChecked() == True:
 			self.r1a.setChecked(True)
 			self.r0a.setEnabled(False)

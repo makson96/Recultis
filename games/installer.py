@@ -114,8 +114,6 @@ def game_info(game_name, requested_list):
 	#Import game specific data
 	game_module = importlib.import_module("games." + game_name + ".game")
 	#Run info gathering
-	print("Gathering " + game_name + " info about:")
-	print(requested_list)
 	if os.path.isfile(game_module.install_dir + "/version_link.txt"):
 		version_file = open(game_module.install_dir + "/version_link.txt")
 		version = version_file.read()
@@ -134,6 +132,4 @@ def game_info(game_name, requested_list):
 			return_list.append(game.install_dir)
 		elif requested_item == "version":
 			return_list.append(version)
-	print("Returning following game info:")
-	print(return_list)
 	return return_list
