@@ -24,7 +24,6 @@ description = """This will be Red Alert description.
 """
 
 shops = ["none"]
-steam_link =  "non_needed"
 screenshot_path = self_dir + "../../assets/html/openra-ra-screen.png"
 icon_name="openra-ra.png"
 

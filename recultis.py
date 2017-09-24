@@ -69,8 +69,8 @@ class Window(QWidget):
 		#Default game selection
 		self.description_image = QLabel() 
 		self.description_label = QLabel()
-		self.description_steam_link = QLabel()
-		self.description_steam_link.setOpenExternalLinks(True)
+		self.description_shop_link = QLabel()
+		self.description_shop_link.setOpenExternalLinks(True)
 		self.game_r_list[0].setChecked(True)
 		
 		vbox1 = QVBoxLayout()
@@ -110,7 +110,7 @@ class Window(QWidget):
 		vbox1.addLayout(hbox2)
 		vbox2.addWidget(self.description_image)
 		vbox2.addWidget(self.description_label)
-		vbox2.addWidget(self.description_steam_link)
+		vbox2.addWidget(self.description_shop_link)
 		hbox0.addLayout(vbox1)
 		hbox0.addLayout(vbox2)
 		
@@ -254,12 +254,10 @@ Terminal=false"""
 		game_module = importlib.import_module("games." + self.clicked_game + ".game")
 		description = game_module.description
 		screenshot_path = game_module.screenshot_path
-		steam_link = game_module.steam_link
 		supported_shops = game_module.shops
 		description_pixmap = QPixmap(screenshot_path)
 		self.description_image.setPixmap(description_pixmap)
 		self.description_label.setText(description)
-		self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
 		#Set correct radiobuttons enabled depending on available shops
 		if ("none" in supported_shops) or (clicked_game_status == 2):
 			self.r0a.setEnabled(True)
@@ -277,6 +275,16 @@ Terminal=false"""
 					if shop_button2.isEnabled() == True:
 						shop_button2.setChecked(True)
 						break
+		#Display proper link to the shop
+		shop_nr = 0
+		for shop_button in self.shop_r_list:
+			if shop_button.isChecked() == True:
+				if shop_nr == 0:
+					self.description_shop_link.setText("")
+				elif shop_nr == 1:
+					steam_link = game_module.steam_link
+					self.description_shop_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
+			shop_nr += 1
 		#Adjust available buttons depending on game status
 		if clicked_game_status == 0 or clicked_game_status == -1:
 			self.playButton.setEnabled(False)
@@ -308,12 +316,16 @@ Terminal=false"""
 			print("No shop radiobutton clicked")
 			self.loginText.setEnabled(False)
 			self.passwordText.setEnabled(False)
+			self.description_shop_link.setText("")
 	
 	def r1a_clicked(self, enabled):
 		if enabled:
 			print("Steam shop radiobutton clicked")
 			self.loginText.setEnabled(True)
 			self.passwordText.setEnabled(True)
+			game_module = importlib.import_module("games." + self.clicked_game + ".game")
+			steam_link = game_module.steam_link
+			self.description_shop_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
 
 	def ask_window_start(self, wr_nr):
 		print("Starting ask window with reason: " + str(wr_nr))
