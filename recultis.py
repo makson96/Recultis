@@ -271,8 +271,6 @@ Terminal=false"""
 			self.r1a.setEnabled(False)
 		#Change clicked radiobutton to enabled one if selected is disabled
 		for shop_button in self.shop_r_list:
-			#print(shop_button.isChecked)
-			#print(shop_button.isEnabled)
 			if (shop_button.isChecked() == True) and (shop_button.isEnabled() == False):
 				shop_button.setChecked(False)
 				for shop_button2 in self.shop_r_list:
