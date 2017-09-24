@@ -43,12 +43,13 @@ class Window(QWidget):
 			self.game_r_list.append(QRadioButton(update_do.game_update_desc(game_position)))
 			self.game_r_list[-1].toggled.connect(self.game_radiobutton_effect)
 		choose_data_box = QGroupBox("Choose digital distribution platform to download game data:")
-		self.r0a = QRadioButton("Only engine update")
+		self.r0a = QRadioButton("None needed")
 		self.r0a.setEnabled(False)
 		self.r0a.toggled.connect(self.r0a_clicked)
 		self.r1a = QRadioButton("Steam")
 		self.r1a.setChecked(True)
 		self.r1a.toggled.connect(self.r1a_clicked)
+		self.shop_r_list = [self.r0a, self.r1a]
 		loginLabel = QLabel("Login:")
 		self.loginText = QLineEdit()
 		passwordLabel = QLabel("Password:")
@@ -259,21 +260,26 @@ Terminal=false"""
 		self.description_image.setPixmap(description_pixmap)
 		self.description_label.setText(description)
 		self.description_steam_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
-		#This should be refactored. Enabled radiobuttons should depend on supported shops
-		if clicked_game_status == 2:
+		#Set correct radiobuttons enabled depending on available shops
+		if ("none" in supported_shops) or (clicked_game_status == 2):
 			self.r0a.setEnabled(True)
-			self.playButton.setEnabled(True)
-			self.launcherButton.setEnabled(True)
-			self.installButton.setEnabled(True)
-			self.installButton.setText("Update")
-			self.uninstallButton.setEnabled(True)
-		elif "none" in supported_shops:
-			self.r0a.setEnabled(True)
-		elif self.r0a.isChecked() == True:
-			self.r1a.setChecked(True)
-			self.r0a.setEnabled(False)
 		else:
 			self.r0a.setEnabled(False)
+		if "steam" in supported_shops:
+			self.r1a.setEnabled(True)
+		else:
+			self.r1a.setEnabled(False)
+		#Change clicked radiobutton to enabled one if selected is disabled
+		for shop_button in self.shop_r_list:
+			#print(shop_button.isChecked)
+			#print(shop_button.isEnabled)
+			if (shop_button.isChecked() == True) and (shop_button.isEnabled() == False):
+				shop_button.setChecked(False)
+				for shop_button2 in self.shop_r_list:
+					if shop_button2.isEnabled() == True:
+						shop_button2.setChecked(True)
+						break
+		#Adjust available buttons depending on game status
 		if clicked_game_status == 0 or clicked_game_status == -1:
 			self.playButton.setEnabled(False)
 			self.launcherButton.setEnabled(False)
@@ -286,12 +292,18 @@ Terminal=false"""
 			self.installButton.setEnabled(True)
 			self.installButton.setText("Install")
 			self.uninstallButton.setEnabled(True)
-		for game_button in self.radio_list:
-			if clicked_game_status == 3:
-				self.playButton.setEnabled(False)
-				self.launcherButton.setEnabled(False)
-				self.uninstallButton.setEnabled(False)
-				self.installButton.setEnabled(False)
+		elif clicked_game_status == 2:
+			self.playButton.setEnabled(True)
+			self.launcherButton.setEnabled(True)
+			self.installButton.setEnabled(True)
+			self.installButton.setText("Update")
+			self.uninstallButton.setEnabled(True)
+		elif clicked_game_status == 3:
+			self.playButton.setEnabled(False)
+			self.launcherButton.setEnabled(False)
+			self.installButton.setEnabled(False)
+			self.installButton.setText("Install")
+			self.uninstallButton.setEnabled(False)
 	
 	def r0a_clicked(self, enabled):
 		if enabled:
