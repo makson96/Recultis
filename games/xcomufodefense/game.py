@@ -27,7 +27,8 @@ shops = ["steam"]
 s_appid = "7760"
 steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
 screenshot_path = self_dir + "../../assets/html/openxcom-screen.png"
-icon_name = "openxcom.png"
+icon1_name = "openxcom.png"
+icon_list = [icon1_name]
 
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/xcom/share/openxcom; ../../bin/openxcom'"
 launcher_cmd_list = [["X-COM UFO Defense", launcher1_cmd]]
@@ -36,7 +37,7 @@ Type=Application
 Name=X-COM: UFO Defense
 Comment=Play X-COM: UFO Defense
 Exec=""" + launcher1_cmd + """
-Icon=""" + icon_name + """
+Icon=""" + icon1_name + """
 Categories=Game;
 Terminal=false
 """

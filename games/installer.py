@@ -98,7 +98,8 @@ def make_launchers(game_name):
 	if os.path.isdir(os.getenv("HOME") + "/.local/share/applications/") == False:
 		os.makedirs(os.getenv("HOME") + "/.local/share/applications/")
 	print("Copy icon")
-	shutil.copy(self_dir + game_name + "/" + game.icon_name, os.getenv("HOME") + "/.local/share/icons/" + game.icon_name)
+	for icon_name in game.icon_list:
+		shutil.copy(self_dir + game_name + "/" + icon_name, os.getenv("HOME") + "/.local/share/icons/" + icon_name)
 	print("Make_launchers")
 	for launcher in game.launcher_list:
 		desktop_file = open(desk_dir + launcher[0], "w")

@@ -27,7 +27,8 @@ shops = ["steam"]
 s_appid = "208200"
 steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
 screenshot_path = self_dir + "../../assets/html/rbdoom3-screen.png"
-icon_name = "rbdoom-3-bfg.png"
+icon1_name = "rbdoom-3-bfg.png"
+icon_list = [icon1_name]
 
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/doom3/; ./RBDoom3BFG'"
 launcher_cmd_list = [["Doom3 BFG", launcher1_cmd]]
@@ -36,7 +37,7 @@ Type=Application
 Name=Doom 3 BFG
 Comment=Play Doom 3 BFG
 Exec=""" + launcher1_cmd + """
-Icon=""" + icon_name + """
+Icon=""" + icon1_name + """
 Categories=Game;
 Terminal=false
 """

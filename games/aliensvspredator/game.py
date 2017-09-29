@@ -27,7 +27,8 @@ shops = ["steam"]
 s_appid = "3730"
 steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
 screenshot_path = self_dir + "../../assets/html/avp-screen.png"
-icon_name="avp.png"
+icon1_name="avp.png"
+icon_list = [icon1_name]
 
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/AliensVsPredator/; ./avp'"
 launcher_cmd_list = [["Aliens vs Predator", launcher1_cmd]]
@@ -36,7 +37,7 @@ Type=Application
 Name=Aliens vs Predator Classic 2000
 Comment=Play Aliens vs Predator Classic 2000
 Exec=""" + launcher1_cmd + """
-Icon=""" + icon_name + """
+Icon=""" + icon1_name + """
 Categories=Game;
 Terminal=false
 """

@@ -27,7 +27,8 @@ shops = ["steam"]
 s_appid = "22320"
 steam_link =  "http://store.steampowered.com/app/"+s_appid+"/"
 screenshot_path = self_dir + "../../assets/html/openmw-screen.png"
-icon_name = "openmw.png"
+icon1_name = "openmw.png"
+icon_list = [icon1_name]
 
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/morrowind/bin/; OSG_LIBRARY_PATH=$HOME/.recultis/morrowind/lib/osgPlugins-3.4.0 ./openmw'"
 launcher_cmd_list = [["Morrowind", launcher1_cmd]]
@@ -36,7 +37,7 @@ Type=Application
 Name=The Elder Scrolls III: Morrowind
 Comment=Play The Elder Scrolls III: Morrowind
 Exec=""" + launcher1_cmd + """
-Icon=""" + icon_name + """
+Icon=""" + icon1_name + """
 Categories=Game;
 Terminal=false
 """
