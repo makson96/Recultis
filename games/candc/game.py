@@ -14,13 +14,13 @@ install_dir = recultis_dir + "OpenRA/"
 desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3] + "/"
 
 full_name = "Command and Conquer on OpenRA"
-description = """Classic Command and Conquer games are
-one of the best real time strategies
-in the history. OpenRA game engine allows you to
-play following titles from the franchise:
-Tiberian Dawn, Red Alert, Dune 2000,
+description = """Classic Command and Conquer games are one of the best real time
+strategies in the history. OpenRA game engine allows you to play
+following titles from the franchise:
+Tiberian Dawn
+Red Alert
+Dune 2000
 Tiberian Sun (pre-alpha).
-
 """
 
 shops = ["none"]
