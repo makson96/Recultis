@@ -13,9 +13,9 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 	os.chdir(recultis_dir)
 	if login == "" or password == "":
 		steam_log_file = open("steam_log.txt", "w")
-		steam_log_file.write("Steamcmd error. Login or password not provided.")
+		steam_log_file.write("Steamcmd Error. Login or password not provided.\n")
 		steam_log_file.close()
-		print("Steamcmd error. Login or password not provided. try again with correct one.")
+		print("Steamcmd Error. Login or password not provided. try again with correct one.")
 		steam_error = 0
 	else:
 		steamcmd_install(recultis_dir)
