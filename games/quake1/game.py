@@ -49,6 +49,8 @@ def prepare_engine():
 	#Here is all game specific code
 	print("Preparing game engine")
 	shutil.copy(recultis_dir + "tmp/darkplaces/darkplaces-sdl", install_dir + "darkplaces-sdl")
+	if os.path.isdir(install_dir + "lib"):
+		shutil.rmtree(install_dir + "lib")
 	shutil.copytree(recultis_dir + "tmp/darkplaces/lib", install_dir + "lib")
 	if os.path.os.path.islink(install_dir + "id1") == False and os.path.isdir(install_dir + "id1") == False and os.path.isfile(install_dir + "id1") == False:
 		if os.path.isdir(install_dir + "Id1") == True:
