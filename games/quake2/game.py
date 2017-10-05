@@ -14,13 +14,13 @@ install_dir = recultis_dir + "Quake2/"
 desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3] + "/"
 
 full_name = "Quake 2 on Yamagi Quake II engine"
-description = """This will be description of Quake 2 game.
-
-
-
-
-
-
+description = """Quake II is the successor of great protagonist. It introduced better
+graphic, new weapons, enemies and amazing multiplayer. The game is
+great improvement to the original. It is first person shooter which was
+most advanced game of its times. Original engine of the game was
+open-sourced and is now developed under the project Yamagi Quake II.
+Thanks to that we can all play this game with tons of improvements
+and using modern technologies.
 """
 
 shops = ["steam"]

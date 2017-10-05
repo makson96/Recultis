@@ -14,13 +14,13 @@ install_dir = recultis_dir + "Quake1/"
 desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3] + "/"
 
 full_name = "Quake on darkplaces engine"
-description = """This will be description of Quake game.
-
-
-
-
-
-
+description = """Classic Quake is one of the firs game ever, which used OpenGL for 3D
+graphic. It is pioneer which started popularization of this portable API.
+Quake is dark theme first person shooter, successor of Doom series.
+You walk in a maze full of monsters and kill them with multiple cool
+weapons. Original source code of Quake was open-sourced and since 
+then has been developed under Darkplaces project. Thanks to that, you
+can now play this game natively on Linux, using modern technologies.
 """
 
 shops = ["steam"]
