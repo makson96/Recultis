@@ -467,9 +467,10 @@ class SecondThread(QThread):
 				game_nr += 1
 		print("Game list looks like:")
 		print(game_list)
-		self.play_button.setEnabled(False)
-		self.install_button.setEnabled(False)
-		self.uninstall_button.setEnabled(False)
+		for push_button in self.push_buttons_list:
+			push_button.setEnabled(False)
+			#Workaround bug, when enabled buttons sometimes are not returning to black color
+			push_button.setStyleSheet('QPushButton {color: gray}')
 		time.sleep(0.5)
 		percent = 0
 		while percent != 100:
