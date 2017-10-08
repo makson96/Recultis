@@ -25,7 +25,8 @@ game_list = installer.get_game_list()
 
 class Window(QWidget):
 	
-	radio_list = []
+	game_r_list = []
+	push_buttons_list = []
 	installing_game = "" #This will track which game name is currently installed
 	clicked_game = "" #This will track which game name is currently clicked
 	playing_game = "" #This will track which game name is currently playing
@@ -38,7 +39,6 @@ class Window(QWidget):
 		self.app_updateButton.setEnabled(False)
 		self.app_create_launcher = QPushButton("Add Desktop Launcher")
 		choose_game_box = QGroupBox("Choose the game to install:")
-		self.game_r_list = []
 		for game_position in game_list:
 			self.game_r_list.append(QRadioButton(update_do.game_update_desc(game_position)))
 			self.game_r_list[-1].toggled.connect(self.game_radiobutton_effect)
@@ -126,8 +126,10 @@ class Window(QWidget):
 		self.setWindowTitle("Recultis " + recultis_version)
 		
 		#After Windows is drawn, lets check status of the games
+		self.push_buttons_list = [self.playButton, self.launcherButton, self.installButton, self.uninstallButton]
+		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.push_buttons_list, self.game_r_list, self.r0a, self.installing_game]
+		#Don't allow to update Recultis if can't write to its directory.
 		if os.access(self_dir, os.W_OK):
-			self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.playButton, self.launcherButton, self.installButton, self.uninstallButton, self.game_r_list, self.r0a, self.installing_game]
 			self.update_app_thread = SecondThread(1, self.second_thread_list)
 		else:
 			self.app_staus_label.setText("Recultis status is: Update disabled")
@@ -310,6 +312,13 @@ Terminal=false"""
 			self.installButton.setEnabled(False)
 			self.installButton.setText("Install")
 			self.uninstallButton.setEnabled(False)
+		#Workaround bug, when enabled buttons sometimes are not returning to black color
+		for push_button in self.push_buttons_list:
+			if push_button.isEnabled():
+				push_button.setStyleSheet('QPushButton {color: black}')
+			else:
+				push_button.setStyleSheet('QPushButton {color: gray}')
+		print("Game list looks like:")
 	
 	def r0a_clicked(self, enabled):
 		if enabled:
@@ -345,19 +354,20 @@ class SecondThread(QThread):
 	def __init__(self, task_nr, widget_list):
 		print("Initializing SecondThread for Qt")
 		QThread.__init__(self)
-		len_widget_list = 9
+		len_widget_list = 6
 		if len(widget_list) != len_widget_list:
 			print("SecondThread error: widget list for has wrong size. Should be: " + str(len_widget_list) + " ,but is: " + str(len(widget_list)))
 			return 0
 		self.status_label = widget_list[0]
 		self.update_button = widget_list[1]
-		self.play_button = widget_list[2]
-		self.launcher_button = widget_list[3]
-		self.install_button = widget_list[4]
-		self.uninstall_button = widget_list[5]
-		self.radio_list = widget_list[6]
-		self.only_engine_radio = widget_list[7]
-		self.installing_game = widget_list[8]
+		self.push_buttons_list = widget_list[2]
+		self.play_button = widget_list[2][0]
+		self.launcher_button = widget_list[2][1]
+		self.install_button = widget_list[2][2]
+		self.uninstall_button = widget_list[2][3]
+		self.radio_list = widget_list[3]
+		self.only_engine_radio = widget_list[4]
+		self.installing_game = widget_list[5]
 		self.connection = 1
 		self.task_nr = task_nr
 
@@ -436,6 +446,12 @@ class SecondThread(QThread):
 					self.uninstall_button.setEnabled(False)
 					self.only_engine_radio.setEnabled(False)
 			game_nr += 1
+		#Workaround bug, when enabled buttons sometimes are not returning to black color
+		for push_button in self.push_buttons_list:
+			if push_button.isEnabled():
+				push_button.setStyleSheet('QPushButton {color: black}')
+			else:
+				push_button.setStyleSheet('QPushButton {color: gray}')
 		print("Game list looks like:")
 		print(game_list)
 	
