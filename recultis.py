@@ -14,7 +14,7 @@ from PyQt5.QtGui import *
 
 from tools import update_check, status
 
-recultis_version = "1.1.2"
+recultis_version = "1.1.3pre"
 
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 recultis_dir = os.getenv("HOME") + "/.recultis/"
