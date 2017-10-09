@@ -1,1 +1,1 @@
-https://launchpad.net/~makson96/+archive/ubuntu/free-engine/+files/openra_0.0.0+git20171008-trusty2_amd64.deb
+https://launchpad.net/~makson96/+archive/ubuntu/free-engine/+files/openra_0.0.0+git20171009-trusty1_amd64.deb
