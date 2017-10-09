@@ -40,21 +40,24 @@ else:
 	print("ar not found")
 del unpack_deb
 #32 bit libc and stdlic++
-os.system("ldconfig -p | grep libc.so > error_file.txt")
+ldconfig_command = "ldconfig"
+if os.path.isfile("/sbin/ldconfig"):
+	ldconfig_command = "/sbin/ldconfig"
+os.system(ldconfig_command + " -p | grep libc.so > error_file.txt")
 if sum(1 for line in open('error_file.txt')) >= 2:
 	print("32 bit libc found")
 	dep_32bit_libc = True
 else:
 	print("32 bit libc not found")
 	dep_32bit_libc = False
-os.system("ldconfig -p | grep libstdc++.so > error_file.txt")
+os.system(ldconfig_command + " -p | grep libstdc++.so > error_file.txt")
 if sum(1 for line in open('error_file.txt')) >= 2:
 	print("32 bit libstdc++ found")
 	dep_32bit_libstd = True
 else:
 	print("32 bit libstdc++ not found")
 	dep_32bit_libstd = False
-os.system("ldconfig -p | grep libgcc_s.so > error_file.txt")
+os.system(ldconfig_command + " -p | grep libgcc_s.so > error_file.txt")
 if sum(1 for line in open('error_file.txt')) >= 2:
 	print("32 bit libgcc_s found")
 	dep_32bit_libgcc = True
