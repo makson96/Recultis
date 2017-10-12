@@ -86,13 +86,13 @@ def prepare_engine():
 	ldconfig_command = "ldconfig"
 	if os.path.isfile("/sbin/ldconfig"):
 		ldconfig_command = "/sbin/ldconfig"
-	os.system(ldconfig_command + " -p | grep libc.so > libc_location.txt")
-	with open("libc_location.txt") as f:
+	os.system(ldconfig_command + " -p | grep libc.so > " + recultis_dir + "libc_location.txt")
+	with open(recultis_dir + "libc_location.txt") as f:
 		for line in f:
 			if "64" in line:
 				libc_location = line.split(" => ")[1].rstrip()
 	if os.path.islink(install_dir + "lib/libc.so"):
 		os.unlink(install_dir + "lib/libc.so")
 	os.symlink(libc_location, install_dir + "lib/libc.so")
-	os.remove("libc_location.txt")
+	os.remove(recultis_dir + "libc_location.txt")
 	print("Game engine ready")

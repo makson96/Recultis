@@ -15,6 +15,11 @@ if os.path.isfile(os.getenv("HOME") + "/.local/share/icons/recultis.png") == Fal
 	print("Prepare Recultis launcher icon.")
 	shutil.copy(os.path.dirname(os.path.abspath(__file__)) + "/assets/icon.png", os.getenv("HOME") + "/.local/share/icons/recultis.png")
 
+#Create ~./recultis directory
+recultis_dir = os.getenv("HOME") + "/.recultis/"
+if os.path.isdir(recultis_dir) == False:
+	os.makedirs(recultis_dir)
+
 #Check for dependencies
 #Python3 PyQt5
 print("Checking dependencies")
@@ -40,25 +45,26 @@ else:
 	print("ar not found")
 del unpack_deb
 #32 bit libc and stdlic++
+if os.path.isdir(""
 ldconfig_command = "ldconfig"
 if os.path.isfile("/sbin/ldconfig"):
 	ldconfig_command = "/sbin/ldconfig"
-os.system(ldconfig_command + " -p | grep libc.so > error_file.txt")
+os.system(ldconfig_command + " -p | grep libc.so > " + recultis_dir + "error_file.txt")
 if sum(1 for line in open('error_file.txt')) >= 2:
 	print("32 bit libc found")
 	dep_32bit_libc = True
 else:
 	print("32 bit libc not found")
 	dep_32bit_libc = False
-os.system(ldconfig_command + " -p | grep libstdc++.so > error_file.txt")
+os.system(ldconfig_command + " -p | grep libstdc++.so > " + recultis_dir + "error_file.txt")
 if sum(1 for line in open('error_file.txt')) >= 2:
 	print("32 bit libstdc++ found")
 	dep_32bit_libstd = True
 else:
 	print("32 bit libstdc++ not found")
 	dep_32bit_libstd = False
-os.system(ldconfig_command + " -p | grep libgcc_s.so > error_file.txt")
-if sum(1 for line in open('error_file.txt')) >= 2:
+os.system(ldconfig_command + " -p | grep libgcc_s.so > " + recultis_dir + "error_file.txt")
+if sum(1 for line in open(recultis_dir + "error_file.txt")) >= 2:
 	print("32 bit libgcc_s found")
 	dep_32bit_libgcc = True
 else:
@@ -74,14 +80,14 @@ if dep_32bit_libc == False or dep_32bit_libstd == False or dep_32bit_libgcc == F
 	dep_error = dep_error + "Error: 32 bit libc required for steam is missing. Try to install lib32gcc1 and lib32stdc++6 on Ubuntu/Debian or glibc.i686 and libstdc++.i686 on Fedora.\n"
 if dep_error != "":
 	print(dep_error)
-	error_file = open("error_file.txt", "w")
+	error_file = open(recultis_dir + "error_file.txt", "w")
 	error_file.write(dep_error + "\n")
 	del error_file
 	os.system("xterm -e 'bash -c \"cat error_file.txt ; sleep 20\"'")
 	sys.exit(2)
 
-if os.path.isfile("error_file.txt"):
-	os.remove("error_file.txt")
+if os.path.isfile(recultis_dir + "error_file.txt"):
+	os.remove(recultis_dir + "error_file.txt")
 #Start main program
 print("Every dependencie met. Starting Recultis.")
 import recultis.py
