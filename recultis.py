@@ -15,7 +15,7 @@ from PyQt5.QtGui import *
 from tools import update_do, status
 from games import installer
 
-recultis_version = "1.2.0"
+recultis_version = "1.2.1pre"
 
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 recultis_dir = os.getenv("HOME") + "/.recultis/"
