@@ -71,6 +71,6 @@ X-COM: UFO Defense is legendary game in which you lead X-COM organization establ
 
 ## [](#header-2)More to come...
 
-There is plenty of games, with open source engines, which Recultis will implement in near future. If your favorite game is still missing, please let us know.
+There are plenty of games, with open source engines, which Recultis will implement in near future. If your favorite game is still missing, please let us know.
 
 ![](https://github.com/makson96/Recultis/raw/master/assets/icon.png)
