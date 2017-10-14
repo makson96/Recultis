@@ -8,6 +8,17 @@ It works on any 64 bit Linux distribution. It does not require any installation 
 
 [![Recultis Youtube Tutorial](https://github.com/makson96/Recultis/raw/master/assets/html/youtube-screen.png)](https://youtu.be/9wHCbyPZ6Eo "Recultis Youtube Tutorial")
 
+## [](#header-2)News 14-10-2017
+
+Recultis 1.2 has been released! This new version introduce:
+- Support for 6 new games: Quake, Quake II, Command & Conquer: Tiberian Dawn, Command & Conquer: Red Alert, Dune 2000, Command & Conquer: Tiberian Sun (pre-alpha)
+- Ability to start games directly from Recultis
+- Better self-update tool (you can choose to which Recultis version you what to update)
+- Better handling of updating game engines
+- Many bug fixes
+
+Games from Command & Conquer series are first, that doesn't require Steam account to download games content. Just click "Install" button and play!
+
 # [](#header-1)Supported games:
 
 ## [](#header-2)Aliens vs Predator Classic 2000
@@ -20,7 +31,7 @@ Aliens vs Predator is revolutionary FPS, which combines the best of both Aliens 
 
 ![](https://github.com/makson96/Recultis/raw/master/assets/html/openra-ra-screen.png)
 
-Classic Command and Conquer games are one of the best real time strategies in the history. Wide variety of units, play styles and abilities are main focus of the series. [OpenRA](http://www.openra.net/) game engine allows you to play following titles from the franchise: Tiberian Dawn, Red Alert, Dune 2000, Tiberian Sun (pre-alpha). Games content is freeware, so you don't need to buy anything. Just install and play.
+Classic Command & Conquer games are one of the best real time strategies in the history. Wide variety of units, play styles and abilities are main focus of the series. [OpenRA](http://www.openra.net/) game engine allows you to play following titles from the franchise: Tiberian Dawn, Red Alert, Dune 2000, Tiberian Sun (pre-alpha). Games content is freeware, so you don't need to buy anything. Just install and play.
 
 ## [](#header-2)Doom 3: BFG
 
