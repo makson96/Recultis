@@ -131,9 +131,9 @@ class Window(QWidget):
 		#Don't allow to update Recultis if can't write to its directory.
 		if os.access(self_dir, os.W_OK):
 			self.update_app_thread = SecondThread(1, self.second_thread_list)
+			self.update_app_thread.start()
 		else:
 			self.app_staus_label.setText("Recultis status is: Update disabled")
-		self.update_app_thread.start()
 		self.update_game_thread = SecondThread(2, self.second_thread_list)
 		self.update_game_thread.start()
 	
