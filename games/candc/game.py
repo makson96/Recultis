@@ -15,12 +15,12 @@ desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3] + "/"
 
 full_name = "Command and Conquer on OpenRA"
 description = """Classic Command and Conquer games are one of the best real time
-strategies in the history. OpenRA game engine allows you to play
-following titles from the franchise:
-Tiberian Dawn
-Red Alert
-Dune 2000
-Tiberian Sun (pre-alpha).
+strategies in the history. Wide variety of units, play styles and
+abilities are main focus of the series. OpenRA game engine
+allows you to play following titles from the franchise:
+Tiberian Dawn, Red Alert, Dune 2000, Tiberian Sun (pre-alpha).
+Games content is freeware, so you don't need to buy anything.
+Just install and play.
 """
 
 shops = ["none"]
@@ -86,13 +86,13 @@ def prepare_engine():
 	ldconfig_command = "ldconfig"
 	if os.path.isfile("/sbin/ldconfig"):
 		ldconfig_command = "/sbin/ldconfig"
-	os.system(ldconfig_command + " -p | grep libc.so > libc_location.txt")
-	with open("libc_location.txt") as f:
+	os.system(ldconfig_command + " -p | grep libc.so > " + recultis_dir + "libc_location.txt")
+	with open(recultis_dir + "libc_location.txt") as f:
 		for line in f:
 			if "64" in line:
 				libc_location = line.split(" => ")[1].rstrip()
 	if os.path.islink(install_dir + "lib/libc.so"):
 		os.unlink(install_dir + "lib/libc.so")
 	os.symlink(libc_location, install_dir + "lib/libc.so")
-	os.remove("libc_location.txt")
+	os.remove(recultis_dir + "libc_location.txt")
 	print("Game engine ready")

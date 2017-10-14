@@ -43,7 +43,7 @@ def game_update_status(game, self_dir, recultis_dir):
 
 def get_link_string(game, self_dir_games):
 	print("Getting game engine download link")
-	target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/" + game+ "/link.txt"
+	target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
 	try:
 		data = urllib.request.urlopen(target_url)
 		download_link = data.read().decode("utf-8")
