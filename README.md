@@ -3,13 +3,16 @@
 The purpose of this software is to make it easy to combine open source game engines with proprietary content using GUI.
 
 # Required Software
-This application needs Python3 and PyQt5 to display GUI. The games are portable and will work on any Linux distribution. Games require 64bit system.
+This application needs Python3 and PyQt5 to display GUI. The games are portable and will work on any Linux distribution. Games require 64bit system. Steamcmd requires 32 bit libc, libstdc++, libgcc_s.
 
 # Supported Games
+Aliens vs Predator Classic 2000 (avp engine) <br>
+Command & Conquer Game Series (OpenRA engine) <br>
+Doom 3 BFG (RBDoom-3-BFG engine) <br>
 Jedi Knights: Jedi Academy (OpenJK engine) <br>
 The Elder Scrolls III: Morrowind (OpenMW engine) <br>
-Doom 3 BFG (RBDoom-3-BFG engine) <br>
-Aliens vs Predator Classic 2000 (avp engine) <br>
+Quake (darkplaces engine) <br>
+Quake II (Yamagi Quake II engine) <br>
 X-COM: UFO Defense (OpenXcom engine) <br>
 
 # License
