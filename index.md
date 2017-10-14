@@ -10,6 +10,18 @@ It works on any 64 bit Linux distribution. It does not require any installation 
 
 # [](#header-1)Supported games:
 
+## [](#header-2)Aliens vs Predator Classic 2000
+
+![](https://github.com/makson96/Recultis/raw/master/assets/html/avp-screen.png)
+
+Aliens vs Predator is revolutionary FPS, which combines the best of both Aliens and Predator franchises. You can play as Colonial Marine, Alien or Predator in great campaigns, single player skirmishes or in multiplayer. Each species introduce completely different play-style - Colonial Marine relies on guns; Alien who can run on walls, sneak and fast attack; and Predator with, masking suit and hunting weapons. To run this [game](http://store.steampowered.com/app/3730/) you need to have it in your Steam Library. Game runs on [avp](https://icculus.org/avp/) engine.
+
+## [](#header-2)Command & Conquer Game Series
+
+![](https://github.com/makson96/Recultis/raw/master/assets/html/openra-ra-screen.png)
+
+Classic Command and Conquer games are one of the best real time strategies in the history. Wide variety of units, play styles and abilities are main focus of the series. [OpenRA](http://www.openra.net/) game engine allows you to play following titles from the franchise: Tiberian Dawn, Red Alert, Dune 2000, Tiberian Sun (pre-alpha). Games content is freeware, so you don't need to buy anything. Just install and play.
+
 ## [](#header-2)Doom 3: BFG
 
 ![](https://github.com/makson96/Recultis/raw/master/assets/html/rbdoom3-screen.png)
@@ -28,11 +40,17 @@ Jedi Academy is fast and fun TPS set in Star Wars universe. Fight with Lightsabe
 
 Morrowind is revolutionary RPG. With open world, endless possibilities and interesting story. What is more, it has well done 3D art and feature great character development. Morrowind was never released on Linux. Fortunately team of developers are working hard on [OpenMW](https://github.com/OpenMW/openmw) project to provide us drop in replacement for original Morrowind engine with tons of new features. To run this [game](http://store.steampowered.com/app/22320/) you need to have it in your Steam Library.
 
-## [](#header-2)Aliens vs Predator Classic 2000
+## [](#header-2)Quake
 
-![](https://github.com/makson96/Recultis/raw/master/assets/html/avp-screen.png)
+![](https://github.com/makson96/Recultis/raw/master/assets/html/darkplaces-screen.png)
 
-Aliens vs Predator is revolutionary FPS, which combines the best of both Aliens and Predator franchises. You can play as Colonial Marine, Alien or Predator in great campaigns, single player skirmishes or in multiplayer. Each species introduce completely different play-style - Colonial Marine relies on guns; Alien who can run on walls, sneak and fast attack; and Predator with, masking suit and hunting weapons. To run this [game](http://store.steampowered.com/app/3730/) you need to have it in your Steam Library. Game runs on [avp](https://icculus.org/avp/) engine.
+Classic Quake is one of the firs game ever, which used OpenGL for 3D graphic. It is pioneer which started popularization of this portable API. Quake is dark theme first person shooter, successor of Doom series. You walk in a maze full of monsters and kill them with multiple cool weapons. Original source code of Quake was open-sourced and since then has been developed under [Darkplaces](https://icculus.org/projects/twilight/darkplaces/) project. Thanks to that, you can now play this [game](http://store.steampowered.com/app/2310/) natively on Linux, using modern technologies.
+
+## [](#header-2)Quake II
+
+![](https://github.com/makson96/Recultis/raw/master/assets/html/yquake2-screen.png)
+
+Quake II is the successor of great protagonist. It introduced better graphic, new weapons, enemies and amazing multiplayer. The game is great improvement to the original. It is first person shooter which was most advanced game of its times. Original engine of the game was open-sourced and is now developed under the project [Yamagi Quake II](https://www.yamagi.org/quake2/). Thanks to that we can all play this [game](http://store.steampowered.com/app/2320/) with tons of improvements and using modern technologies.
 
 ## [](#header-2)X-COM: UFO Defense
 

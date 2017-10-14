@@ -15,12 +15,12 @@ desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3] + "/"
 
 full_name = "Command and Conquer on OpenRA"
 description = """Classic Command and Conquer games are one of the best real time
-strategies in the history. OpenRA game engine allows you to play
-following titles from the franchise:
-Tiberian Dawn
-Red Alert
-Dune 2000
-Tiberian Sun (pre-alpha).
+strategies in the history. Wide variety of units, play styles and
+abilities are main focus of the series. OpenRA game engine
+allows you to play following titles from the franchise:
+Tiberian Dawn, Red Alert, Dune 2000, Tiberian Sun (pre-alpha).
+Games content is freeware, so you don't need to buy anything.
+Just install and play.
 """
 
 shops = ["none"]
