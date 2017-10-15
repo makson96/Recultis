@@ -17,7 +17,7 @@ Recultis 1.2 has been released! This new version introduce:
 - Better handling of updating game engines
 - Many bug fixes
 
-Games from Command & Conquer series are first, that doesn't require Steam account to download games content. Just click "Install" button and play!
+Games from Command & Conquer series are first, that don't require Steam account to download games content. Just click "Install" button and play!
 
 # [](#header-1)Supported games:
 
