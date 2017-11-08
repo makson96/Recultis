@@ -61,7 +61,9 @@ def install(game_name, shop, shop_login, shop_password):
 		unpack_deb.unpack_deb(recultis_dir + "tmp/", game_name + ".deb")
 		game.prepare_engine()
 		#Mark installed version by coping link file
-		shutil.copy(self_dir + game_name + "/link.txt", game.install_dir + "/version_link.txt")
+		version_link_file = open(game.install_dir + "/version_link.txt","w")
+		version_link_file.write(link)
+		version_link_file.close()
 		shutil.rmtree(recultis_dir + "tmp")
 
 def uninstall(game_name):
