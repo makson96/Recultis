@@ -53,11 +53,6 @@ launcher_list = [["openjk_sp.desktop", launcher1_text], ["openjk_mp.desktop", la
 
 uninstall_files_list = []
 uninstall_dir_list = []
-#Legacy code for Recultis 1.1
-uninstall_files_legacy = [desk_dir + "openjk_amd64_sp.desktop", desk_dir + "openjk_amd64_mp.desktop",
-os.getenv("HOME") + "/.local/share/applications/openjk_amd64_sp.desktop", os.getenv("HOME") + "/.local/share/applications/openjk_amd64_mp.desktop"]
-uninstall_files_list.extend(uninstall_files_legacy)
-#End of legacy code
 
 def prepare_engine():
 	#Here is all game specific code
