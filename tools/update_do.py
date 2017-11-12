@@ -42,17 +42,25 @@ def game_update_status(game, self_dir, recultis_dir):
 	return status
 
 def get_link_string(game, self_dir_games):
-	print("Getting game engine download link")
-	target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
+	if game == "runtime":
+		print("Getting runtime download link")
+		target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/runtime_link.txt"
+	else:
+		print("Getting game engine download link")
+		target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
 	try:
 		data = urllib.request.urlopen(target_url)
 		download_link = data.read().decode("utf-8")
 	except urllib.request.URLError:
-		print("Can't get game engine link from the server. Using local copy.")
-		link_file = open(self_dir_games + game +"/link.txt")
+		if game == "runtime":
+			print("Can't get runtime link from the server. Using local copy.")
+			link_file = open(self_dir_games + "/runtime_link.txt")
+		else:
+			print("Can't get game engine link from the server. Using local copy.")
+			link_file = open(self_dir_games + game +"/link.txt")
 		download_link = link_file.read()
 		link_file.close()
-	print("Downalod game engine link is:")
+	print("Downalod link is:")
 	print(download_link)
 	return download_link
 
