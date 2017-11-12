@@ -72,11 +72,20 @@ def install(game_name, shop, shop_login, shop_password):
 			if os.path.isdir(recultis_dir + "runtime/recultis2") == True:
 				hutil.rmtree(recultis_dir + "runtime/recultis2")
 			shutil.move(recultis_dir + "tmp/runtime/recultis2", recultis_dir + "runtime/")
+			runtime_status_ok = True
 			print("Runtime ready")
 		else:
+			runtime_status_ok = True
 			print("Runtime up to date.")
+	if runtime_status_ok == True:
 		print("Downloading game engine")
-		link = update_do.get_link_string(game_name, self_dir)
+		#start of legacy code for Recultis 1.2
+		non_legacy_game_list = ["morrowind"]
+		if game_name in non_legacy_game_list:
+			link = update_do.get_link_string(game_name, self_dir, 0)
+		else:
+			#end of legacy code for Recultis 1.2
+			link = update_do.get_link_string(game_name, self_dir)
 		result = download_engine.download(link, recultis_dir + "tmp/" + game_name + ".deb")		
 		unpack_deb.unpack_deb(recultis_dir + "tmp/", game_name + ".deb")
 		game.prepare_engine()

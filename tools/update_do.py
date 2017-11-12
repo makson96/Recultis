@@ -41,13 +41,18 @@ def game_update_status(game, self_dir, recultis_dir):
 	print(game + " status is " + str(status))
 	return status
 
-def get_link_string(game, self_dir_games):
+def get_link_string(game, self_dir_games, legacy = 1): #legacy parameter for Recultis 1.2
 	if game == "runtime":
 		print("Getting runtime download link")
 		target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/runtime_link.txt"
 	else:
 		print("Getting game engine download link")
-		target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
+		#start of legacy code for Recultis 1.2
+		if legacy = 1:
+			target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
+		#end of legacy code for Recultis 1.2
+		else:
+			target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/" + game+ "/link.txt"
 	try:
 		data = urllib.request.urlopen(target_url)
 		download_link = data.read().decode("utf-8")
