@@ -8,6 +8,7 @@
 import os, urllib
 
 recultis_dir = os.getenv("HOME") + "/.recultis/"
+steam_dir = recultis_dir + "shops/steam/"
 
 def check(game):
 	status = "Waiting for user action"
@@ -18,7 +19,7 @@ def check(game):
 	return status, percent
 	
 def steam_status():
-	os.chdir(recultis_dir)
+	os.chdir(steam_dir)
 	status = "Downloading and installing game data"
 	percent = 0
 	try:

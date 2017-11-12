@@ -10,7 +10,28 @@ from subprocess import Popen, PIPE
 
 def start(login, password, recultis_dir, s_appid, game_dir):
 	print("Starting SteamCMD procedure")
-	os.chdir(recultis_dir)
+	shop_install_dir = recultis_dir + "shops/steam/"
+	if os.path.isdir(shop_install_dir) == False:
+		os.makedirs(shop_install_dir)
+		#start of legacy code for Recultis 1.2
+		if os.path.isfile(recultis_dir+"steam.sh") == True:
+			os.move(recultis_dir+"steam.sh")
+		if os.path.isfile(recultis_dir+"steamcmd.sh") == True:
+			os.move(recultis_dir+"steamcmd.sh")
+		if os.path.isfile(recultis_dir+"steamcmd_linux.tar.gz") == True:
+			os.move(recultis_dir+"steamcmd_linux.tar.gz")
+		if os.path.isfile(recultis_dir+"steam_log.txt") == True:
+			os.move(recultis_dir+"steam_log.txt")
+		if os.path.isdir(recultis_dir+"linux32") == True:
+			shutil.move(recultis_dir+"linux32")
+		if os.path.isdir(recultis_dir+"linux64") == True:
+			shutil.move(recultis_dir+"linux64")
+		if os.path.isdir(recultis_dir+"package") == True:
+			shutil.move(recultis_dir+"package")
+		if os.path.isdir(recultis_dir+"public") == True:
+			shutil.move(recultis_dir+"public")
+		#end of legacy code for Recultis 1.2
+	os.chdir(shop_install_dir)
 	if login == "" or password == "":
 		steam_log_file = open("steam_log.txt", "w")
 		steam_log_file.write("Steamcmd Error. Login or password not provided.\n")
@@ -18,17 +39,17 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 		print("Steamcmd Error. Login or password not provided. try again with correct one.")
 		steam_error = 0
 	else:
-		steamcmd_install(recultis_dir)
+		steamcmd_install(shop_install_dir)
 		steam_error = 2
 		retry_nr = 0
 	while steam_error == 2:
-		steam_error = run(login, password, recultis_dir, s_appid, game_dir)
+		steam_error = run(login, password, shop_install_dir, s_appid, game_dir)
 		if steam_error == 2:
 			print("Steamcmd error. Retry.")
 			retry_nr = retry_nr + 1
 			if retry_nr == 5:
 				print("Steamcmd error. Reinstall steamcmd.")
-				steamcmd_reinstall(recultis_dir)
+				steamcmd_reinstall(shop_install_dir)
 			elif retry_nr == 8:
 				steam_error = 0
 	if steam_error == 0:
@@ -38,11 +59,11 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 		print("Steamcmd Error. Terminate.")
 	return steam_error
 
-def steamcmd_install(recultis_dir):
+def steamcmd_install(shop_install_dir):
 	print("Installing SteamCMD")
-	if os.path.isfile(recultis_dir+"steamcmd.sh") == False:
-		urllib.request.urlretrieve("http://media.steampowered.com/client/steamcmd_linux.tar.gz", recultis_dir + "steamcmd_linux.tar.gz")
-		tar = tarfile.open(recultis_dir + "steamcmd_linux.tar.gz")
+	if os.path.isfile(shop_install_dir+"steamcmd.sh") == False:
+		urllib.request.urlretrieve("http://media.steampowered.com/client/steamcmd_linux.tar.gz", shop_install_dir + "steamcmd_linux.tar.gz")
+		tar = tarfile.open(shop_install_dir + "steamcmd_linux.tar.gz")
 		tar.extractall()
 		tar.close()
 
@@ -53,24 +74,24 @@ def get_last_log_line():
 	steam_log_file.close()
 	return steam_last_line
 
-def steam_guard(recultis_dir):
-	while os.path.isfile(recultis_dir + "steam_guard_key.txt") == False:
+def steam_guard(shop_install_dir):
+	while os.path.isfile(shop_install_dir + "steam_guard_key.txt") == False:
 		time.sleep(2)
 	print('Steam Guard Key detected. Verifying...')
-	steam_guard_file = open(recultis_dir + "steam_guard_key.txt", "r")
+	steam_guard_file = open(shop_install_dir + "steam_guard_key.txt", "r")
 	steam_guard_code = steam_guard_file.readline()
 	steam_guard_file.close()
-	os.remove(recultis_dir + "steam_guard_key.txt")
+	os.remove(shop_install_dir + "steam_guard_key.txt")
 	print(str(steam_guard_code).upper())
 	return str(steam_guard_code.upper())
 	
 
-def run(login, password, recultis_dir, s_appid, game_dir):
-	if os.path.isfile(recultis_dir+"steam_log.txt") == True:
-		os.remove(recultis_dir+"steam_log.txt")
+def run(login, password, shop_install_dir, s_appid, game_dir):
+	if os.path.isfile(shop_install_dir+"steam_log.txt") == True:
+		os.remove(shop_install_dir+"steam_log.txt")
 	print("Running following steamcmd command:")
 	print("./steamcmd.sh +@sSteamCmdForcePlatformType windows +login '" + login + "' '******' +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit")
-	print("Check " + recultis_dir + "steam_log.txt for more details.")
+	print("Check " + shop_install_dir + "steam_log.txt for more details.")
 	steam_download = Popen("script -q -c \"./steamcmd.sh +@sSteamCmdForcePlatformType windows +login '" + login + "' '" + password + "' +force_install_dir " + game_dir + " +app_update " + s_appid + " validate +quit\" /dev/null", shell=True, stdout=open("steam_log.txt", "wb"), stdin=PIPE)
 	while steam_download.poll() is None:
 		time.sleep(2)
@@ -88,7 +109,7 @@ def run(login, password, recultis_dir, s_appid, game_dir):
 			return 2
 		#If computer is not registered on Steam, handle Steam Guard
 		elif 'Steam Guard' in steam_last_line:
-			steam_guard_code = steam_guard(recultis_dir)
+			steam_guard_code = steam_guard(shop_install_dir)
 			steam_download.stdin.write(bytes(steam_guard_code + '\n', 'ascii'))
 			steam_download.stdin.flush()
 	#if there is only 1 line after steamcmd finished working, it means it crashed.
@@ -98,21 +119,21 @@ def run(login, password, recultis_dir, s_appid, game_dir):
 		rc = 1
 	return rc
 
-def steamcmd_reinstall(recultis_dir):
+def steamcmd_reinstall(shop_install_dir):
 	print("Reinstalling SteamCMD")
 	print("Removing SteamCMD")
-	if os.path.isfile(recultis_dir+"steam.sh") == True:
-		os.remove(recultis_dir+"steam.sh")
-	if os.path.isfile(recultis_dir+"steamcmd.sh") == True:
-		os.remove(recultis_dir+"steamcmd.sh")
-	if os.path.isfile(recultis_dir+"steamcmd_linux.tar.gz") == True:
-		os.remove(recultis_dir+"steamcmd_linux.tar.gz")
-	if os.path.isdir(recultis_dir+"linux32") == True:
-		shutil.rmtree(recultis_dir+"linux32")
-	if os.path.isdir(recultis_dir+"linux64") == True:
-		shutil.rmtree(recultis_dir+"linux64")
-	if os.path.isdir(recultis_dir+"package") == True:
-		shutil.rmtree(recultis_dir+"package")
-	if os.path.isdir(recultis_dir+"public") == True:
-		shutil.rmtree(recultis_dir+"public")
-	steamcmd_install(recultis_dir)
+	if os.path.isfile(shop_install_dir+"steam.sh") == True:
+		os.remove(shop_install_dir+"steam.sh")
+	if os.path.isfile(shop_install_dir+"steamcmd.sh") == True:
+		os.remove(shop_install_dir+"steamcmd.sh")
+	if os.path.isfile(shop_install_dir+"steamcmd_linux.tar.gz") == True:
+		os.remove(shop_install_dir+"steamcmd_linux.tar.gz")
+	if os.path.isdir(shop_install_dir+"linux32") == True:
+		shutil.rmtree(shop_install_dir+"linux32")
+	if os.path.isdir(shop_install_dir+"linux64") == True:
+		shutil.rmtree(shop_install_dir+"linux64")
+	if os.path.isdir(shop_install_dir+"package") == True:
+		shutil.rmtree(shop_install_dir+"package")
+	if os.path.isdir(shop_install_dir+"public") == True:
+		shutil.rmtree(shop_install_dir+"public")
+	steamcmd_install(shop_install_dir)
