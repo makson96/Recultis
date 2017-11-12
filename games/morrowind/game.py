@@ -30,7 +30,9 @@ screenshot_path = self_dir + "../../assets/html/openmw-screen.png"
 icon1_name = "openmw.png"
 icon_list = [icon1_name]
 
-launcher1_cmd = "bash -c 'cd $HOME/.recultis/morrowind/bin/; OSG_LIBRARY_PATH=$HOME/.recultis/morrowind/lib/osgPlugins-3.4.0 ./openmw'"
+runtime_version = "recultis2"
+env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/" + runtime_version + ":$HOME/.recultis/runtime/" + runtime_version + "/custom OSG_LIBRARY_PATH=$HOME/.recultis/runtime/" + runtime_version + "/custom/osgPlugins"
+launcher1_cmd = "bash -c 'cd $HOME/.recultis/morrowind/bin/; " + env_var + " ./openmw'"
 launcher_cmd_list = [["Morrowind", launcher1_cmd]]
 launcher1_text = """[Desktop Entry]
 Type=Application
@@ -48,12 +50,12 @@ uninstall_dir_list = []
 
 def prepare_engine():
 	print("Preparing game engine")
-	for directory in next(os.walk(recultis_dir + "tmp/openmw-makson/"))[1]:
+	for directory in next(os.walk(recultis_dir + "tmp/openmw/"))[1]:
 		try:
 			shutil.rmtree(install_dir + directory)
 		except:
 			pass
-		shutil.copytree(recultis_dir + "tmp/openmw-makson/" + directory, install_dir + directory, symlinks=True)
+		shutil.copytree(recultis_dir + "tmp/openmw/" + directory, install_dir + directory, symlinks=True)
 	print("copy config")
 	if os.path.isdir(os.getenv("HOME") + "/.config/openmw/") == False:
 		os.makedirs(os.getenv("HOME") + "/.config/openmw/")

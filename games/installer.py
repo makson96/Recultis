@@ -33,6 +33,8 @@ def install(game_name, shop, shop_login, shop_password):
 	#Import game specific data
 	game = importlib.import_module("games." + game_name + ".game")
 	#Run install
+	shop_status_ok = False
+	runtime_status_ok = False
 	print("Start installing " + game.full_name)
 	print("Preparing directory structure")
 	if os.path.isdir(game.install_dir) == False:
@@ -54,10 +56,10 @@ def install(game_name, shop, shop_login, shop_password):
 	if shop_status_ok == True:
 		from tools import update_do, download_engine, unpack_deb
 		print("Download and prepare runtime")
-		if os.path.isfile(recultis_dir + "runtime/recults2/version_link.txt") == True:
-			runtime_version_file = open(self_dir + game_name + "/link.txt")
+		runtime_link = update_do.get_link_string("runtime", self_dir)
+		if os.path.isfile(recultis_dir + "runtime/recultis2/version_link.txt") == True:
+			runtime_version_file = open(recultis_dir + "runtime/recultis2/version_link.txt")
 			runtime_version = runtime_version_file.read()
-			runtime_link = update_do.get_link_string("runtime", self_dir)
 			if runtime_version == runtime_link:
 				runtime_update_needed = 0
 			else:
@@ -65,18 +67,22 @@ def install(game_name, shop, shop_login, shop_password):
 		else:
 			runtime_update_needed = 1
 		if runtime_update_needed == 1:
-			result = download_engine.download(link, recultis_dir + "tmp/recultis-runtime.deb")		
+			result = download_engine.download(runtime_link, recultis_dir + "tmp/recultis-runtime.deb")		
 			unpack_deb.unpack_deb(recultis_dir + "tmp/", "recultis-runtime.deb")
 			if os.path.isdir(recultis_dir + "runtime/") == False:
-				os.mkdirs(recultis_dir + "runtime/")
+				os.makedirs(recultis_dir + "runtime/")
 			if os.path.isdir(recultis_dir + "runtime/recultis2") == True:
-				hutil.rmtree(recultis_dir + "runtime/recultis2")
+				shutil.rmtree(recultis_dir + "runtime/recultis2")
 			shutil.move(recultis_dir + "tmp/runtime/recultis2", recultis_dir + "runtime/")
+			#Mark installed version by coping link file
+			version_link_file = open(recultis_dir + "runtime/recultis2/version_link.txt","w")
+			version_link_file.write(runtime_link)
+			version_link_file.close()
 			runtime_status_ok = True
 			print("Runtime ready")
 		else:
 			runtime_status_ok = True
-			print("Runtime up to date.")
+			print("Runtime up to date")
 	if runtime_status_ok == True:
 		print("Downloading game engine")
 		#start of legacy code for Recultis 1.2

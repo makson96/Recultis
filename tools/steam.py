@@ -15,21 +15,21 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 		os.makedirs(shop_install_dir)
 		#start of legacy code for Recultis 1.2
 		if os.path.isfile(recultis_dir+"steam.sh") == True:
-			os.move(recultis_dir+"steam.sh")
+			shutil.move(recultis_dir+"steam.sh", shop_install_dir)
 		if os.path.isfile(recultis_dir+"steamcmd.sh") == True:
-			os.move(recultis_dir+"steamcmd.sh")
+			shutil.move(recultis_dir+"steamcmd.sh", shop_install_dir)
 		if os.path.isfile(recultis_dir+"steamcmd_linux.tar.gz") == True:
-			os.move(recultis_dir+"steamcmd_linux.tar.gz")
+			shutil.move(recultis_dir+"steamcmd_linux.tar.gz", shop_install_dir)
 		if os.path.isfile(recultis_dir+"steam_log.txt") == True:
-			os.move(recultis_dir+"steam_log.txt")
+			shutil.move(recultis_dir+"steam_log.txt", shop_install_dir)
 		if os.path.isdir(recultis_dir+"linux32") == True:
-			shutil.move(recultis_dir+"linux32")
+			shutil.move(recultis_dir+"linux32", shop_install_dir)
 		if os.path.isdir(recultis_dir+"linux64") == True:
-			shutil.move(recultis_dir+"linux64")
+			shutil.move(recultis_dir+"linux64", shop_install_dir)
 		if os.path.isdir(recultis_dir+"package") == True:
-			shutil.move(recultis_dir+"package")
+			shutil.move(recultis_dir+"package", shop_install_dir)
 		if os.path.isdir(recultis_dir+"public") == True:
-			shutil.move(recultis_dir+"public")
+			shutil.move(recultis_dir+"public", shop_install_dir)
 		#end of legacy code for Recultis 1.2
 	os.chdir(shop_install_dir)
 	if login == "" or password == "":

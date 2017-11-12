@@ -28,7 +28,13 @@ def game_update_desc(info_list):
 
 #This function will return game status and update link if possible.
 def game_update_status(game, self_dir, recultis_dir):
-	link_string = get_link_string(game, self_dir + "games/")
+	#start of legacy code for Recultis 1.2
+	non_legacy_game_list = ["morrowind"]
+	if game in non_legacy_game_list:
+		link_string = get_link_string(game, self_dir + "games/", 0)
+	else:
+		#end of legacy code for Recultis 1.2
+		link_string = get_link_string(game, self_dir + "games/")
 	from games import installer
 	game_info = installer.game_info(game, ["version"])
 	version = game_info[0]
@@ -48,7 +54,7 @@ def get_link_string(game, self_dir_games, legacy = 1): #legacy parameter for Rec
 	else:
 		print("Getting game engine download link")
 		#start of legacy code for Recultis 1.2
-		if legacy = 1:
+		if legacy == 1:
 			target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
 		#end of legacy code for Recultis 1.2
 		else:
