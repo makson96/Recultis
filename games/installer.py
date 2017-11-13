@@ -85,13 +85,7 @@ def install(game_name, shop, shop_login, shop_password):
 			print("Runtime up to date")
 	if runtime_status_ok == True:
 		print("Downloading game engine")
-		#start of legacy code for Recultis 1.2
-		non_legacy_game_list = ["morrowind"]
-		if game_name in non_legacy_game_list:
-			link = update_do.get_link_string(game_name, self_dir, 0)
-		else:
-			#end of legacy code for Recultis 1.2
-			link = update_do.get_link_string(game_name, self_dir)
+		link = update_do.get_link_string(game_name, self_dir, game.runtime_version)
 		result = download_engine.download(link, recultis_dir + "tmp/" + game_name + ".deb")		
 		unpack_deb.unpack_deb(recultis_dir + "tmp/", game_name + ".deb")
 		game.prepare_engine()
@@ -169,7 +163,9 @@ def game_info(game_name, requested_list):
 		elif requested_item == "deb_url_path":
 			return_list.append(link)
 		elif requested_item == "install_dir":
-			return_list.append(game.install_dir)
+			return_list.append(game_module.install_dir)
 		elif requested_item == "version":
 			return_list.append(version)
+		elif requested_item == "runtime_version":
+			return_list.append(game_module.runtime_version)
 	return return_list

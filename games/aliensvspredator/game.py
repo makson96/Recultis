@@ -30,6 +30,7 @@ screenshot_path = self_dir + "../../assets/html/avp-screen.png"
 icon1_name="avp.png"
 icon_list = [icon1_name]
 
+runtime_version = "recultis1"
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/AliensVsPredator/; ./avp'"
 launcher_cmd_list = [["Aliens vs Predator", launcher1_cmd]]
 launcher1_text = """[Desktop Entry]

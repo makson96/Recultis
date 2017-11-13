@@ -28,15 +28,9 @@ def game_update_desc(info_list):
 
 #This function will return game status and update link if possible.
 def game_update_status(game, self_dir, recultis_dir):
-	#start of legacy code for Recultis 1.2
-	non_legacy_game_list = ["morrowind"]
-	if game in non_legacy_game_list:
-		link_string = get_link_string(game, self_dir + "games/", 0)
-	else:
-		#end of legacy code for Recultis 1.2
-		link_string = get_link_string(game, self_dir + "games/")
 	from games import installer
-	game_info = installer.game_info(game, ["version"])
+	game_info = installer.game_info(game, ["version", "runtime_version"])
+	link_string = get_link_string(game, self_dir + "games/", game_info[1])
 	version = game_info[0]
 	if version != "No proper install":
 		status = 1
@@ -47,17 +41,15 @@ def game_update_status(game, self_dir, recultis_dir):
 	print(game + " status is " + str(status))
 	return status
 
-def get_link_string(game, self_dir_games, legacy = 1): #legacy parameter for Recultis 1.2
+def get_link_string(game, self_dir_games, runtime_version):
 	if game == "runtime":
 		print("Getting runtime download link")
 		target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/runtime_link.txt"
 	else:
 		print("Getting game engine download link")
-		#start of legacy code for Recultis 1.2
-		if legacy == 1:
+		if runtime_version == "recultis1":
 			target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
-		#end of legacy code for Recultis 1.2
-		else:
+		elif runtime_version == "recultis2":
 			target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/" + game+ "/link.txt"
 	try:
 		data = urllib.request.urlopen(target_url)
