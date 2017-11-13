@@ -1,1 +1,1 @@
-https://launchpad.net/~makson96/+archive/ubuntu/free-engine/+files/openjk_1.0.1.1+git20170806-trusty1_amd64.deb
+https://launchpad.net/~makson96/+archive/ubuntu/recultis/+files/openjk_1.0.1.1+git20171113-xenial1_amd64.deb

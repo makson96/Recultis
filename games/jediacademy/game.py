@@ -30,9 +30,10 @@ screenshot_path = self_dir + "../../assets/html/openjk-screen.png"
 icon1_name = "openjk.png"
 icon_list = [icon1_name]
 
-runtime_version = "recultis1"
-launcher1_cmd = "bash -c 'cd $HOME/.recultis/JediAcademy/GameData/; ./openjk_sp.x86_64'"
-launcher2_cmd = "bash -c 'cd $HOME/.recultis/JediAcademy/GameData/; ./openjk.x86_64'"
+runtime_version = "recultis2"
+env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/" + runtime_version + ":$HOME/.recultis/runtime/" + runtime_version + "/custom"
+launcher1_cmd = "bash -c 'cd $HOME/.recultis/JediAcademy/GameData/; "+ env_var + " ./openjk_sp.x86_64'"
+launcher2_cmd = "bash -c 'cd $HOME/.recultis/JediAcademy/GameData/; "+ env_var + " ./openjk.x86_64'"
 launcher_cmd_list = [["Jedi Knight Single Player", launcher1_cmd], ["Jedi Knight Multi Player", launcher2_cmd]]
 launcher1_text = """[Desktop Entry]
 Type=Application
