@@ -82,7 +82,7 @@ if dep_error != "":
 	error_file = open(recultis_dir + "error_file.txt", "w")
 	error_file.write(dep_error + "\n")
 	del error_file
-	os.system("xterm -e 'bash -c \"cat error_file.txt ; sleep 20\"'")
+	os.system("xdg-open " + recultis_dir + "error_file.txt")
 	sys.exit(2)
 
 if os.path.isfile(recultis_dir + "error_file.txt"):
