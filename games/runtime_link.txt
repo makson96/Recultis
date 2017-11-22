@@ -1,1 +1,1 @@
-https://launchpad.net/~makson96/+archive/ubuntu/recultis/+files/recultis-runtime_2.0.0~20171110-xenial7_amd64.deb
+https://launchpad.net/~makson96/+archive/ubuntu/recultis/+files/recultis-runtime_2.0.0~20171122-xenial1_amd64.deb
