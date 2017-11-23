@@ -30,6 +30,7 @@ screenshot_path = self_dir + "../../assets/html/openmw-screen.png"
 icon1_name = "openmw.png"
 icon_list = [icon1_name]
 
+engine = "openmw"
 runtime_version = "recultis2"
 env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/" + runtime_version + ":$HOME/.recultis/runtime/" + runtime_version + "/custom OSG_LIBRARY_PATH=$HOME/.recultis/runtime/" + runtime_version + "/custom/osgPlugins"
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/morrowind/bin/; " + env_var + " ./openmw'"

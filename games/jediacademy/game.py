@@ -30,6 +30,7 @@ screenshot_path = self_dir + "../../assets/html/openjk-screen.png"
 icon1_name = "openjk.png"
 icon_list = [icon1_name]
 
+engine = "openjk"
 runtime_version = "recultis2"
 env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/" + runtime_version + ":$HOME/.recultis/runtime/" + runtime_version + "/custom"
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/JediAcademy/GameData/; "+ env_var + " ./openjk_sp.x86_64'"

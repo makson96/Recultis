@@ -56,7 +56,7 @@ def install(game_name, shop, shop_login, shop_password):
 	if shop_status_ok == True:
 		from tools import update_do, download_engine, unpack_deb
 		print("Download and prepare runtime")
-		runtime_link = update_do.get_link_string("runtime", self_dir, 0)
+		runtime_link = update_do.get_link_string("runtime", 0)
 		if os.path.isfile(recultis_dir + "runtime/recultis2/version_link.txt") == True:
 			runtime_version_file = open(recultis_dir + "runtime/recultis2/version_link.txt")
 			runtime_version = runtime_version_file.read()
@@ -85,7 +85,7 @@ def install(game_name, shop, shop_login, shop_password):
 			print("Runtime up to date")
 	if runtime_status_ok == True:
 		print("Downloading game engine")
-		link = update_do.get_link_string(game_name, self_dir, game.runtime_version)
+		link = update_do.get_link_string(game_name, game.runtime_version)
 		result = download_engine.download(link, recultis_dir + "tmp/" + game_name + ".deb")		
 		unpack_deb.unpack_deb(recultis_dir + "tmp/", game_name + ".deb")
 		game.prepare_engine()
@@ -153,15 +153,11 @@ def game_info(game_name, requested_list):
 		version = version_file.read()
 	else:
 		version = "No proper install"
-	link_file = open(self_dir + game_name + "/link.txt")
-	link = link_file.read()
 	deb_file_path = recultis_dir + "tmp/" + game_name + ".deb"
 	return_list = []
 	for requested_item in requested_list:
 		if requested_item == "deb_file_path":
 			return_list.append(deb_file_path)
-		elif requested_item == "deb_url_path":
-			return_list.append(link)
 		elif requested_item == "install_dir":
 			return_list.append(game_module.install_dir)
 		elif requested_item == "version":

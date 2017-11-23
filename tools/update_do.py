@@ -27,10 +27,10 @@ def game_update_desc(info_list):
 	return full_name + rest_name
 
 #This function will return game status and update link if possible.
-def game_update_status(game, self_dir, recultis_dir):
+def game_update_status(game, recultis_dir):
 	from games import installer
 	game_info = installer.game_info(game, ["version", "runtime_version"])
-	link_string = get_link_string(game, self_dir + "games/", game_info[1])
+	link_string = get_link_string(game, game_info[1])
 	version = game_info[0]
 	if version != "No proper install":
 		status = 1
@@ -41,7 +41,7 @@ def game_update_status(game, self_dir, recultis_dir):
 	print(game + " status is " + str(status))
 	return status
 
-def get_link_string(game, self_dir_games, runtime_version):
+def get_link_string(game, runtime_version):
 	if game == "runtime":
 		print("Getting runtime download link")
 		target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/runtime_link.txt"
@@ -49,20 +49,22 @@ def get_link_string(game, self_dir_games, runtime_version):
 		print("Getting game engine download link")
 		if runtime_version == "recultis1":
 			target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
+			data = urllib.request.urlopen(target_url)
+			download_link = data.read().decode("utf-8")
 		elif runtime_version == "recultis2":
-			target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/" + game+ "/link.txt"
-	try:
-		data = urllib.request.urlopen(target_url)
-		download_link = data.read().decode("utf-8")
-	except urllib.request.URLError:
-		if game == "runtime":
-			print("Can't get runtime link from the server. Using local copy.")
-			link_file = open(self_dir_games + "/runtime_link.txt")
-		else:
-			print("Can't get game engine link from the server. Using local copy.")
-			link_file = open(self_dir_games + game +"/link.txt")
-		download_link = link_file.read()
-		link_file.close()
+			game_module = importlib.import_module("games." + game + ".game")
+			target_engine = game_module.engine
+			target_page = urllib.request.urlopen("https://launchpad.net/~makson96/+archive/ubuntu/recultis/+packages")
+			target_page_str = str(target_page.read())
+			start = target_engine + " - "
+			end = "\\n"
+			target_start_list = target_page_str.split(start)#[1].split(end)[0]
+			target_start_list = target_start_list[1::2]
+			for engine_package in target_start_list:
+				target_end_list = engine_package.split(end)[0]
+				if "xenial" in target_end_list:
+					target_version = target_end_list
+			download_link = "https://launchpad.net/~makson96/+archive/ubuntu/recultis/+files/" + target_engine + "_" + target_version + "_amd64.deb"
 	print("Downalod link is:")
 	print(download_link)
 	return download_link

@@ -420,7 +420,7 @@ class SecondThread(QThread):
 		global game_list
 		game_nr = 0
 		for radio_button in self.radio_list:
-			game_status_description = update_do.game_update_status(game_list[game_nr][0], self_dir, recultis_dir)
+			game_status_description = update_do.game_update_status(game_list[game_nr][0], recultis_dir)
 			game_list[game_nr] = [game_list[game_nr][0], game_status_description]
 			radio_button.setText(update_do.game_update_desc(game_list[game_nr]))
 			if radio_button.isChecked() == True:
