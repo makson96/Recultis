@@ -42,29 +42,28 @@ def game_update_status(game, recultis_dir):
 	return status
 
 def get_link_string(game, runtime_version):
-	if game == "runtime":
-		print("Getting runtime download link")
-		target_url = "https://raw.githubusercontent.com/makson96/Recultis/master/games/runtime_link.txt"
-	else:
-		print("Getting game engine download link")
-		if runtime_version == "recultis1":
-			target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
-			data = urllib.request.urlopen(target_url)
-			download_link = data.read().decode("utf-8")
-		elif runtime_version == "recultis2":
+	print("Getting game engine download link")
+	if runtime_version == "recultis1":
+		target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
+		data = urllib.request.urlopen(target_url)
+		download_link = data.read().decode("utf-8")
+	elif runtime_version == "recultis2":
+		if game == "runtime":
+			target_engine = "recultis-runtime"
+		else:
 			game_module = importlib.import_module("games." + game + ".game")
 			target_engine = game_module.engine
-			target_page = urllib.request.urlopen("https://launchpad.net/~makson96/+archive/ubuntu/recultis/+packages")
-			target_page_str = str(target_page.read())
-			start = target_engine + " - "
-			end = "\\n"
-			target_start_list = target_page_str.split(start)#[1].split(end)[0]
-			target_start_list = target_start_list[1::2]
-			for engine_package in target_start_list:
-				target_end_list = engine_package.split(end)[0]
-				if "xenial" in target_end_list:
-					target_version = target_end_list
-			download_link = "https://launchpad.net/~makson96/+archive/ubuntu/recultis/+files/" + target_engine + "_" + target_version + "_amd64.deb"
+		target_page = urllib.request.urlopen("https://launchpad.net/~makson96/+archive/ubuntu/recultis/+packages")
+		target_page_str = str(target_page.read())
+		start = target_engine + " - "
+		end = "\\n"
+		target_start_list = target_page_str.split(start)#[1].split(end)[0]
+		target_start_list = target_start_list[1::2]
+		for engine_package in target_start_list:
+			target_end_list = engine_package.split(end)[0]
+			if "xenial" in target_end_list:
+				target_version = target_end_list
+		download_link = "https://launchpad.net/~makson96/+archive/ubuntu/recultis/+files/" + target_engine + "_" + target_version + "_amd64.deb"
 	print("Downalod link is:")
 	print(download_link)
 	return download_link

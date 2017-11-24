@@ -56,7 +56,7 @@ def install(game_name, shop, shop_login, shop_password):
 	if shop_status_ok == True:
 		from tools import update_do, download_engine, unpack_deb
 		print("Download and prepare runtime")
-		runtime_link = update_do.get_link_string("runtime", 0)
+		runtime_link = update_do.get_link_string("runtime", 2)
 		if os.path.isfile(recultis_dir + "runtime/recultis2/version_link.txt") == True:
 			runtime_version_file = open(recultis_dir + "runtime/recultis2/version_link.txt")
 			runtime_version = runtime_version_file.read()
