@@ -50,6 +50,8 @@ def get_link_string(game, runtime_version):
 	elif runtime_version == "recultis2":
 		if game == "runtime":
 			target_engine = "recultis-runtime"
+		elif game == "lgogdownloader":
+			target_engine = "lgogdownloader"
 		else:
 			game_module = importlib.import_module("games." + game + ".game")
 			target_engine = game_module.engine

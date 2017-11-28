@@ -50,13 +50,17 @@ def install(game_name, shop, shop_login, shop_password):
 		from tools import steam
 		print("Start Steam")
 		shop_status_ok = steam.start(shop_login, shop_password, recultis_dir, game.s_appid, game.install_dir)
+	elif shop == "gog":
+		from tools import gog
+		print("GOG Steam")
+		shop_status_ok = gog.start(shop_login, shop_password, recultis_dir, game.s_appid, game.install_dir)
 	else:
 		print("No data download, only engine update")
 		shop_status_ok = True
 	if shop_status_ok == True:
 		from tools import update_do, download_engine, unpack_deb
 		print("Download and prepare runtime")
-		runtime_link = update_do.get_link_string("runtime", 2)
+		runtime_link = update_do.get_link_string("runtime", "recultis2")
 		if os.path.isfile(recultis_dir + "runtime/recultis2/version_link.txt") == True:
 			runtime_version_file = open(recultis_dir + "runtime/recultis2/version_link.txt")
 			runtime_version = runtime_version_file.read()

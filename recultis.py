@@ -49,7 +49,10 @@ class Window(QWidget):
 		self.r1a = QRadioButton("Steam")
 		self.r1a.setChecked(True)
 		self.r1a.toggled.connect(self.r1a_clicked)
-		self.shop_r_list = [self.r0a, self.r1a]
+		self.r2a = QRadioButton("GOG")
+		self.r2a.setChecked(False)
+		self.r2a.toggled.connect(self.r2a_clicked)
+		self.shop_r_list = [self.r0a, self.r1a, self.r2a]
 		loginLabel = QLabel("Login:")
 		self.loginText = QLineEdit()
 		passwordLabel = QLabel("Password:")
@@ -94,6 +97,7 @@ class Window(QWidget):
 		vbox1.addWidget(choose_data_box)
 		vbox1_2.addWidget(self.r0a)
 		vbox1_2.addWidget(self.r1a)
+		vbox1_2.addWidget(self.r2a)
 		grid1.addWidget(loginLabel, 0, 0)
 		grid1.addWidget(self.loginText, 0, 1)
 		grid1.addWidget(passwordLabel, 1, 0)
@@ -188,8 +192,10 @@ class Window(QWidget):
 		print("starting new thread, which will install: " + self.installing_game)
 		if self.r0a.isChecked():
 			game_shop = "none"
-		else:
+		elif self.r1a.isChecked():
 			game_shop = "steam"
+		elif self.r2a.isChecked():
+			game_shop = "gog"
 		#This is game install/update thread
 		_thread.start_new_thread(installer.install, (self.installing_game, game_shop, str(self.loginText.text()), str(self.passwordText.text())))
 		#This is thread for GUI
@@ -335,6 +341,15 @@ Terminal=false"""
 			game_module = importlib.import_module("games." + self.clicked_game + ".game")
 			steam_link = game_module.steam_link
 			self.description_shop_link.setText("<a href='" + steam_link + "'>Link to the game on Steam.</a>")
+	
+	def r2a_clicked(self, enabled):
+		if enabled:
+			print("GOG shop radiobutton clicked")
+			self.loginText.setEnabled(True)
+			self.passwordText.setEnabled(True)
+			game_module = importlib.import_module("games." + self.clicked_game + ".game")
+			gog_link = game_module.steam_link ### GOG Link
+			self.description_shop_link.setText("<a href='" + gog_link + "'>Link to the game on Steam.</a>")
 
 	def ask_window_start(self, wr_nr):
 		print("Starting ask window with reason: " + str(wr_nr))
