@@ -20,7 +20,7 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 	else:
 		shutil.rmtree(shop_install_dir)
 		os.makedirs(shop_install_dir)
-	shutil.move(recultis_dir + "tmp/lgogdownloader", shop_install_dir)
+	shutil.move(recultis_dir + "tmp/lgogdownloader/bin/lgogdownloader", shop_install_dir)
 	print("Download innoextract")
 	print("Download game using lgogdownloader")
 	print("Extract game using innoextract")

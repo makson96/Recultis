@@ -275,6 +275,10 @@ Terminal=false"""
 			self.r1a.setEnabled(True)
 		else:
 			self.r1a.setEnabled(False)
+		if "gog" in supported_shops:
+			self.r2a.setEnabled(True)
+		else:
+			self.r2a.setEnabled(False)
 		#Change clicked radiobutton to enabled one if selected is disabled
 		for shop_button in self.shop_r_list:
 			if (shop_button.isChecked() == True) and (shop_button.isEnabled() == False):
@@ -348,8 +352,8 @@ Terminal=false"""
 			self.loginText.setEnabled(True)
 			self.passwordText.setEnabled(True)
 			game_module = importlib.import_module("games." + self.clicked_game + ".game")
-			gog_link = game_module.steam_link ### GOG Link
-			self.description_shop_link.setText("<a href='" + gog_link + "'>Link to the game on Steam.</a>")
+			gog_link = game_module.gog_link
+			self.description_shop_link.setText("<a href='" + gog_link + "'>Link to the game on GOG.</a>")
 
 	def ask_window_start(self, wr_nr):
 		print("Starting ask window with reason: " + str(wr_nr))

@@ -61,6 +61,7 @@ def get_link_string(game, runtime_version):
 		end = "\\n"
 		target_start_list = target_page_str.split(start)#[1].split(end)[0]
 		target_start_list = target_start_list[1::2]
+		target_version = "0"
 		for engine_package in target_start_list:
 			target_end_list = engine_package.split(end)[0]
 			if "xenial" in target_end_list:
