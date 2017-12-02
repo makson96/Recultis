@@ -6,7 +6,7 @@
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
 import os, tarfile, urllib.request, time, shutil
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, call
 
 def start(login, password, recultis_dir, s_appid, game_dir):
 	shop_install_dir = recultis_dir + "shops/gog/"
@@ -22,10 +22,17 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 		os.makedirs(shop_install_dir)
 	shutil.move(recultis_dir + "tmp/lgogdownloader/bin/lgogdownloader", shop_install_dir)
 	print("Download innoextract")
+	innoextract_link = "http://constexpr.org/innoextract/files/innoextract-1.6-linux.tar.xz"
+	urllib.request.urlretrieve(innoextract_link, recultis_dir + "tmp/innoextract.tar.xz")
+	tar = tarfile.open(recultis_dir + "tmp/innoextract.tar.xz")
+	tar.extractall(path=recultis_dir + "tmp/")
+	tar.close()
+	os.rename(recultis_dir + "tmp/innoextract-1.6-linux/bin/amd64/innoextract", shop_install_dir + "innoextract")
 	print("Download game using lgogdownloader")
 	os.chdir(shop_install_dir)
 	gog_error = run(login, password, shop_install_dir, s_appid, game_dir)
 	print("Extract game using innoextract")
+	call("./innoextract " + game_dir + s_appid +"/setup*.exe -d " + game_dir, shell=True)
 	return True
 
 def run(login, password, shop_install_dir, s_appid, game_dir):

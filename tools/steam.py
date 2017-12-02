@@ -70,7 +70,10 @@ def steamcmd_install(shop_install_dir):
 def get_last_log_line():
 	steam_log_file = open("steam_log.txt", "r")
 	steam_log_lines = steam_log_file.readlines()
-	steam_last_line = steam_log_lines[-1]
+	if len(steam_log_lines) > 0:
+		steam_last_line = steam_log_lines[-1]
+	else:
+		steam_last_line = ""
 	steam_log_file.close()
 	return steam_last_line
 
