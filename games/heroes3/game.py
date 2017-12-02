@@ -24,7 +24,7 @@ description = """Heroes III on VCMI description
 """
 
 shops = ["gog"]
-s_appid = ""
+s_appid = "heroes_of_might_and_magic_3_complete_edition"
 gog_link =  "https://www.gog.com/game/heroes_of_might_and_magic_3_complete_edition"
 screenshot_path = self_dir + "../../assets/html/vcmi-screen.png"
 icon1_name="vcmi.png"
