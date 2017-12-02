@@ -35,7 +35,7 @@ def run(login, password, shop_install_dir, s_appid, game_dir):
 	print("./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode")
 	print("Check " + shop_install_dir + "gog_log.txt for more details.")
 	env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis2:$HOME/.recultis/runtime/recultis2/custom"
-	gog_download = Popen(env_var + " script -q -c \"./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode\" /dev/null", shell=True, stdout=open("gog_log.txt", "wb"), stdin=PIPE)
+	gog_download = Popen(env_var + " stdbuf -oL -eL ./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode", shell=True, stdout=open("gog_log.txt", "wb"), stdin=PIPE)
 	while gog_download.poll() is None:
 		time.sleep(2)
 		gog_last_line = get_last_log_line()
@@ -62,7 +62,10 @@ def run(login, password, shop_install_dir, s_appid, game_dir):
 def get_last_log_line():
 	gog_log_file = open("gog_log.txt", "r")
 	gog_log_lines = gog_log_file.readlines()
-	gog_last_line = gog_log_lines[-1]
+	if len(gog_log_lines) > 0:
+		gog_last_line = gog_log_lines[-1]
+	else:
+		gog_last_line = ""
 	gog_log_file.close()
 	return gog_last_line
 

@@ -52,7 +52,7 @@ def install(game_name, shop, shop_login, shop_password):
 		shop_status_ok = steam.start(shop_login, shop_password, recultis_dir, game.s_appid, game.install_dir)
 	elif shop == "gog":
 		from tools import gog
-		print("GOG Steam")
+		print("Start GOG")
 		shop_status_ok = gog.start(shop_login, shop_password, recultis_dir, game.s_appid, game.install_dir)
 	else:
 		print("No data download, only engine update")
