@@ -27,7 +27,7 @@ class Window(QWidget):
 	
 	game_r_list = []
 	push_buttons_list = []
-	installing_game = "" #This will track which game name is currently installed
+	installing_game = "" #This will track which game name is currently being installed
 	clicked_game = "" #This will track which game name is currently clicked
 	playing_game = "" #This will track which game name is currently playing
 	

@@ -79,8 +79,9 @@ def steam_status():
 
 def engine_status(game):
 	from games import installer
-	game_info = installer.game_info(game, ["deb_url_path", "deb_file_path"])
-	link = game_info[0]
+	from tools import update_do
+	game_info = installer.game_info(game, ["runtime_version", "deb_file_path"])
+	link = update_do.get_link_string(game, game_info[0])
 	file_path = game_info[1]
 	status = "Downloading engine"
 	percent = 75

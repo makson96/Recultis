@@ -168,4 +168,6 @@ def game_info(game_name, requested_list):
 			return_list.append(version)
 		elif requested_item == "runtime_version":
 			return_list.append(game_module.runtime_version)
+		else:
+			raise ValueError("Unknown game info: " + requested_item)
 	return return_list
