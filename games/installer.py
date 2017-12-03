@@ -33,8 +33,8 @@ def install(game_name, shop, shop_login, shop_password):
 	#Import game specific data
 	game = importlib.import_module("games." + game_name + ".game")
 	#Run install
-	shop_status_ok = False
 	runtime_status_ok = False
+	shop_status_ok = False
 	print("Start installing " + game.full_name)
 	print("Preparing directory structure")
 	if os.path.isdir(game.install_dir) == False:
@@ -45,49 +45,49 @@ def install(game_name, shop, shop_login, shop_password):
 		shutil.rmtree(recultis_dir + "tmp")
 		os.makedirs(recultis_dir + "tmp")
 	open(recultis_dir + "tmp/" + game_name + ".deb", 'a').close()
-	print("Download game content from digital distribution platform")
-	if shop == "steam":
-		from tools import steam
-		print("Start Steam")
-		shop_status_ok = steam.start(shop_login, shop_password, recultis_dir, game.s_appid, game.install_dir)
-	elif shop == "gog":
-		from tools import gog
-		print("Start GOG")
-		shop_status_ok = gog.start(shop_login, shop_password, recultis_dir, game.s_appid, game.install_dir)
-	else:
-		print("No data download, only engine update")
-		shop_status_ok = True
-	if shop_status_ok == True:
-		from tools import update_do, download_engine, unpack_deb
-		print("Download and prepare runtime")
-		runtime_link = update_do.get_link_string("runtime", "recultis2")
-		if os.path.isfile(recultis_dir + "runtime/recultis2/version_link.txt") == True:
-			runtime_version_file = open(recultis_dir + "runtime/recultis2/version_link.txt")
-			runtime_version = runtime_version_file.read()
-			if runtime_version == runtime_link:
-				runtime_update_needed = 0
-			else:
-				runtime_update_needed = 1
+	from tools import update_do, download_engine, unpack_deb
+	print("Download and prepare runtime")
+	runtime_link = update_do.get_link_string("runtime", "recultis2")
+	if os.path.isfile(recultis_dir + "runtime/recultis2/version_link.txt") == True:
+		runtime_version_file = open(recultis_dir + "runtime/recultis2/version_link.txt")
+		runtime_version = runtime_version_file.read()
+		if runtime_version == runtime_link:
+			runtime_update_needed = 0
 		else:
 			runtime_update_needed = 1
-		if runtime_update_needed == 1:
-			result = download_engine.download(runtime_link, recultis_dir + "tmp/recultis-runtime.deb")		
-			unpack_deb.unpack_deb(recultis_dir + "tmp/", "recultis-runtime.deb")
-			if os.path.isdir(recultis_dir + "runtime/") == False:
-				os.makedirs(recultis_dir + "runtime/")
-			if os.path.isdir(recultis_dir + "runtime/recultis2") == True:
-				shutil.rmtree(recultis_dir + "runtime/recultis2")
-			shutil.move(recultis_dir + "tmp/runtime/recultis2", recultis_dir + "runtime/")
-			#Mark installed version by coping link file
-			version_link_file = open(recultis_dir + "runtime/recultis2/version_link.txt","w")
-			version_link_file.write(runtime_link)
-			version_link_file.close()
-			runtime_status_ok = True
-			print("Runtime ready")
-		else:
-			runtime_status_ok = True
-			print("Runtime up to date")
+	else:
+		runtime_update_needed = 1
+	if runtime_update_needed == 1:
+		result = download_engine.download(runtime_link, recultis_dir + "tmp/recultis-runtime.deb")		
+		unpack_deb.unpack_deb(recultis_dir + "tmp/", "recultis-runtime.deb")
+		if os.path.isdir(recultis_dir + "runtime/") == False:
+			os.makedirs(recultis_dir + "runtime/")
+		if os.path.isdir(recultis_dir + "runtime/recultis2") == True:
+			shutil.rmtree(recultis_dir + "runtime/recultis2")
+		shutil.move(recultis_dir + "tmp/runtime/recultis2", recultis_dir + "runtime/")
+		#Mark installed version by coping link file
+		version_link_file = open(recultis_dir + "runtime/recultis2/version_link.txt","w")
+		version_link_file.write(runtime_link)
+		version_link_file.close()
+		runtime_status_ok = True
+		print("Runtime ready")
+	else:
+		runtime_status_ok = True
+		print("Runtime up to date")
 	if runtime_status_ok == True:
+		print("Download game content from digital distribution platform")
+		if shop == "steam":
+			from tools import steam
+			print("Start Steam")
+			shop_status_ok = steam.start(shop_login, shop_password, recultis_dir, game.s_appid, game.install_dir)
+		elif shop == "gog":
+			from tools import gog
+			print("Start GOG")
+			shop_status_ok = gog.start(shop_login, shop_password, recultis_dir, game.s_appid, game.install_dir)
+		else:
+			print("No data download, only engine update")
+			shop_status_ok = True
+	if shop_status_ok == True:
 		print("Downloading game engine")
 		link = update_do.get_link_string(game_name, game.runtime_version)
 		result = download_engine.download(link, recultis_dir + "tmp/" + game_name + ".deb")		
