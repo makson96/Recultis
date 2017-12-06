@@ -33,7 +33,7 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 	gog_error = run(login, password, shop_install_dir, s_appid, game_dir)
 	print("Extract game using innoextract")
 	os.chdir(shop_install_dir)
-	call("./innoextract " + game_dir + s_appid +"/setup*.exe -d >> gog_log.txt" + game_dir, shell=True)
+	call("./innoextract " + game_dir + s_appid +"/setup*.exe -d " + game_dir + " >> gog_log.txt", shell=True)
 	return True
 
 def run(login, password, shop_install_dir, s_appid, game_dir):

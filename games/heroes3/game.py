@@ -56,7 +56,7 @@ def prepare_engine():
 			shutil.rmtree(install_dir + vcmi_file_or_dir)
 		os.rename(recultis_dir + "tmp/vcmi/" + vcmi_file_or_dir, install_dir + vcmi_file_or_dir)
 	call(env_var + " " + install_dir + "bin/vcmibuilder --data " + install_dir + "app", shell=True)
-	local_data_dir = recultis_dir = os.getenv("HOME") + "/.local/share/vcmi/"
+	local_data_dir = os.getenv("HOME") + "/.local/share/vcmi/"
 	for vcmi_file_or_dir in os.listdir(install_dir + "share/vcmi/"):
 		if os.path.islink(local_data_dir + vcmi_file_or_dir):
 			os.unlink(local_data_dir + vcmi_file_or_dir)
