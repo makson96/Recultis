@@ -42,7 +42,7 @@ def game_update_status(game, recultis_dir):
 	return status
 
 def get_link_string(game, runtime_version):
-	print("Getting game engine download link")
+	#print("Getting game engine download link")
 	if runtime_version == "recultis1":
 		target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
 		data = urllib.request.urlopen(target_url)
@@ -67,8 +67,9 @@ def get_link_string(game, runtime_version):
 			if "xenial" in target_end_list:
 				target_version = target_end_list
 		download_link = "https://launchpad.net/~makson96/+archive/ubuntu/recultis/+files/" + target_engine + "_" + target_version + "_amd64.deb"
-	print("Downalod link is:")
-	print(download_link)
+	#Silence this for now
+	#print("Downalod link is:")
+	#print(download_link)
 	return download_link
 
 def recultis_update_do(self_dir, patch_link):
