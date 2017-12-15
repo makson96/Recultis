@@ -30,7 +30,7 @@ screenshot_path = self_dir + "../../assets/html/yquake2-screen.png"
 icon1_name = "yquake2.png"
 icon_list = [icon1_name]
 
-runtime_version = "recultis1"
+runtime_version = 1
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/Quake2; LD_LIBRARY_PATH=lib ./quake2'"
 launcher_cmd_list = [["Quake1", launcher1_cmd]]
 launcher1_text = """[Desktop Entry]

@@ -30,7 +30,7 @@ screenshot_path = self_dir + "../../assets/html/darkplaces-screen.png"
 icon1_name = "darkplaces.png"
 icon_list = [icon1_name]
 
-runtime_version = "recultis1"
+runtime_version = 1
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/Quake1; LD_LIBRARY_PATH=lib ./darkplaces-sdl -window'"
 launcher_cmd_list = [["Quake1", launcher1_cmd]]
 launcher1_text = """[Desktop Entry]

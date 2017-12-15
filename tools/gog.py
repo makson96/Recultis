@@ -12,7 +12,7 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 	shop_install_dir = recultis_dir + "shops/gog/"
 	print("Download lgogdownloader")
 	from tools import update_do, download_engine, unpack_deb
-	lgog_link = update_do.get_link_string("lgogdownloader", "recultis2")
+	lgog_link = update_do.get_link_list(["lgogdownloader"])[0]
 	result = download_engine.download(lgog_link, recultis_dir + "tmp/lgogdownloader.deb")		
 	unpack_deb.unpack_deb(recultis_dir + "tmp/", "lgogdownloader.deb")
 	if os.path.isdir(shop_install_dir) == False:

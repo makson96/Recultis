@@ -31,7 +31,7 @@ icon3_name="openra-d2k.png"
 icon4_name="openra-ts.png"
 icon_list = [icon1_name, icon2_name, icon3_name, icon4_name]
 
-runtime_version = "recultis1"
+runtime_version = 1
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/OpenRA/; LD_LIBRARY_PATH=lib MONO_PATH=lib/4.5 lib/mono-sgen OpenRA.Game.exe Game.Mod=cnc'"
 launcher2_cmd = "bash -c 'cd $HOME/.recultis/OpenRA/; LD_LIBRARY_PATH=lib MONO_PATH=lib/4.5 lib/mono-sgen OpenRA.Game.exe Game.Mod=ra'"
 launcher3_cmd = "bash -c 'cd $HOME/.recultis/OpenRA/; LD_LIBRARY_PATH=lib MONO_PATH=lib/4.5 lib/mono-sgen OpenRA.Game.exe Game.Mod=d2k'"

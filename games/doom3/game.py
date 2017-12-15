@@ -30,7 +30,7 @@ screenshot_path = self_dir + "../../assets/html/rbdoom3-screen.png"
 icon1_name = "rbdoom-3-bfg.png"
 icon_list = [icon1_name]
 
-runtime_version = "recultis1"
+runtime_version = 1
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/doom3/; ./RBDoom3BFG'"
 launcher_cmd_list = [["Doom3 BFG", launcher1_cmd]]
 launcher1_text = """[Desktop Entry]

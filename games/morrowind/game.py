@@ -31,8 +31,8 @@ icon1_name = "openmw.png"
 icon_list = [icon1_name]
 
 engine = "openmw"
-runtime_version = "recultis2"
-env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/" + runtime_version + ":$HOME/.recultis/runtime/" + runtime_version + "/custom OSG_LIBRARY_PATH=$HOME/.recultis/runtime/" + runtime_version + "/custom/osgPlugins"
+runtime_version = 2
+env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis" + str(runtime_version) + ":$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/custom OSG_LIBRARY_PATH=$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/custom/osgPlugins"
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/morrowind/bin/; " + env_var + " ./openmw'"
 launcher_cmd_list = [["Morrowind", launcher1_cmd]]
 launcher1_text = """[Desktop Entry]

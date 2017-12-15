@@ -31,8 +31,8 @@ icon1_name="vcmi.png"
 icon_list = [icon1_name]
 
 engine = "vcmi"
-runtime_version = "recultis2"
-env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/" + runtime_version + ":$HOME/.recultis/runtime/" + runtime_version + "/custom:" + install_dir +"lib/x86_64-linux-gnu/vcmi/:" + install_dir +"lib/x86_64-linux-gnu/vcmi/AI/"
+runtime_version = 2
+env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis" + str(runtime_version) + ":$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/custom:" + install_dir +"lib/x86_64-linux-gnu/vcmi/:" + install_dir +"lib/x86_64-linux-gnu/vcmi/AI/"
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/Heroes3/bin; "+ env_var + " ./vcmiclient'"
 launcher_cmd_list = [["Heroes III", launcher1_cmd]]
 launcher1_text = """[Desktop Entry]

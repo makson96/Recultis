@@ -5,7 +5,7 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import os, urllib.request, tarfile, shutil, importlib
+import os, urllib.request, tarfile, shutil, importlib, socket
 
 #Status: -1 - Checking for update...; 0 - Not installed; 1 - Installed; 2 - Update available; 3 - Installing...	
 def game_update_desc(info_list):
@@ -27,50 +27,62 @@ def game_update_desc(info_list):
 	return full_name + rest_name
 
 #This function will return game status and update link if possible.
-def game_update_status(game, recultis_dir):
+def game_update_status(game_list, recultis_dir):
+	link_string_list = get_link_list(game_list)
 	from games import installer
-	game_info = installer.game_info(game, ["version", "runtime_version"])
-	link_string = get_link_string(game, game_info[1])
-	version = game_info[0]
-	if version != "No proper install":
-		status = 1
-		if version != link_string:
-			status = 2
-	else:
-		status = 0
-	print(game + " status is " + str(status))
-	return status
-
-def get_link_string(game, runtime_version):
-	#print("Getting game engine download link")
-	if runtime_version == "recultis1":
-		target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
-		data = urllib.request.urlopen(target_url)
-		download_link = data.read().decode("utf-8")
-	elif runtime_version == "recultis2":
-		if game == "runtime":
-			target_engine = "recultis-runtime"
-		elif game == "lgogdownloader":
-			target_engine = "lgogdownloader"
+	status_list = []
+	game_nr = 0
+	for game in game_list:
+		game_info = installer.game_info(game, ["version"])
+		version = game_info[0]
+		if version != "No proper install":
+			status = 1
+			if version != link_string_list[game_nr]:
+				status = 2
 		else:
-			game_module = importlib.import_module("games." + game + ".game")
-			target_engine = game_module.engine
-		target_page = urllib.request.urlopen("https://launchpad.net/~makson96/+archive/ubuntu/recultis/+packages")
-		target_page_str = str(target_page.read())
-		start = target_engine + " - "
-		end = "\\n"
-		target_start_list = target_page_str.split(start)#[1].split(end)[0]
-		target_start_list = target_start_list[1::2]
-		target_version = "0"
-		for engine_package in target_start_list:
-			target_end_list = engine_package.split(end)[0]
-			if "xenial" in target_end_list:
-				target_version = target_end_list
-		download_link = "https://launchpad.net/~makson96/+archive/ubuntu/recultis/+files/" + target_engine + "_" + target_version + "_amd64.deb"
-	#Silence this for now
-	#print("Downalod link is:")
-	#print(download_link)
-	return download_link
+			status = 0
+		game_nr += 1
+		print(game + " status is " + str(status))
+		status_list.append(status)
+	return status_list
+
+def get_link_list(package_list):
+	print("Getting projects download link")
+	target_page = urllib.request.urlopen("https://launchpad.net/~makson96/+archive/ubuntu/recultis/+packages")
+	target_page_str = str(target_page.read())
+	download_link_list = []
+	for package in package_list:
+		if package == "runtime":
+			target_package = "recultis-runtime"
+			runtime_version = 2
+		elif package == "lgogdownloader":
+			target_package = "lgogdownloader"
+			runtime_version = 2
+		else:
+			game_module = importlib.import_module("games." + package + ".game")
+			runtime_version = game_module.runtime_version
+			if runtime_version != 1:
+				target_package = game_module.engine
+		if runtime_version == 1:
+			target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + package + "/link.txt"
+			data = urllib.request.urlopen(target_url)
+			download_link = data.read().decode("utf-8")
+			download_link_list.append(download_link)
+		elif runtime_version == 2:		
+			start = target_package + " - "
+			end = "\\n"
+			target_start_list = target_page_str.split(start)
+			target_start_list = target_start_list[1::2]
+			target_version = "0"
+			for package2 in target_start_list:
+				target_end_list = package2.split(end)[0]
+				if "xenial" in target_end_list:
+					target_version = target_end_list
+			download_link = "https://launchpad.net/~makson96/+archive/ubuntu/recultis/+files/" + target_package + "_" + target_version + "_amd64.deb"
+			download_link_list.append(download_link)
+	print("Downalod links are:")
+	print(download_link_list)
+	return download_link_list
 
 def recultis_update_do(self_dir, patch_link):
 	print("Starting autoupdate.")
@@ -116,7 +128,7 @@ def recultis_update_check(self_dir, recultis_version):
 			status = 2		
 			print("Found following Recultis patch:")
 			print(patch_url)		
-		except urllib.request.URLError:
+		except (urllib.request.URLError, socket.timeout) as e:
 				pass
 	print("Return Recultis update status: " + str(status))
 	return status
