@@ -10,12 +10,15 @@ import os, urllib
 recultis_dir = os.getenv("HOME") + "/.recultis/"
 steam_dir = recultis_dir + "shops/steam/"
 
-def check(game):
+def check(game, shop, game_link, runtime_link):
 	status = "Waiting for user action"
 	percent = 0
-	status, percent = steam_status()
+	if shop == "steam":
+		status, percent = steam_status()
+	elif shop == "gog":
+		pass
 	if status == "Download of game data completed":
-		status, percent = engine_status(game)
+		status, percent = engine_status(game, game_link)
 	return status, percent
 	
 def steam_status():
@@ -77,12 +80,10 @@ def steam_status():
 			percent = 0
 	return status, percent
 
-def engine_status(game):
+def engine_status(game, link):
 	from games import installer
 	from tools import update_do
-	game_info = installer.game_info(game, ["runtime_version", "deb_file_path"])
-	link = update_do.get_link_string(game, game_info[0])
-	file_path = game_info[1]
+	file_path = installer.game_info(game, ["deb_file_path"])[0]
 	status = "Downloading engine"
 	percent = 75
 	disk_s = 0

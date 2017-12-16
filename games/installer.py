@@ -89,7 +89,7 @@ def install(game_name, shop, shop_login, shop_password):
 			shop_status_ok = True
 	if shop_status_ok == True:
 		print("Downloading game engine")
-		link = update_do.get_link_string([game_name])[0]
+		link = update_do.get_link_list([game_name])[0]
 		result = download_engine.download(link, recultis_dir + "tmp/" + game_name + ".deb")		
 		unpack_deb.unpack_deb(recultis_dir + "tmp/", game_name + ".deb")
 		game.prepare_engine()

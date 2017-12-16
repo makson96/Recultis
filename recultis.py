@@ -131,7 +131,7 @@ class Window(QWidget):
 		
 		#After Windows is drawn, lets check status of the games
 		self.push_buttons_list = [self.playButton, self.launcherButton, self.installButton, self.uninstallButton]
-		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.push_buttons_list, self.game_r_list, self.r0a, self.installing_game]
+		self.second_thread_list = [self.app_staus_label, self.app_updateButton, self.push_buttons_list, self.game_r_list, self.shop_r_list, self.installing_game]
 		#Don't allow to update Recultis if can't write to its directory.
 		if os.access(self_dir, os.W_OK):
 			self.update_app_thread = SecondThread(1, self.second_thread_list)
@@ -328,7 +328,6 @@ Terminal=false"""
 				push_button.setStyleSheet('QPushButton {color: black}')
 			else:
 				push_button.setStyleSheet('QPushButton {color: gray}')
-		print("Game list looks like:")
 	
 	def r0a_clicked(self, enabled):
 		if enabled:
@@ -385,7 +384,7 @@ class SecondThread(QThread):
 		self.install_button = widget_list[2][2]
 		self.uninstall_button = widget_list[2][3]
 		self.radio_list = widget_list[3]
-		self.only_engine_radio = widget_list[4]
+		self.shop_radio_list = widget_list[4]
 		self.installing_game = widget_list[5]
 		self.connection = 1
 		self.task_nr = task_nr
@@ -455,21 +454,21 @@ class SecondThread(QThread):
 					self.install_button.setEnabled(True)
 					self.install_button.setText("Install")
 					self.uninstall_button.setEnabled(True)
-					self.only_engine_radio.setEnabled(False)
+					self.shop_radio_list[0].setEnabled(False)
 				elif game_list[game_nr][1] == 2:
 					self.play_button.setEnabled(True)
 					self.launcher_button.setEnabled(True)
 					self.install_button.setEnabled(True)
 					self.install_button.setText("Update")
 					self.uninstall_button.setEnabled(True)
-					self.only_engine_radio.setEnabled(True)
+					self.shop_radio_list[0].setEnabled(True)
 				elif game_list[game_nr][1] == 0:
 					self.play_button.setEnabled(False)
 					self.launcher_button.setEnabled(False)
 					self.install_button.setEnabled(True)
 					self.install_button.setText("Install")
 					self.uninstall_button.setEnabled(False)
-					self.only_engine_radio.setEnabled(False)
+					self.shop_radio_list[0].setEnabled(False)
 			game_nr += 1
 		#Workaround bug, when enabled buttons sometimes are not returning to black color
 		for push_button in self.push_buttons_list:
@@ -498,8 +497,15 @@ class SecondThread(QThread):
 			push_button.setStyleSheet('QPushButton {color: gray}')
 		time.sleep(0.5)
 		percent = 0
+		game_and_runtime_link = update_do.get_link_list([game, "runtime"])
+		if self.shop_radio_list[0].isChecked():
+			game_shop = "none"
+		elif self.shop_radio_list[1].isChecked():
+			game_shop = "steam"
+		elif self.shop_radio_list[2].isChecked():
+			game_shop = "gog"
 		while percent != 100:
-			result, percent = status.check(game)
+			result, percent = status.check(game, game_shop, game_and_runtime_link[0], game_and_runtime_link[1])
 			self.result_text.emit(result)
 			self.percent_num.emit(percent)
 			time.sleep(1)
