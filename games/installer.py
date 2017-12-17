@@ -5,8 +5,10 @@
 ##Copyright:
 ##- Tomasz Makarewicz (makson96@gmail.com)
 
-import os, shutil, importlib
+import os, shutil, importlib, urllib
 from subprocess import check_output
+
+from tools import update_do, download_engine, unpack_deb
 
 self_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 recultis_dir = os.getenv("HOME") + "/.recultis/"
@@ -45,7 +47,6 @@ def install(game_name, shop, shop_login, shop_password):
 		shutil.rmtree(recultis_dir + "tmp")
 		os.makedirs(recultis_dir + "tmp")
 	open(recultis_dir + "tmp/" + game_name + ".deb", 'a').close()
-	from tools import update_do, download_engine, unpack_deb
 	print("Download and prepare runtime")
 	runtime_link = update_do.get_link_list(["runtime"])[0]
 	if os.path.isfile(recultis_dir + "runtime/recultis2/version_link.txt") == True:
@@ -168,6 +169,19 @@ def game_info(game_name, requested_list):
 			return_list.append(version)
 		elif requested_item == "runtime_version":
 			return_list.append(game_module.runtime_version)
+		elif requested_item == "engine_size":
+			link = update_do.get_link_list([game_name])[0]
+			d = urllib.request.urlopen(link)
+			url_s = int(d.getheaders()[2][1])
+			return_list.append(url_s)
+		elif requested_item == "runtime_size":
+			if game_module.runtime_version == 1:
+				return_list.append(0)
+			else:
+				link = update_do.get_link_list(["runtime"])[0]
+				d = urllib.request.urlopen(link)
+				url_s = int(d.getheaders()[2][1])
+				return_list.append(url_s)
 		else:
 			raise ValueError("Unknown game info: " + requested_item)
 	return return_list

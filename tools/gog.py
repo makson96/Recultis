@@ -87,3 +87,7 @@ def gog_guard(shop_install_dir):
 	os.remove(shop_install_dir + "gog_guard_key.txt")
 	print(str(gog_guard_code).upper())
 	return str(gog_guard_code.upper())
+	
+def runtime_status():
+	#This is just dummy implementation
+	return "Download of game data completed", 100

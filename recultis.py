@@ -497,7 +497,7 @@ class SecondThread(QThread):
 			push_button.setStyleSheet('QPushButton {color: gray}')
 		time.sleep(0.5)
 		percent = 0
-		game_and_runtime_link = update_do.get_link_list([game, "runtime"])
+		engine_and_runtime_size = installer.game_info(game, ["engine_size", "runtime_size"])
 		if self.shop_radio_list[0].isChecked():
 			game_shop = "none"
 		elif self.shop_radio_list[1].isChecked():
@@ -505,7 +505,7 @@ class SecondThread(QThread):
 		elif self.shop_radio_list[2].isChecked():
 			game_shop = "gog"
 		while percent != 100:
-			result, percent = status.check(game, game_shop, game_and_runtime_link[0], game_and_runtime_link[1])
+			result, percent = status.check(game, game_shop, engine_and_runtime_size[0], engine_and_runtime_size[1])
 			self.result_text.emit(result)
 			self.percent_num.emit(percent)
 			time.sleep(1)
