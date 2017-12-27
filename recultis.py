@@ -513,7 +513,7 @@ class SecondThread(QThread):
 				print(result)
 				self.steam_warning.emit(1) #This should not allways be 1. 1 Represent Steam Guard.
 				while "Warning" in result:
-					result, percent = status.check(game)
+					result, percent = status.check(game, game_shop, engine_and_runtime_size[0], engine_and_runtime_size[1])
 					time.sleep(1)
 			elif "Error" in result:
 				print(result)

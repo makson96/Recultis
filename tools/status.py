@@ -16,22 +16,20 @@ def check(game, shop, engine_size, runtime_size):
 	percent0 = 0
 	percent1 = 0
 	percent2 = 0
+	if shop == "none":
+		weight = [0.5, 0, 0.5]
+		percent1 = 100
+	elif shop == "steam":
+		weight = [0.1, 0.8, 0.1]
+		from tools import steam as shop_platform
+	elif shop == "gog":
+		weight = [0.1, 0.8, 0.1]
+		from tools import gog as shop_platform
 	#Checking runtime
-	status, percent0 = runtime_status()
+	status, percent0 = runtime_status(runtime_size)
 	#Checking shop
-	if percent0 == 100:
-		if shop == "none":
-			weight = [0.5, 0, 0.5]
-			status = "Download of game data completed"
-			percent1 = 100
-		elif shop == "steam":
-			weight = [0.1, 0.8, 0.1]
-			from tools import steam
-			status, percent1 = steam.status()
-		elif shop == "gog":
-			weight = [0.1, 0.8, 0.1]
-			from tools import gog
-			status, percent1 = gog.status()
+	if percent0 == 100 and percent1 != 100:
+		status, percent1 = shop_platform.status()
 	#Checking game engine
 	if percent1 == 100:
 			status, percent2 = engine_status(game, engine_size)
@@ -39,18 +37,29 @@ def check(game, shop, engine_size, runtime_size):
 	percent = int(percent0*weight[0]+percent1*weight[1]+percent2*weight[2])
 	return status, percent
 
-def runtime_status():
-	#This is just dummy implementation
-	return "Runtime installation done", 100
+def runtime_status(url_s):
+	file_path = recultis_dir + "/tmp/recultis-runtime.deb"
+	status = "Downloading runtime"
+	percent = 0
+	disk_s = 0
+	if os.path.isfile(file_path) == True:
+		f = open(file_path, "rb")
+		disk_s = int(len(f.read()))
+		f.close()
+		percent = int(100 * disk_s / url_s)
+		status = "Downloading runtime"
+	else:
+		percent = 100
+	if percent == 100:
+		status = "Runtime installation completed"
+	return status, percent
 
 def engine_status(game, url_s):
 	from games import installer
-	from tools import update_do
 	file_path = installer.game_info(game, ["deb_file_path"])[0]
 	status = "Downloading engine"
 	percent = 0
 	disk_s = 0
-	url_s = 1
 	if os.path.isfile(file_path) == True:
 		f = open(file_path, "rb")
 		disk_s = int(len(f.read()))

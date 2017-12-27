@@ -8,6 +8,9 @@
 import os, tarfile, urllib.request, time, shutil
 from subprocess import Popen, PIPE, call
 
+recultis_dir = os.getenv("HOME") + "/.recultis/"
+gog_dir = recultis_dir + "shops/gog/"
+
 def start(login, password, recultis_dir, s_appid, game_dir):
 	shop_install_dir = recultis_dir + "shops/gog/"
 	print("Download lgogdownloader")
@@ -88,6 +91,32 @@ def gog_guard(shop_install_dir):
 	print(str(gog_guard_code).upper())
 	return str(gog_guard_code.upper())
 	
-def runtime_status():
-	#This is just dummy implementation
-	return "Download of game data completed", 100
+def status():
+	status = "Downloading and installing game data"
+	percent = 0
+	line1 = ""
+	line2 = ""
+	if os.path.isfile(gog_dir + "gog_log.txt") == False:
+		return status, percent
+	for line in reversed(list(open(gog_dir + "gog_log.txt"))):
+		line2 = line1
+		line1 = line
+		if "setup_homm_3_complete_4.0_(10665).exe" in line1: #Warning this code is HOI3 specific!
+			line2 = line2.split("%")[0]
+			line2 = line2.split(" ")[-1]
+			status = "Downloading game data"
+			try:
+				percent = int(int(line2) * 0.9)
+			except ValueError:
+				percent = 90
+			break
+		elif " - " in line1:
+			status = "Installing game data"
+			percent = 95
+			break
+		elif "Done." in line1:
+			status = "Download of game data completed"
+			percent = 100
+			break
+	return status, percent
+			
