@@ -84,13 +84,13 @@ def get_last_log_line():
 	return steam_last_line
 
 def steam_guard(shop_install_dir):
-	while os.path.isfile(shop_install_dir + "steam_guard_key.txt") == False:
+	while os.path.isfile(shop_install_dir + "guard_key.txt") == False:
 		time.sleep(2)
 	print('Steam Guard Key detected. Verifying...')
-	steam_guard_file = open(shop_install_dir + "steam_guard_key.txt", "r")
+	steam_guard_file = open(shop_install_dir + "guard_key.txt", "r")
 	steam_guard_code = steam_guard_file.readline()
 	steam_guard_file.close()
-	os.remove(shop_install_dir + "steam_guard_key.txt")
+	os.remove(shop_install_dir + "guard_key.txt")
 	print(str(steam_guard_code).upper())
 	return str(steam_guard_code.upper())
 	

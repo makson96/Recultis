@@ -81,13 +81,13 @@ def get_last_log_line():
 	return gog_last_line
 
 def gog_guard(shop_install_dir):
-	while os.path.isfile(shop_install_dir + "gog_guard_key.txt") == False:
+	while os.path.isfile(shop_install_dir + "guard_key.txt") == False:
 		time.sleep(2)
 	print('GOG Security code detected. Verifying...')
-	gog_guard_file = open(shop_install_dir + "gog_guard_key.txt", "r")
+	gog_guard_file = open(shop_install_dir + "guard_key.txt", "r")
 	gog_guard_code = gog_guard_file.readline()
 	gog_guard_file.close()
-	os.remove(shop_install_dir + "gog_guard_key.txt")
+	os.remove(shop_install_dir + "guard_key.txt")
 	print(str(gog_guard_code).upper())
 	return str(gog_guard_code.upper())
 	

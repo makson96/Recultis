@@ -202,7 +202,7 @@ class Window(QWidget):
 		self.update_status_bar_thread = SecondThread(3, self.second_thread_list)
 		self.update_status_bar_thread.result_text.connect(self.statusLabel2.setText)
 		self.update_status_bar_thread.percent_num.connect(self.progress.setValue)
-		self.update_status_bar_thread.steam_warning.connect(self.ask_window_start)
+		self.update_status_bar_thread.status_warning.connect(self.ask_window_start)
 		self.update_status_bar_thread.start()
 	
 	def uninstall_game(self):
@@ -367,7 +367,7 @@ class SecondThread(QThread):
 	
 	result_text = pyqtSignal(str)
 	percent_num = pyqtSignal(int)
-	steam_warning = pyqtSignal(int)
+	status_warning = pyqtSignal(int)
 
 	def __init__(self, task_nr, widget_list):
 		print("Initializing SecondThread for Qt")
@@ -511,7 +511,7 @@ class SecondThread(QThread):
 			time.sleep(1)
 			if "Warning" in result:
 				print(result)
-				self.steam_warning.emit(1) #This should not allways be 1. 1 Represent Steam Guard.
+				self.status_warning.emit(1) #This should not allways be 1. 1 Represent Guard Key.
 				while "Warning" in result:
 					result, percent = status.check(game, game_shop, engine_and_runtime_size[0], engine_and_runtime_size[1])
 					time.sleep(1)
@@ -525,7 +525,7 @@ class SecondThread(QThread):
 		game_list[game_nr] = [game_list[game_nr][0], 1]
 
 class AskWindow(QMainWindow):
-	#Available reasons: 1 - Steam Guard, 2 - Choose game launcher, 3 - Choose app update version
+	#Available reasons: 1 - Guard Key, 2 - Choose game launcher, 3 - Choose app update version
 	
 	reason = 0
 	game = ""
@@ -536,37 +536,25 @@ class AskWindow(QMainWindow):
 		super(AskWindow, self).__init__(parent)
 		self.reason = reason
 		move_offset = 50
+		print("AskWindow reason: " + str(self.reason))
+		#Get data to draw window proper to reason
 		if self.reason == 1:
-			print("Reason: " + str(self.reason) + " - Steam Guard authentication")
-			self.game = parent.installing_game
-			self.title = 'Steam Guard authentication.'
-			self.MessageLabel = QLabel("Please provide Steam Guard code, which was just send via email.", self)
-			self.textbox = QLineEdit(self)
-			self.button = QPushButton('OK', self)
-			self.button.clicked.connect(self.on_click_steam_guard)
-			self.textbox.move(0,move_offset)
-			self.textbox.resize(400, 30)
+			window_title = "Guard Key authentication."
+			message_text = "Please provide Guard Key code, which was just send via email."
+			textbox_present = True
+			radio_buttons_list = False
 		elif self.reason == 2:
-			print("Reason: " + str(self.reason) + " - Choosing game launcher")
-			self.game = parent.playing_game
-			self.title = 'Choose game launcher.'
-			self.MessageLabel = QLabel("Please choose game launcher.", self)
-			game_module = importlib.import_module("games." + self.game + ".game")
-			launcher_cmd_list = game_module.launcher_cmd_list
-			self.r_button_list = []
-			for launcher in launcher_cmd_list:
-				self.r_button_list.append(QRadioButton(launcher[0], self))
-			self.button = QPushButton('OK', self)
-			self.button.clicked.connect(self.on_click_launcher)
-			for r_button in self.r_button_list:
-				r_button.move(0, move_offset)
-				move_offset = move_offset + 27
-				r_button.resize(400, 30)
-			self.r_button_list[0].setChecked(True)
+			window_title = "Choose game launcher."
+			message_text = "Please choose game launcher."
+			textbox_present = False
+			game_module = importlib.import_module("games." + parent.playing_game + ".game")
+			radio_buttons_list = []
+			for launcher_cmd in game_module.launcher_cmd_list:
+				radio_buttons_list.append(launcher_cmd[0])
 		elif self.reason == 3:
-			print("Reason: " + str(self.reason) + " - Choosing update version")
-			self.title = 'Choose update version.'
-			self.MessageLabel = QLabel("Choose version of Recultis to which you want to update.\nPlease note that major version updates may break\ncompatibility for older systems.", self)
+			window_title = "Choose update version."
+			message_text = "Choose version of Recultis to which you want to update.\nPlease note that major version updates may break\ncompatibility for older systems."
+			textbox_present = False
 			patch_link_file = open(self_dir + "patch_link.txt", "r")
 			self.patch_link_list = []
 			for line in patch_link_file:
@@ -574,58 +562,65 @@ class AskWindow(QMainWindow):
 					pass
 				else:
 					self.patch_link_list.append(line.strip())
-			self.r_button_list = []
+			radio_buttons_list = []
 			for link in self.patch_link_list:
-				self.r_button_list.append(QRadioButton("Recultis version " + link[-12:-7], self))
-			self.button = QPushButton('OK', self)
-			self.button.clicked.connect(self.on_click_autoupdate)
+				self.radio_button_list.append("Recultis version " + link[-12:-7])
+		else:
+			print("Error, wrong reason nr: " + str(self.reason))
+			return 0
+		#Draw window
+		self.setWindowTitle(window_title)
+		self.MessageLabel = QLabel(message_text, self)
+		self.MessageLabel.move(0,0)
+		self.MessageLabel.resize(self.MessageLabel.minimumSizeHint())
+		if textbox_present:
+			self.textbox = QLineEdit(self)
+			self.textbox.move(0,move_offset)
+			self.textbox.resize(400, 30)
+		if radio_buttons_list:
+			self.r_button_list = []
+			for radio_button in radio_buttons_list:
+				self.r_button_list.append(QRadioButton(radio_button, self))
 			for r_button in self.r_button_list:
 				r_button.move(0, move_offset)
 				move_offset = move_offset + 27
 				r_button.resize(400, 30)
 			self.r_button_list[0].setChecked(True)
-		else:
-			print("Error, wrong reason nr: " + str(self.reason))
-			return 0
-		self.setWindowTitle(self.title)
-		self.MessageLabel.move(0,0)
-		self.MessageLabel.resize(self.MessageLabel.minimumSizeHint())
+		self.button = QPushButton('OK', self)
 		self.button.move(50, move_offset + 40)
+		self.button.clicked.connect(self.on_click_button)
 		self.cancel_button = QPushButton('Cancel', self)
 		self.cancel_button.clicked.connect(self.close)
 		self.cancel_button.move(200, move_offset + 40)
 		self.setGeometry(250, 250, 400, move_offset + 90)
 		
-	def on_click_steam_guard(self):
-		print("Steam Guard Key provided")
-		steam_guard_key = self.textbox.text()
-		steam_guard_key_file = open(recultis_dir + "steam_guard_key.txt", "w")
-		steam_guard_key_file.write(steam_guard_key)
-		steam_guard_key_file.close()
-		self.result = "ok"
-		self.close()
-	
-	def on_click_launcher(self):
-		result = 0
-		for r_button in self.r_button_list:
-			if r_button.isChecked() == False:
-				result += 1
-			else:
-				break
-		print("Launcher choosen")
+	def on_click_button(self):
+		print("Ask Window button clicked")
+		if self.reason == 1:
+			guard_key = self.textbox.text()
+			guard_key_file = open(recultis_dir + "guard_key.txt", "w")
+			guard_key_file.write(guard_key)
+			guard_key_file.close()
+			print("Guard key provided")
+			result = "ok"
+		elif self.reason == 2:
+			result = 0
+			for r_button in self.r_button_list:
+				if r_button.isChecked() == False:
+					result += 1
+				else:
+					break
+			print("Launcher choosen")
+		elif self.reason == 3:
+			result = 0
+			for r_button in self.r_button_list:
+				if r_button.isChecked() == False:
+					result += 1
+				else:
+					update_link = self.patch_link_list[result]
+			print("Recultis update version choosen")
+			update_do.recultis_update_do(self_dir, update_link)
 		self.result = result
-		self.close()
-		
-	def on_click_autoupdate(self):
-		result = 0
-		for r_button in self.r_button_list:
-			if r_button.isChecked() == False:
-				result += 1
-			else:
-				update_link = self.patch_link_list[result]
-		print("Recultis update version choosen")
-		update_do.recultis_update_do(self_dir, update_link)
-		self.result = "ok"
 		self.close()
 
 app = QApplication(sys.argv)
