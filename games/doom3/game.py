@@ -30,8 +30,9 @@ screenshot_path = self_dir + "../../assets/html/rbdoom3-screen.png"
 icon1_name = "rbdoom-3-bfg.png"
 icon_list = [icon1_name]
 
-runtime_version = 1
-launcher1_cmd = "bash -c 'cd $HOME/.recultis/doom3/; ./RBDoom3BFG'"
+runtime_version = 2
+env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis" + str(runtime_version) + ":$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/custom"
+launcher1_cmd = "bash -c 'cd $HOME/.recultis/doom3/; " + env_var + " ./RBDoom3BFG'"
 launcher_cmd_list = [["Doom3 BFG", launcher1_cmd]]
 launcher1_text = """[Desktop Entry]
 Type=Application
