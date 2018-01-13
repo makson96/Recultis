@@ -30,6 +30,7 @@ screenshot_path = self_dir + "../../assets/html/rbdoom3-screen.png"
 icon1_name = "rbdoom-3-bfg.png"
 icon_list = [icon1_name]
 
+engine = "rbdoom-3-bfg"
 runtime_version = 2
 env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis" + str(runtime_version) + ":$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/custom"
 launcher1_cmd = "bash -c 'cd $HOME/.recultis/doom3/; " + env_var + " ./RBDoom3BFG'"
@@ -56,5 +57,4 @@ def prepare_engine():
 	except:
 		pass
 	shutil.copy(recultis_dir + "tmp/rbdoom-3-bfg/RBDoom3BFG", install_dir + "RBDoom3BFG")
-	shutil.copytree(recultis_dir + "tmp/rbdoom-3-bfg/lib", install_dir + "lib", symlinks=True)
 	print("Game engine ready")
