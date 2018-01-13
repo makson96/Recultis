@@ -30,8 +30,10 @@ screenshot_path = self_dir + "../../assets/html/avp-screen.png"
 icon1_name="avp.png"
 icon_list = [icon1_name]
 
-runtime_version = 1
-launcher1_cmd = "bash -c 'cd $HOME/.recultis/AliensVsPredator/; ./avp'"
+engine = "avp"
+runtime_version = 2
+env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis" + str(runtime_version) + ":$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/custom"
+launcher1_cmd = "bash -c 'cd $HOME/.recultis/AliensVsPredator/; " + env_var + " ./avp'"
 launcher_cmd_list = [["Aliens vs Predator", launcher1_cmd]]
 launcher1_text = """[Desktop Entry]
 Type=Application
@@ -58,9 +60,6 @@ def prepare_engine():
 					os.rename(install_dir + avp_file_or_dir + "/" + avp_file, install_dir + avp_file_or_dir + "/" + avp_file.lower())
 		if avp_file_or_dir != avp_file_or_dir.lower():
 			os.rename(install_dir + avp_file_or_dir, install_dir + avp_file_or_dir.lower())
-	#Copy game engine and libs
+	#Copy game engine
 	shutil.copy(recultis_dir + "tmp/avp/avp", install_dir + "avp")
-	if os.path.isdir(install_dir + "lib/") == True:
-		shutil.rmtree(install_dir + "lib/")
-	shutil.copytree(recultis_dir + "tmp/avp/lib/", install_dir + "lib/", symlinks=True)
 	print("Game engine ready")
