@@ -31,11 +31,14 @@ icon3_name="openra-d2k.png"
 icon4_name="openra-ts.png"
 icon_list = [icon1_name, icon2_name, icon3_name, icon4_name]
 
-runtime_version = 1
-launcher1_cmd = "bash -c 'cd $HOME/.recultis/OpenRA/; LD_LIBRARY_PATH=lib MONO_PATH=lib/4.5 lib/mono-sgen OpenRA.Game.exe Game.Mod=cnc'"
-launcher2_cmd = "bash -c 'cd $HOME/.recultis/OpenRA/; LD_LIBRARY_PATH=lib MONO_PATH=lib/4.5 lib/mono-sgen OpenRA.Game.exe Game.Mod=ra'"
-launcher3_cmd = "bash -c 'cd $HOME/.recultis/OpenRA/; LD_LIBRARY_PATH=lib MONO_PATH=lib/4.5 lib/mono-sgen OpenRA.Game.exe Game.Mod=d2k'"
-launcher4_cmd = "bash -c 'cd $HOME/.recultis/OpenRA/; LD_LIBRARY_PATH=lib MONO_PATH=lib/4.5 lib/mono-sgen OpenRA.Game.exe Game.Mod=ts'"
+engine = "openra"
+runtime_version = 2
+env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis" + str(runtime_version) + ":$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/custom:$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/mono MONO_PATH=$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/mono/4.5"
+mono_exe = " $HOME/.recultis/runtime/recultis" + str(runtime_version) + "/mono/mono-sgen "
+launcher1_cmd = "bash -c 'cd $HOME/.recultis/OpenRA/; " + env_var + mono_exe + "OpenRA.Game.exe Game.Mod=cnc'"
+launcher2_cmd = "bash -c 'cd $HOME/.recultis/OpenRA/; " + env_var + mono_exe + "OpenRA.Game.exe Game.Mod=ra'"
+launcher3_cmd = "bash -c 'cd $HOME/.recultis/OpenRA/; " + env_var + mono_exe + "OpenRA.Game.exe Game.Mod=d2k'"
+launcher4_cmd = "bash -c 'cd $HOME/.recultis/OpenRA/; " + env_var + mono_exe + "OpenRA.Game.exe Game.Mod=ts'"
 launcher_cmd_list = [["Command and Conquer: Tiberian Dawn", launcher1_cmd], ["Command and Conquer: Red Alert", launcher2_cmd], ["Dune 2000", launcher3_cmd], ["Command and Conquer: Tiberian Sun (pre-alpha)", launcher4_cmd]]
 launcher1_text = """[Desktop Entry]
 Type=Application
@@ -80,20 +83,9 @@ uninstall_dir_list = []
 
 def prepare_engine():
 	print("Preparing game engine")
-	#Copy game engine and libs
+	#Copy game engine
 	shutil.rmtree(install_dir)
 	shutil.copytree(recultis_dir + "tmp/openra/", install_dir, symlinks=True)
-	#Link libc to directory with OpenRA libs
-	ldconfig_command = "ldconfig"
-	if os.path.isfile("/sbin/ldconfig"):
-		ldconfig_command = "/sbin/ldconfig"
-	os.system(ldconfig_command + " -p | grep libc.so > " + recultis_dir + "libc_location.txt")
-	with open(recultis_dir + "libc_location.txt") as f:
-		for line in f:
-			if "64" in line:
-				libc_location = line.split(" => ")[1].rstrip()
-	if os.path.islink(install_dir + "lib/libc.so"):
-		os.unlink(install_dir + "lib/libc.so")
-	os.symlink(libc_location, install_dir + "lib/libc.so")
-	os.remove(recultis_dir + "libc_location.txt")
+	#Prepare mono config for the game
+	shutil.copy(recultis_dir + "runtime/recultis" + str(runtime_version) + "/mono/machine.config", install_dir + "OpenRA.Game.exe.config")
 	print("Game engine ready")
