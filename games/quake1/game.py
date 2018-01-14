@@ -30,8 +30,10 @@ screenshot_path = self_dir + "../../assets/html/darkplaces-screen.png"
 icon1_name = "darkplaces.png"
 icon_list = [icon1_name]
 
-runtime_version = 1
-launcher1_cmd = "bash -c 'cd $HOME/.recultis/Quake1; LD_LIBRARY_PATH=lib ./darkplaces-sdl -window'"
+engine = "darkplaces"
+runtime_version = 2
+env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis" + str(runtime_version) + ":$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/custom"
+launcher1_cmd = "bash -c 'cd $HOME/.recultis/Quake1; " + env_var + " ./darkplaces-sdl -window'"
 launcher_cmd_list = [["Quake1", launcher1_cmd]]
 launcher1_text = """[Desktop Entry]
 Type=Application
@@ -50,9 +52,6 @@ def prepare_engine():
 	#Here is all game specific code
 	print("Preparing game engine")
 	shutil.copy(recultis_dir + "tmp/darkplaces/darkplaces-sdl", install_dir + "darkplaces-sdl")
-	if os.path.isdir(install_dir + "lib"):
-		shutil.rmtree(install_dir + "lib")
-	shutil.copytree(recultis_dir + "tmp/darkplaces/lib", install_dir + "lib")
 	if os.path.os.path.islink(install_dir + "id1") == False and os.path.isdir(install_dir + "id1") == False and os.path.isfile(install_dir + "id1") == False:
 		if os.path.isdir(install_dir + "Id1") == True:
 			os.symlink(install_dir + "Id1", install_dir + "id1")
