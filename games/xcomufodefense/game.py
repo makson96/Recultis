@@ -30,8 +30,10 @@ screenshot_path = self_dir + "../../assets/html/openxcom-screen.png"
 icon1_name = "openxcom.png"
 icon_list = [icon1_name]
 
-runtime_version = 1
-launcher1_cmd = "bash -c 'cd $HOME/.recultis/xcom/share/openxcom; ../../bin/openxcom'"
+engine = "openxcom"
+runtime_version = 2
+env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis" + str(runtime_version) + ":$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/custom"
+launcher1_cmd = "bash -c 'cd $HOME/.recultis/xcom/share/openxcom; " + env_var + " ../../bin/openxcom'"
 launcher_cmd_list = [["X-COM UFO Defense", launcher1_cmd]]
 launcher1_text = """[Desktop Entry]
 Type=Application
@@ -52,9 +54,6 @@ def prepare_engine():
 	if os.path.isdir(install_dir + "bin") == True:
 		shutil.rmtree(install_dir + "bin")
 	shutil.copytree(recultis_dir + "tmp/openxcom/bin", install_dir + "bin/", symlinks=True)
-	if os.path.isdir(install_dir + "lib/") == True:
-		shutil.rmtree(install_dir + "lib/")
-	shutil.copytree(recultis_dir + "tmp/openxcom/lib/", install_dir + "lib/", symlinks=True)
 	if os.path.isdir(install_dir + "share/") == True:
 		shutil.rmtree(install_dir + "share/")
 	shutil.copytree(recultis_dir + "tmp/openxcom/share/", install_dir + "share/", symlinks=True)
