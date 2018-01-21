@@ -154,7 +154,12 @@ def steamcmd_reinstall(shop_install_dir):
 	steamcmd_install(shop_install_dir)
 
 def status():
-	os.chdir(steam_dir)
+	if os.path.isdir(steam_dir) == True:
+		os.chdir(steam_dir)
+	else:
+		status = "Preparing SteamCMD"
+		percent = 0
+		return status, percent
 	status = "Downloading and installing game data"
 	percent = 0
 	steam_last_line = get_last_log_line()
