@@ -39,7 +39,7 @@ launcher_cmd_list = [["Jedi Knight Single Player", launcher1_cmd], ["Jedi Knight
 launcher1_text = """[Desktop Entry]
 Type=Application
 Name=Jedi Knight: Jedi Academy - SinglePlayer
-Comment=Play Jedi Knights Academy
+Comment=Play Jedi Knight: Jedi Academy
 Exec=""" + launcher1_cmd + """
 Icon=""" + icon1_name + """
 Categories=Game;
@@ -47,7 +47,7 @@ Terminal=false"""
 launcher2_text = """[Desktop Entry]
 Type=Application
 Name=Jedi Knight: Jedi Academy - MultiPlayer
-Comment=Play Jedi Knights Academy
+Comment=Play Jedi Knight: Jedi Academy
 Exec=""" + launcher2_cmd + """
 Icon=""" + icon1_name + """
 Categories=Game;
@@ -63,13 +63,8 @@ def prepare_engine():
 	for binary in next(os.walk(recultis_dir + "tmp/JediAcademy/"))[2]:
 		shutil.copy(recultis_dir + "tmp/JediAcademy/" + binary, install_dir + "GameData/" + binary)
 	for directory in next(os.walk(recultis_dir + "tmp/JediAcademy/"))[1]:
-		if directory == "lib":
-			if os.path.isdir(install_dir + "GameData/" + directory):
-				shutil.rmtree(install_dir + "GameData/" + directory)
-			shutil.copytree(recultis_dir + "tmp/JediAcademy/" + directory, install_dir + "GameData/" + directory, symlinks=True)
-		else:
-			if os.path.isdir(install_dir + "GameData/" + directory) == False:
-				os.makedirs(install_dir + "GameData/" + directory)
-			for binary in next(os.walk(recultis_dir + "tmp/JediAcademy/" + directory))[2]:
-				shutil.copy(os.path.join(recultis_dir, "tmp/JediAcademy/", directory, binary), os.path.join(install_dir, "GameData/", directory, binary))
+		if os.path.isdir(install_dir + "GameData/" + directory) == False:
+			os.makedirs(install_dir + "GameData/" + directory)
+		for binary in next(os.walk(recultis_dir + "tmp/JediAcademy/" + directory))[2]:
+			shutil.copy(os.path.join(recultis_dir, "tmp/JediAcademy/", directory, binary), os.path.join(install_dir, "GameData/", directory, binary))
 	print("Game engine ready")
