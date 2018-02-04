@@ -14,13 +14,13 @@ install_dir = recultis_dir + "JediOutcast/"
 desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3] + "/"
 
 full_name = "Jedi Knight II: Jedi Outcast on OpenJK engine"
-description = """Jedi Outcast description
-
-
-
-
-
-
+description = """Jedi Outcast is the third game from Star Wars Dark Forces series. In
+this game you play as one of the heroes of New Republic. At the
+beggining you use only conventional weapons, but as the game
+evolves, you move to using force and the light saber. This game
+is great TPP/FPP title for Star Wars fans. It can by played on Linux
+thanks to OpenJO engine, which is developed by OpenJK Project. To
+play this game you need to have it in your Steam library.
 """
 
 shops = ["steam"]

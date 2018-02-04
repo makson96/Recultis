@@ -14,13 +14,13 @@ install_dir = recultis_dir + "Heroes3/"
 desk_dir = str(check_output(['xdg-user-dir', 'DESKTOP']))[2:-3] + "/"
 
 full_name = "Heroes III Complete on VCMI engine"
-description = """Heroes III on VCMI description
-
-
-
-
-
-
+description = """Heroes of Might and Magic III Complete is one of the best turn
+based strategy in the history of computer games. You develop your
+castle, recruit soldiers who moves with your hero, engage in battles
+and discover new land. All of this is set in rich fantasy world with
+beautiful graphic. This game can be played natively on Linux thanks
+to VCMI game engine. In order to play it, you need to have it in your
+GOG library.
 """
 
 shops = ["gog"]
