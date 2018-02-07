@@ -47,18 +47,20 @@ def run(login, password, shop_install_dir, s_appid, game_dir):
 	print("./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode")
 	print("Check " + shop_install_dir + "gog_log.txt for more details.")
 	env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis2:$HOME/.recultis/runtime/recultis2/custom"
-	gog_download = Popen(env_var + " stdbuf -oL -eL ./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode", shell=True, stdout=open("gog_log.txt", "wb"), stdin=PIPE, stdout=open("gog_log2.txt", "wb"))
+	gog_download = Popen(env_var + " stdbuf -oL -eL ./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode", shell=True, stdout=open("gog_log.txt", "wb"), stdin=PIPE, stderr=open("gog_log2.txt", "wb"))
 	while gog_download.poll() is None:
 		time.sleep(2)
 		gog_error_line = get_last_error_line()
-		#Insert login
-		if "Email" in gog_error_line:
-			gog_download.stdin.write(bytes(login + '\n', 'ascii'))
-			gog_download.stdin.flush()
-		#Insert Password
+        #Insert Password
 		if "Password" in gog_error_line:
 			gog_download.stdin.write(bytes(password + '\n', 'ascii'))
 			gog_download.stdin.flush()
+			print("gog_password")
+		#Insert login
+		elif "Email" in gog_error_line:
+			gog_download.stdin.write(bytes(login + '\n', 'ascii'))
+			gog_download.stdin.flush()
+			print("gog_email")
 		#If computer is not registered on GOG, handle GOG Security code
 		elif 'Security code' in gog_error_line:
 			gog_guard_code = gog_guard(shop_install_dir)
@@ -66,6 +68,8 @@ def run(login, password, shop_install_dir, s_appid, game_dir):
 			gog_download.stdin.flush()
 	#if there is only 1 line after gog finished working, it means it crashed.
 	if sum(1 for line in open('gog_log.txt')) == 1:
+		rc = 0
+	elif "error" in get_last_log_line():
 		rc = 0
 	else:
 		rc = 1
