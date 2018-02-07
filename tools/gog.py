@@ -33,14 +33,12 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 	os.rename(recultis_dir + "tmp/innoextract-1.6-linux/bin/amd64/innoextract", shop_install_dir + "innoextract")
 	print("Download game using lgogdownloader")
 	os.chdir(shop_install_dir)
-	rc = run(login, password, shop_install_dir, s_appid, game_dir)
+	rc = run_lgog(login, password, shop_install_dir, s_appid, game_dir)
 	if rc == 1:
-		print("Extract game using innoextract")
-		os.chdir(shop_install_dir)
-		call("./innoextract " + game_dir + s_appid +"/setup*.exe -d " + game_dir + " >> gog_log.txt", shell=True)
+		rc = run_innoex(game_dir, s_appid)
 	return rc
 
-def run(login, password, shop_install_dir, s_appid, game_dir):
+def run_lgog(login, password, shop_install_dir, s_appid, game_dir):
 	if os.path.isfile(shop_install_dir+"gog_log.txt") == True:
 		os.remove(shop_install_dir+"gog_log.txt")
 	print("Running following gog command:")
@@ -71,6 +69,16 @@ def run(login, password, shop_install_dir, s_appid, game_dir):
 		rc = 0
 	else:
 		rc = 1
+	return rc
+
+def run_innoex(game_dir, s_appid):
+	print("Extract game using innoextract")
+	os.chdir(shop_install_dir)
+	innoextract_rc = call("./innoextract " + game_dir + s_appid +"/setup*.exe -d " + game_dir + " >> gog_log.txt", shell=True)
+	if innoextract_rc == 0:
+		rc = 1
+	else:
+		rc = 0
 	return rc
 
 def get_last_log_line():
