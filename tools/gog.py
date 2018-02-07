@@ -44,10 +44,10 @@ def run(login, password, shop_install_dir, s_appid, game_dir):
 	if os.path.isfile(shop_install_dir+"gog_log.txt") == True:
 		os.remove(shop_install_dir+"gog_log.txt")
 	print("Running following gog command:")
-	print("./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode")
+	print("./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode --insecure")
 	print("Check " + shop_install_dir + "gog_log.txt for more details.")
 	env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis2:$HOME/.recultis/runtime/recultis2/custom"
-	gog_download = Popen(env_var + " stdbuf -oL -eL ./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode", shell=True, stdout=open("gog_log.txt", "wb"), stdin=PIPE, stderr=open("gog_log2.txt", "wb"))
+	gog_download = Popen(env_var + " stdbuf -oL -eL ./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode --insecure", shell=True, stdout=open("gog_log.txt", "wb"), stdin=PIPE, stderr=open("gog_log2.txt", "wb"))
 	while gog_download.poll() is None:
 		time.sleep(2)
 		gog_error_line = get_last_error_line()
@@ -55,12 +55,10 @@ def run(login, password, shop_install_dir, s_appid, game_dir):
 		if "Password" in gog_error_line:
 			gog_download.stdin.write(bytes(password + '\n', 'ascii'))
 			gog_download.stdin.flush()
-			print("gog_password")
 		#Insert login
 		elif "Email" in gog_error_line:
 			gog_download.stdin.write(bytes(login + '\n', 'ascii'))
 			gog_download.stdin.flush()
-			print("gog_email")
 		#If computer is not registered on GOG, handle GOG Security code
 		elif 'Security code' in gog_error_line:
 			gog_guard_code = gog_guard(shop_install_dir)
@@ -80,6 +78,8 @@ def get_last_log_line():
 	gog_log_lines = gog_log_file.readlines()
 	if len(gog_log_lines) > 0:
 		gog_last_line = gog_log_lines[-1]
+		if gog_last_line.rstrip() == "" and len(gog_log_lines) > 1:
+			gog_last_line = gog_log_lines[-2]
 	else:
 		gog_last_line = ""
 	gog_log_file.close()
