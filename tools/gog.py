@@ -33,11 +33,12 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 	os.rename(recultis_dir + "tmp/innoextract-1.6-linux/bin/amd64/innoextract", shop_install_dir + "innoextract")
 	print("Download game using lgogdownloader")
 	os.chdir(shop_install_dir)
-	gog_error = run(login, password, shop_install_dir, s_appid, game_dir)
-	print("Extract game using innoextract")
-	os.chdir(shop_install_dir)
-	call("./innoextract " + game_dir + s_appid +"/setup*.exe -d " + game_dir + " >> gog_log.txt", shell=True)
-	return True
+	rc = run(login, password, shop_install_dir, s_appid, game_dir)
+	if rc == 1:
+		print("Extract game using innoextract")
+		os.chdir(shop_install_dir)
+		call("./innoextract " + game_dir + s_appid +"/setup*.exe -d " + game_dir + " >> gog_log.txt", shell=True)
+	return rc
 
 def run(login, password, shop_install_dir, s_appid, game_dir):
 	if os.path.isfile(shop_install_dir+"gog_log.txt") == True:
@@ -46,22 +47,22 @@ def run(login, password, shop_install_dir, s_appid, game_dir):
 	print("./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode")
 	print("Check " + shop_install_dir + "gog_log.txt for more details.")
 	env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis2:$HOME/.recultis/runtime/recultis2/custom"
-	gog_download = Popen(env_var + " stdbuf -oL -eL ./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode", shell=True, stdout=open("gog_log.txt", "wb"), stdin=PIPE)
+	gog_download = Popen(env_var + " stdbuf -oL -eL ./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode", shell=True, stdout=open("gog_log.txt", "wb"), stdin=PIPE, stdout=open("gog_log2.txt", "wb"))
 	while gog_download.poll() is None:
 		time.sleep(2)
-		gog_last_line = get_last_log_line()
+		gog_error_line = get_last_error_line()
 		#Insert login
-		if "Email" in gog_last_line:
+		if "Email" in gog_error_line:
 			gog_download.stdin.write(bytes(login + '\n', 'ascii'))
 			gog_download.stdin.flush()
 		#Insert Password
-		if "Password" in gog_last_line:
+		if "Password" in gog_error_line:
 			gog_download.stdin.write(bytes(password + '\n', 'ascii'))
 			gog_download.stdin.flush()
 		#If computer is not registered on GOG, handle GOG Security code
-		elif 'Security code' in gog_last_line:
-			gog_guard_code = steam_guard(shop_install_dir)
-			gog_download.stdin.write(bytes(steam_guard_code + '\n', 'ascii'))
+		elif 'Security code' in gog_error_line:
+			gog_guard_code = gog_guard(shop_install_dir)
+			gog_download.stdin.write(bytes(gog_guard_code + '\n', 'ascii'))
 			gog_download.stdin.flush()
 	#if there is only 1 line after gog finished working, it means it crashed.
 	if sum(1 for line in open('gog_log.txt')) == 1:
@@ -79,6 +80,16 @@ def get_last_log_line():
 		gog_last_line = ""
 	gog_log_file.close()
 	return gog_last_line
+
+def get_last_error_line():
+	gog_error_file = open("gog_log2.txt", "r")
+	gog_error_lines = gog_error_file.readlines()
+	if len(gog_error_lines) > 0:
+		gog_last_error_line = gog_error_lines[-1]
+	else:
+		gog_last_error_line = ""
+	gog_error_file.close()
+	return gog_last_error_line
 
 def gog_guard(shop_install_dir):
 	while os.path.isfile(shop_install_dir + "guard_key.txt") == False:
