@@ -76,7 +76,7 @@ def run_lgog(login, password, shop_install_dir, s_appid, game_dir):
 def run_innoex(game_dir, shop_install_dir, s_appid):
 	os.chdir(shop_install_dir)
 	print("Running following innoextract command:")
-	print(""./innoextract " + game_dir + s_appid +"/setup*.exe -d " + game_dir")
+	print("./innoextract " + game_dir + s_appid +"/setup*.exe -d " + game_dir)
 	print("Check " + shop_install_dir + "gog_log.txt for more details.")
 	innoextract_rc = call("./innoextract " + game_dir + s_appid +"/setup*.exe -d " + game_dir + " >> gog_log.txt", shell=True)
 	if innoextract_rc == 0:
