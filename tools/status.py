@@ -32,7 +32,7 @@ def check(game, shop, engine_size, runtime_size):
 		status, percent1 = shop_platform.status()
 	#Checking game engine
 	if percent1 == 100:
-			status, percent2 = engine_status(game, engine_size)
+		status, percent2 = engine_status(game, engine_size)
 	#Final calculation
 	percent = int(percent0*weight[0]+percent1*weight[1]+percent2*weight[2])
 	return status, percent

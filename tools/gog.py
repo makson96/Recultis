@@ -35,7 +35,7 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 	os.chdir(shop_install_dir)
 	rc = run_lgog(login, password, shop_install_dir, s_appid, game_dir)
 	if rc == 1:
-		rc = run_innoex(game_dir, s_appid)
+		rc = run_innoex(game_dir, shop_install_dir, s_appid)
 	return rc
 
 def run_lgog(login, password, shop_install_dir, s_appid, game_dir):
@@ -67,13 +67,17 @@ def run_lgog(login, password, shop_install_dir, s_appid, game_dir):
 		rc = 0
 	elif "error" in get_last_log_line():
 		rc = 0
+	elif "HTTP: Login failed" in get_last_error_line():
+		rc = 0
 	else:
 		rc = 1
 	return rc
 
-def run_innoex(game_dir, s_appid):
-	print("Extract game using innoextract")
+def run_innoex(game_dir, shop_install_dir, s_appid):
 	os.chdir(shop_install_dir)
+	print("Running following innoextract command:")
+	print(""./innoextract " + game_dir + s_appid +"/setup*.exe -d " + game_dir")
+	print("Check " + shop_install_dir + "gog_log.txt for more details.")
 	innoextract_rc = call("./innoextract " + game_dir + s_appid +"/setup*.exe -d " + game_dir + " >> gog_log.txt", shell=True)
 	if innoextract_rc == 0:
 		rc = 1
@@ -85,8 +89,8 @@ def get_last_log_line():
 	gog_log_file = open("gog_log.txt", "r")
 	gog_log_lines = gog_log_file.readlines()
 	if len(gog_log_lines) > 0:
-		gog_last_line = gog_log_lines[-1]
-		if gog_last_line.rstrip() == "" and len(gog_log_lines) > 1:
+		gog_last_line = gog_log_lines[-1].rstrip()
+		if gog_last_line == "" and len(gog_log_lines) > 1:
 			gog_last_line = gog_log_lines[-2]
 	else:
 		gog_last_line = ""
@@ -97,7 +101,7 @@ def get_last_error_line():
 	gog_error_file = open("gog_log2.txt", "r")
 	gog_error_lines = gog_error_file.readlines()
 	if len(gog_error_lines) > 0:
-		gog_last_error_line = gog_error_lines[-1]
+		gog_last_error_line = gog_error_lines[-1].rstrip()
 	else:
 		gog_last_error_line = ""
 	gog_error_file.close()
@@ -121,6 +125,8 @@ def status():
 	line2 = ""
 	if os.path.isfile(gog_dir + "gog_log.txt") == False:
 		return status, percent
+	elif "failed" in get_last_error_line():
+		return "Error: " + get_last_error_line(), 0
 	for line in reversed(list(open(gog_dir + "gog_log.txt"))):
 		line2 = line1
 		line1 = line
