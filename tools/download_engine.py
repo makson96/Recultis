@@ -10,6 +10,9 @@ import urllib.request
 def download(link, file_path):
 	link = link.rstrip()
 	print("Downloading game engine from: " + link + " to: " + file_path)
-	urllib.request.urlretrieve(link, file_path)
+	try:
+		urllib.request.urlretrieve(link, file_path)
+	except urllib.error.HTTPError:
+		return 0
 	print("Game engine download finished successfully")
 	return 1

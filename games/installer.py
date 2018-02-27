@@ -91,14 +91,19 @@ def install(game_name, shop, shop_login, shop_password):
 	if shop_status_ok == True:
 		print("Downloading game engine")
 		link = update_do.get_link_list([game_name])[0]
-		result = download_engine.download(link, recultis_dir + "tmp/" + game_name + ".deb")		
-		unpack_deb.unpack_deb(recultis_dir + "tmp/", game_name + ".deb")
-		game.prepare_engine()
-		#Mark installed version by coping link file
-		version_link_file = open(game.install_dir + "/version_link.txt","w")
-		version_link_file.write(link)
-		version_link_file.close()
-		shutil.rmtree(recultis_dir + "tmp")
+		result = download_engine.download(link, recultis_dir + "tmp/" + game_name + ".deb")
+		if result == 1:
+			unpack_deb.unpack_deb(recultis_dir + "tmp/", game_name + ".deb")
+			game.prepare_engine()
+			#Mark installed version by coping link file
+			version_link_file = open(game.install_dir + "/version_link.txt","w")
+			version_link_file.write(link)
+			version_link_file.close()
+			shutil.rmtree(recultis_dir + "tmp")
+		else:
+			error_file = open(recultis_dir + "error.txt", "w")
+			error_file.write("Error: download game engine failed. Try again later.")
+			error_file.close()
 
 def uninstall(game_name):
 	#Import game specific data
@@ -170,17 +175,23 @@ def game_info(game_name, requested_list):
 		elif requested_item == "runtime_version":
 			return_list.append(game_module.runtime_version)
 		elif requested_item == "engine_size":
-			link = update_do.get_link_list([game_name])[0]
-			d = urllib.request.urlopen(link)
-			url_s = int(d.getheaders()[2][1])
+			try:
+				link = update_do.get_link_list([game_name])[0]
+				d = urllib.request.urlopen(link)
+				url_s = int(d.getheaders()[2][1])
+			except urllib.error.HTTPError:
+				url_s = 0
 			return_list.append(url_s)
 		elif requested_item == "runtime_size":
 			if game_module.runtime_version == 1:
 				return_list.append(0)
 			else:
-				link = update_do.get_link_list(["runtime"])[0]
-				d = urllib.request.urlopen(link)
-				url_s = int(d.getheaders()[2][1])
+				try:
+					link = update_do.get_link_list(["runtime"])[0]
+					d = urllib.request.urlopen(link)
+					url_s = int(d.getheaders()[2][1])
+				except urllib.error.HTTPError:
+					url_s = 0
 				return_list.append(url_s)
 		else:
 			raise ValueError("Unknown game info: " + requested_item)
