@@ -55,6 +55,14 @@ def runtime_status(url_s):
 	return status, percent
 
 def engine_status(game, url_s):
+	#First check if there is error regarding engine download
+	if os.path.isfile(recultis_dir + "error.txt") == True:
+		error_file = open(recultis_dir + "error.txt", "r")
+		error_message = error_file.read()
+		error_file.close()
+		os.remove(recultis_dir + "error.txt")
+		return error_message, 0
+	#Now check engine download status
 	from games import installer
 	file_path = installer.game_info(game, ["deb_file_path"])[0]
 	status = "Downloading engine"
