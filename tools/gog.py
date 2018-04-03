@@ -86,6 +86,8 @@ def run_innoex(game_dir, shop_install_dir, s_appid):
 	return rc
 
 def get_last_log_line():
+	if os.path.isfile("gog_log.txt") == False:
+		return ""
 	gog_log_file = open("gog_log.txt", "r")
 	gog_log_lines = gog_log_file.readlines()
 	if len(gog_log_lines) > 0:
@@ -98,6 +100,8 @@ def get_last_log_line():
 	return gog_last_line
 
 def get_last_error_line():
+	if os.path.isfile("gog_log2.txt") == False:
+		return ""
 	gog_error_file = open("gog_log2.txt", "r")
 	gog_error_lines = gog_error_file.readlines()
 	if len(gog_error_lines) > 0:
