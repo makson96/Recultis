@@ -42,7 +42,7 @@ def run_lgog(login, password, shop_install_dir, s_appid, game_dir):
 	if os.path.isfile(shop_install_dir+"gog_log.txt") == True:
 		os.remove(shop_install_dir+"gog_log.txt")
 	print("Running following gog command:")
-	print("./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode --insecure")
+	print("./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode")
 	print("Check " + shop_install_dir + "gog_log.txt for more details.")
 	env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis2:$HOME/.recultis/runtime/recultis2/custom"
 	gog_download = Popen(env_var + " stdbuf -oL -eL ./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode --insecure", shell=True, stdout=open("gog_log.txt", "wb"), stdin=PIPE, stderr=open("gog_log2.txt", "wb"))
