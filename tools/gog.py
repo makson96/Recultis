@@ -33,7 +33,7 @@ def start(login, password, recultis_dir, s_appid, game_dir):
 	os.rename(recultis_dir + "tmp/innoextract-1.6-linux/bin/amd64/innoextract", shop_install_dir + "innoextract")
 	print("Download cacert.pem")
 	cacert_link = "https://curl.haxx.se/ca/cacert.pem"
-	urllib.request.urlretrieve(cacert_link, shop_install_dir + + "cacert.pem")
+	urllib.request.urlretrieve(cacert_link, shop_install_dir + "cacert.pem")
 	print("Download game using lgogdownloader")
 	os.chdir(shop_install_dir)
 	rc = run_lgog(login, password, shop_install_dir, s_appid, game_dir)
