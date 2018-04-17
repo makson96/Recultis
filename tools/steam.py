@@ -89,14 +89,14 @@ def get_last_log_line():
 		steam_last_line = ""
 	return steam_last_line
 
-def steam_guard(shop_install_dir):
-	while os.path.isfile(shop_install_dir + "guard_key.txt") == False:
+def steam_guard():
+	while os.path.isfile(recultis_dir + "guard_key.txt") == False:
 		time.sleep(2)
 	print('Steam Guard Key detected. Verifying...')
-	steam_guard_file = open(shop_install_dir + "guard_key.txt", "r")
+	steam_guard_file = open(recultis_dir + "guard_key.txt", "r")
 	steam_guard_code = steam_guard_file.readline()
 	steam_guard_file.close()
-	os.remove(shop_install_dir + "guard_key.txt")
+	os.remove(recultis_dir + "guard_key.txt")
 	print(str(steam_guard_code).upper())
 	return str(steam_guard_code.upper())
 	
@@ -124,7 +124,7 @@ def run(login, password, shop_install_dir, s_appid, game_dir):
 			return 2
 		#If computer is not registered on Steam, handle Steam Guard
 		elif 'Steam Guard' in steam_last_line:
-			steam_guard_code = steam_guard(shop_install_dir)
+			steam_guard_code = steam_guard()
 			steam_download.stdin.write(bytes(steam_guard_code + '\n', 'ascii'))
 			steam_download.stdin.flush()
 	#if there is only 1 line after steamcmd finished working, it means it crashed.

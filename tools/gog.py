@@ -62,7 +62,7 @@ def run_lgog(login, password, shop_install_dir, s_appid, game_dir):
 			gog_download.stdin.flush()
 		#If computer is not registered on GOG, handle GOG Security code
 		elif 'Security code' in gog_error_line:
-			gog_guard_code = gog_guard(shop_install_dir)
+			gog_guard_code = gog_guard()
 			gog_download.stdin.write(bytes(gog_guard_code + '\n', 'ascii'))
 			gog_download.stdin.flush()
 	#if there is only 1 line after gog finished working, it means it crashed.
@@ -114,14 +114,14 @@ def get_last_error_line():
 	gog_error_file.close()
 	return gog_last_error_line
 
-def gog_guard(shop_install_dir):
-	while os.path.isfile(shop_install_dir + "guard_key.txt") == False:
+def gog_guard():
+	while os.path.isfile(recultis_dir + "guard_key.txt") == False:
 		time.sleep(2)
 	print('GOG Security code detected. Verifying...')
-	gog_guard_file = open(shop_install_dir + "guard_key.txt", "r")
+	gog_guard_file = open(recultis_dir + "guard_key.txt", "r")
 	gog_guard_code = gog_guard_file.readline()
 	gog_guard_file.close()
-	os.remove(shop_install_dir + "guard_key.txt")
+	os.remove(recultis_dir + "guard_key.txt")
 	print(str(gog_guard_code).upper())
 	return str(gog_guard_code.upper())
 	
