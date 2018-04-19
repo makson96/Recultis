@@ -45,10 +45,10 @@ def run_lgog(login, password, shop_install_dir, s_appid, game_dir):
 	if os.path.isfile(shop_install_dir+"gog_log.txt") == True:
 		os.remove(shop_install_dir+"gog_log.txt")
 	print("Running following gog command:")
-	print("./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode --cacert cacert.pem")
+	print("./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode --login-website --cacert cacert.pem")
 	print("Check " + shop_install_dir + "gog_log.txt for more details.")
 	env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis2:$HOME/.recultis/runtime/recultis2/custom"
-	gog_download = Popen(env_var + " stdbuf -oL -eL ./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode --cacert cacert.pem", shell=True, stdout=open("gog_log.txt", "wb"), stdin=PIPE, stderr=open("gog_log2.txt", "wb"))
+	gog_download = Popen(env_var + " stdbuf -oL -eL ./lgogdownloader --download --game " + s_appid + " --directory " + game_dir + " --no-color --no-unicode --login-website --cacert cacert.pem", shell=True, stdout=open("gog_log.txt", "wb"), stdin=PIPE, stderr=open("gog_log2.txt", "wb"))
 	while gog_download.poll() is None:
 		time.sleep(2)
 		gog_error_line = get_last_error_line()
@@ -133,7 +133,7 @@ def status():
 	if os.path.isfile(gog_dir + "gog_log.txt") == False:
 		return status, percent
 	elif "failed" in get_last_error_line():
-		return "Error: " + get_last_error_line(), 0
+		return "Error: " + get_last_error_line() + ". Try again later.", 0
 	for line in reversed(list(open(gog_dir + "gog_log.txt"))):
 		line2 = line1
 		line1 = line
