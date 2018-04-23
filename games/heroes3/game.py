@@ -32,8 +32,8 @@ icon_list = [icon1_name]
 
 engine = "vcmi"
 runtime_version = 2
-env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis" + str(runtime_version) + ":$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/custom:" + install_dir +"lib/x86_64-linux-gnu/vcmi/:" + install_dir +"lib/x86_64-linux-gnu/vcmi/AI/"
-launcher1_cmd = "bash -c 'cd $HOME/.recultis/Heroes3/bin; "+ env_var + " ./vcmiclient'"
+env_var = "LD_LIBRARY_PATH=$HOME/.recultis/runtime/recultis" + str(runtime_version) + ":$HOME/.recultis/runtime/recultis" + str(runtime_version) + "/custom"
+launcher1_cmd = "bash -c 'cd $HOME/.recultis/Heroes3; "+ env_var + " ./vcmiclient'"
 launcher_cmd_list = [["Heroes III", launcher1_cmd]]
 launcher1_text = """[Desktop Entry]
 Type=Application
@@ -55,14 +55,5 @@ def prepare_engine():
 		if os.path.isdir(install_dir + vcmi_file_or_dir):
 			shutil.rmtree(install_dir + vcmi_file_or_dir)
 		os.rename(recultis_dir + "tmp/vcmi/" + vcmi_file_or_dir, install_dir + vcmi_file_or_dir)
-	call(env_var + " " + install_dir + "bin/vcmibuilder --data " + install_dir + "app", shell=True)
-	local_data_dir = os.getenv("HOME") + "/.local/share/vcmi/"
-	for vcmi_file_or_dir in os.listdir(install_dir + "share/vcmi/"):
-		if os.path.islink(local_data_dir + vcmi_file_or_dir):
-			os.unlink(local_data_dir + vcmi_file_or_dir)
-		elif os.path.isfile(local_data_dir + vcmi_file_or_dir):
-			os.remove(local_data_dir + vcmi_file_or_dir)
-		elif os.path.isdir(local_data_dir + vcmi_file_or_dir):
-			shutil.rmtree(local_data_dir + vcmi_file_or_dir)
-		os.symlink(install_dir + "share/vcmi/" + vcmi_file_or_dir, local_data_dir + vcmi_file_or_dir)
+	call(env_var + " " + install_dir + "vcmibuilder --data " + install_dir + "app", shell=True)
 	print("Game engine ready")
