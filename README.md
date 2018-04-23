@@ -9,10 +9,13 @@ This application needs Python3 and PyQt5 to display GUI. The games are portable 
 Aliens vs Predator Classic 2000 (avp engine) <br>
 Command & Conquer Game Series (OpenRA engine) <br>
 Doom 3 BFG (RBDoom-3-BFG engine) <br>
+Heroes III Complete (VCMI engine) <br>
 Jedi Knights: Jedi Academy (OpenJK engine) <br>
+Star Wars JJedi Knight II: Jedi Outcast (OpenJK engine) <br>
 The Elder Scrolls III: Morrowind (OpenMW engine) <br>
 Quake (darkplaces engine) <br>
 Quake II (Yamagi Quake II engine) <br>
+X-COM: Terror From the Deep (OpenXcom engine) <br>
 X-COM: UFO Defense (OpenXcom engine) <br>
 
 # License
