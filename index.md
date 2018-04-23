@@ -7,7 +7,7 @@ It uses modern, open source engines to run the game, and download game content f
 It works on any 64 bit Linux distribution. It does not require any installation - just download it and double click on the launcher. It is that simple! You can watch whole process on the YouTube video below.
 Warning: Recultis 2.x requires Linux distribution from 2016 or newer (for example Ubuntu 16,04 or 18.04). If you have older Linux distribution, please stick to Recultis 1.2.
 
-[![Recultis Youtube Tutorial](https://github.com/makson96/Recultis/raw/master/assets/html/youtube-screen.png)](https://youtu.be/9wHCbyPZ6Eo "Recultis Youtube Tutorial")
+[![Recultis Youtube Tutorial](https://github.com/makson96/Recultis/raw/master/assets/html/youtube-screen.png)](https://youtu.be/M96WZNIBfeU "Recultis 2.0 Introduction")
 
 ## [](#header-2)News 20-04-2018
 
