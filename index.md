@@ -17,8 +17,6 @@ Recultis 2.0 has been released! This new version introduce:
 - New common Runtime for games (download game quicer, run on updated libraries)
 - Better warning end error display
 
-Games from Command & Conquer series are first, that don't require Steam account to download games content. Just click "Install" button and play!
-
 # [](#header-1)Supported games:
 
 ## [](#header-2)Supported games shops:
