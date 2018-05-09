@@ -1,1 +1,1 @@
-https://launchpad.net/~makson96/+archive/ubuntu/free-engine/+files/yquake2_7.21pre+git20180322-trusty1_amd64.deb
+https://launchpad.net/~makson96/+archive/ubuntu/free-engine/+files/yquake2_7.21pre+git20180508-trusty1_amd64.deb
