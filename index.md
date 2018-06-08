@@ -12,7 +12,7 @@ Warning: Recultis 2.x requires Linux distribution from 2016 or newer (for exampl
 ## [](#header-2)News 09-06-2018
 
 We are moving this project to GitLab. Please use new website:
-[](https://makson.gitlab.io/Recultis/)
+[https://makson.gitlab.io/Recultis/](https://makson.gitlab.io/Recultis/)
 
 ## [](#header-2)News 20-04-2018
 
