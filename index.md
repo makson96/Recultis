@@ -9,6 +9,11 @@ Warning: Recultis 2.x requires Linux distribution from 2016 or newer (for exampl
 
 [![Recultis Youtube Tutorial](https://github.com/makson96/Recultis/raw/master/assets/html/youtube-screen.png)](https://youtu.be/M96WZNIBfeU "Recultis 2.0 Introduction")
 
+## [](#header-2)News 09-06-2018
+
+We are moving this project to GitLab. Please use new website:
+[](https://makson.gitlab.io/Recultis/)
+
 ## [](#header-2)News 20-04-2018
 
 Recultis 2.0 has been released! This new version introduce:

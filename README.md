@@ -1,6 +1,9 @@
 # Recultis
-[Project website](https://makson96.github.io/Recultis/) <br>
+[Project website](https://makson.gitlab.io/Recultis/) <br>
 The purpose of this software is to make it easy to combine open source game engines with proprietary content using GUI.
+
+#We are moving to GitLab.
+This repository is transfering to GitLab: [](https://gitlab.com/makson/Recultis) . Please use new repository to file bug reports, make suggestions and contributions to code.
 
 # Required Software
 This application needs Python3 and PyQt5 to display GUI. The games are portable and will work on any Linux distribution. Games require 64bit system. Steamcmd requires 32 bit libc, libstdc++, libgcc_s.
