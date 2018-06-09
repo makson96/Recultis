@@ -223,7 +223,7 @@ class Window(QWidget):
 		print("Starting autopupdate window")
 		self.app_staus_label.setText("Recultis status is: Updating. Please wait.")
 		result = self.ask_window_start(3)
-		if result == "ok":
+		if type(result) == int:
 			QMessageBox.information(self, "Message", "Update complete. Recultis will now turn off. Please start it again to apply patch.")
 			self.close()
 	
@@ -419,7 +419,7 @@ class SecondThread(QThread):
 					
 	def check_net_connection(self):
 		try:
-			urllib.request.urlopen("https://github.com", timeout=3)
+			urllib.request.urlopen("https://gitlab.com", timeout=3)
 			self.connection = 1
 		except urllib.request.URLError:
 			self.connection = 0
@@ -564,7 +564,7 @@ class AskWindow(QMainWindow):
 					self.patch_link_list.append(line.strip())
 			radio_buttons_list = []
 			for link in self.patch_link_list:
-				self.radio_button_list.append("Recultis version " + link[-12:-7])
+				radio_buttons_list.append("Recultis version " + link[-12:-7])
 		else:
 			print("Error, wrong reason nr: " + str(self.reason))
 			return 0
