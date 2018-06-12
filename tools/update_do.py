@@ -43,7 +43,7 @@ def game_update_status(game, self_dir, recultis_dir):
 
 def get_link_string(game, self_dir_games):
 	print("Getting game engine download link")
-	target_url = "https://raw.githubusercontent.com/makson96/Recultis/1.2/games/" + game+ "/link.txt"
+	target_url = "https://gitlab.com/makson/Recultis/raw/1.2/games/" + game + "/link.txt"
 	try:
 		data = urllib.request.urlopen(target_url)
 		download_link = data.read().decode("utf-8")
@@ -92,7 +92,7 @@ def recultis_update_check(self_dir, recultis_version):
 	status = 1
 	for potential_patch in update_list:
 		try:
-			patch_url = "https://github.com/makson96/Recultis/archive/v" + potential_patch + ".tar.gz"
+			patch_url = "https://gitlab.com/makson/Recultis/-/archive/v" + potential_patch + "/Recultis-v" + potential_patch + ".tar.gz"
 			urllib.request.urlopen(patch_url, timeout=1)
 			patch_link_file = open(self_dir + "patch_link.txt", "a")
 			patch_link_file.write(patch_url + "\n")

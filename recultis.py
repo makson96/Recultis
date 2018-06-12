@@ -401,7 +401,7 @@ class SecondThread(QThread):
 					
 	def check_net_connection(self):
 		try:
-			urllib.request.urlopen("https://github.com", timeout=3)
+			urllib.request.urlopen("https://gitlab.com", timeout=3)
 			self.connection = 1
 		except urllib.request.URLError:
 			self.connection = 0
